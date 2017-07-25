@@ -8,6 +8,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.util.PropertyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +35,29 @@ public class GoodsCategoryController {
     @ResponseBody
     public String list() {
 
+        JsonConfig cfg = getJsonConfig();
+
+        List<GoodsCategoryEntity> goodsCatesList = mGoodsCategoryRepository.findAll();
+        String goodsCatesJson = JsonHelper.getJson(goodsCatesList, cfg);
+
+
+        System.out.println(" list GoodsCategoryEntity.size1: " + goodsCatesList.size() + ", entitys: " + goodsCatesJson);
+        return goodsCatesJson;
+    }
+
+    @RequestMapping(value = GoodsCategoryConstant.LIST + "/{goodsCategoryId}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String listOne(@PathVariable int goodsCategoryId) {
+        System.out.print("listOne goodsCategoryId: " + goodsCategoryId +" \n");
+        JsonConfig cfg = getJsonConfig();
+
+        GoodsCategoryEntity goodsCategory = mGoodsCategoryRepository.findOne(goodsCategoryId);
+        String goodsCateJson = JsonHelper.getJson(goodsCategory, cfg);
+
+        return goodsCateJson;
+    }
+
+    private JsonConfig getJsonConfig() {
         JsonConfig cfg = new JsonConfig();
         cfg.setJsonPropertyFilter(new PropertyFilter() {
             public boolean apply(Object source, String name, Object value) {
@@ -45,12 +69,7 @@ public class GoodsCategoryController {
             }
         });
 
-        List<GoodsCategoryEntity> entityList = mGoodsCategoryRepository.findAll();
-        String entitys = JsonHelper.getJson(entityList, cfg);
-
-
-//        String entitys = "";
-        System.out.println(" list GoodsCategoryEntity.size1: " + entityList.size() + ", entitys: " + entitys);
-        return entitys;
+        return cfg;
     }
+
 }

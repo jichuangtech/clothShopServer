@@ -13,9 +13,13 @@ import java.util.Map;
  */
 public class JsonHelper {
     //从普通的Bean转换为字符串
-    public static String getJson(Object o) {
-        JSONObject jo = JSONObject.fromObject(o);
+
+    public static String getJson(Object o, JsonConfig jsonConfig) {
+        JSONObject jo = JSONObject.fromObject(o, jsonConfig);
         return jo.toString();
+    }
+    public static String getJson(Object o) {
+        return getJson(o, new JsonConfig());
     }
 
     //从Java的列表转换为字符串，使用默认过滤字段
