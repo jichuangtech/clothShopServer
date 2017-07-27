@@ -48,7 +48,6 @@ public class GoodsEntity {
     private String spu;
     private String sku;
     private String shippingAreaIds;
-    private GoodsCategoryEntity categoryId;
 
     @Id
     @Column(name = "goods_id", nullable = false)
@@ -438,7 +437,7 @@ public class GoodsEntity {
         GoodsEntity that = (GoodsEntity) o;
 
         if (goodsId != that.goodsId) return false;
-//        if (catId != that.catId) return false;  // TODO: 2017/7/23 先注释
+        if (catId != that.catId) return false;
         if (clickCount != that.clickCount) return false;
         if (brandId != that.brandId) return false;
         if (storeCount != that.storeCount) return false;
@@ -483,8 +482,7 @@ public class GoodsEntity {
     @Override
     public int hashCode() {
         int result = goodsId;
-        // TODO: 2017/7/23 先注释
-//        result = 31 * result + catId;
+        result = 31 * result + catId;
         result = 31 * result + (extendCatId != null ? extendCatId.hashCode() : 0);
         result = 31 * result + (goodsSn != null ? goodsSn.hashCode() : 0);
         result = 31 * result + (goodsName != null ? goodsName.hashCode() : 0);
@@ -524,13 +522,4 @@ public class GoodsEntity {
         return result;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "cat_id", referencedColumnName = "id", nullable = false)
-//    public GoodsCategoryEntity getCategoryId() {
-//        return categoryId;
-//    }
-//
-//    public void setCategoryId(GoodsCategoryEntity categoryId) {
-//        this.categoryId = categoryId;
-//    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "goods_category", schema = "clothShop", catalog = "")
 public class GoodsCategoryEntity {
+    @Id
     private int id;
     private String name;
     private String mobileName;
