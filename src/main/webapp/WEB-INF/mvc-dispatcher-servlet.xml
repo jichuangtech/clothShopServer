@@ -14,7 +14,7 @@
 
 
     <!--指明 controller 所在包，并扫描其中的注解-->
-    <context:component-scan base-package="com.jichuangtech.clothshopserver.controller"/>
+    <context:component-scan base-package="com.jichuangtech.clothshopserver.controller,com.jichuangtech.clothshopserver.service"/>
 
     <!-- 静态资源(js、image等)的访问 -->
     <mvc:default-servlet-handler/>
@@ -48,5 +48,32 @@
 
     <!-- ②：启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
+    
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />  
+
+	<mvc:annotation-driven conversion-service="conversionService"> 
+	<!-- spring返回的时候会根据这里的bean的顺序去匹配  -->
+		<mvc:message-converters register-defaults="false">  
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	        	<property name="supportedMediaTypes">  
+	                <list>  
+	                    <value>text/plain;charset=UTF-8</value>  
+	                </list>  
+				</property>
+	        </bean> 
+	         <!-- 修改为以下配置即可 -->  
+	        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+	        	<property name="supportedMediaTypes">  
+	                <list>  
+	                    <value>application/json;charset=UTF-8</value>  
+	                </list>  
+				</property>
+	           
+	        </bean> 
+	        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />  
+	        <bean class="org.springframework.http.converter.FormHttpMessageConverter" />  
+	        <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />  
+	    </mvc:message-converters>  
+	</mvc:annotation-driven>
 
 </beans>
