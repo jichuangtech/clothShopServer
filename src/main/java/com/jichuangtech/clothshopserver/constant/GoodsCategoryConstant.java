@@ -9,6 +9,8 @@ public class GoodsCategoryConstant {
     public static final String LIST  = "/list";
     public static final String IMAGE = "/image";
 
+    public static final String LIST_GOODS  = "/listGoods";
+
     public static final String SERVER_IMAGE_PATH = "//home/image/clothshop/";
 
     public static final String IMAGE_SUFFIX = ".jpg";

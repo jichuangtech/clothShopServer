@@ -34,20 +34,16 @@ public class GoodsController {
         return "goods";
     }
 
-    @RequestMapping(value = GoodsConstant.LIST, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(GoodsConstant.LIST)
     @ResponseBody
-    public String list() {
-        List<GoodsEntity> goodsList = mGoodsRepository.findAll();
-        String goodsListJson = JsonHelper.getJson(goodsList);
-        return goodsListJson;
+    public List<GoodsEntity> list() {
+        return mGoodsRepository.findAll();
     }
 
-    @RequestMapping(value = GoodsConstant.LIST + "/{goodsId}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(GoodsConstant.LIST + "/{goodsId}")
     @ResponseBody
-    public String listOne(@PathVariable int goodsId) {
+    public GoodsEntity listOne(@PathVariable int goodsId) {
         System.out.print("listOne goodsId: " + goodsId +" \n");
-        GoodsEntity goods = mGoodsRepository.findOne(goodsId);
-        String goodsJson = JsonHelper.getJson(goods);
-        return goodsJson;
+        return mGoodsRepository.findOne(goodsId);
     }
 }
