@@ -1,17 +1,10 @@
 package com.jichuangtech.clothshopserver.controller;
 
-import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
-import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
-import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
-import com.jichuangtech.clothshopserver.utils.JsonHelper;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.PropertyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,9 +33,9 @@ public class GoodsController {
         return mGoodsRepository.findAll();
     }
 
-    @RequestMapping(GoodsConstant.LIST + "/{goodsId}")
+    @RequestMapping(GoodsConstant.LIST_BY_ID)
     @ResponseBody
-    public GoodsEntity listOne(@PathVariable int goodsId) {
+    public GoodsEntity listById(int goodsId) {
         System.out.print("listOne goodsId: " + goodsId +" \n");
         return mGoodsRepository.findOne(goodsId);
     }

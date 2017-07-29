@@ -22,7 +22,6 @@ public class OrderController {
 	@RequestMapping(OrderConstant.LIST)
 	@ResponseBody
 	public List<OrderDetailVO> list(int userId){
-		System.out.print("我正在查询");
 		return orderService.getList(userId);
 	}
 	

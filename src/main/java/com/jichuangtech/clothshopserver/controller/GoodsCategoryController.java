@@ -43,16 +43,16 @@ public class GoodsCategoryController {
         return mGoodsCategoryRepository.findAll();
     }
 
-    @RequestMapping(GoodsCategoryConstant.LIST + "/{goodsCategoryId}")
+    @RequestMapping(GoodsCategoryConstant.LIST_BY_ID)
     @ResponseBody
-    public GoodsCategoryEntity listOne(@PathVariable int goodsCategoryId) {
+    public GoodsCategoryEntity listById(int goodsCategoryId) {
         System.out.print("listOne goodsCategoryId: " + goodsCategoryId + " \n");
         return mGoodsCategoryRepository.findOne(goodsCategoryId);
     }
 
-    @RequestMapping(GoodsCategoryConstant.LIST_GOODS + "/{goodsCategoryId}")
+    @RequestMapping(GoodsCategoryConstant.LIST_GOODS)
     @ResponseBody
-    public List<GoodsEntity> listGoods(@PathVariable int goodsCategoryId) {
+    public List<GoodsEntity> listGoodsById(int goodsCategoryId) {
         System.out.print("listOne listGoods: " + goodsCategoryId + " \n");
         GoodsCategoryEntity goodsCategory = mGoodsCategoryRepository.findOne(goodsCategoryId);
         return goodsCategory.getGoodsList();
