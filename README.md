@@ -1,11 +1,13 @@
 # clothShopServer
-金凤布料商城
+- ### 金凤布料商城
 
-服务器地址:www.jichaungtech.site/clothshopserver
+  - 服务器地址:www.jichaungtech.site/clothshopserver
 
-``RESTFUL``接口规范资料：（1）http://www.ruanyifeng.com/blog/2014/05/restful_api.html
 
-​				       （2）http://www.ruanyifeng.com/blog/2011/09/restful.html
+  -  ``RESTFUL``接口规范资料
+    - http://www.ruanyifeng.com/blog/2014/05/restful_api.html
+    - http://www.ruanyifeng.com/blog/2011/09/restful.html
+
 
 - ### 接口
 
