@@ -1,12 +1,10 @@
 package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
+import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
-import com.jichuangtech.clothshopserver.utils.JsonHelper;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.PropertyFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,22 +35,22 @@ public class GoodsCategoryController {
         return "goodsCategory";
     }
 
-    @RequestMapping(GoodsCategoryConstant.LIST)
+    @RequestMapping()
     @ResponseBody
     public List<GoodsCategoryEntity> list() {
         return mGoodsCategoryRepository.findAll();
     }
 
-    @RequestMapping(GoodsCategoryConstant.LIST_BY_ID)
+    @RequestMapping("/{goodsCategoryId}")
     @ResponseBody
-    public GoodsCategoryEntity listById(int goodsCategoryId) {
+    public GoodsCategoryEntity listById(@PathVariable int goodsCategoryId) {
         System.out.print("listOne goodsCategoryId: " + goodsCategoryId + " \n");
         return mGoodsCategoryRepository.findOne(goodsCategoryId);
     }
 
-    @RequestMapping(GoodsCategoryConstant.LIST_GOODS)
+    @RequestMapping("/{goodsCategoryId}" + GoodsConstant.GOODS)
     @ResponseBody
-    public List<GoodsEntity> listGoodsById(int goodsCategoryId) {
+    public List<GoodsEntity> listGoodsById(@PathVariable int goodsCategoryId) {
         System.out.print("listOne listGoods: " + goodsCategoryId + " \n");
         GoodsCategoryEntity goodsCategory = mGoodsCategoryRepository.findOne(goodsCategoryId);
         return goodsCategory.getGoodsList();
@@ -60,11 +58,11 @@ public class GoodsCategoryController {
 
 //        private static final String SERVER_IMAGE_PATH = "/Users/Bingo/Desktop/shop/clothShop/img/";
 
-    @RequestMapping(GoodsCategoryConstant.IMAGE + "/{picName}")
+    @RequestMapping(GoodsCategoryConstant.PICTURE + "/{picName}")
     @ResponseBody
-    public String getImage(HttpServletRequest request,
-                           HttpServletResponse response, Model model, @PathVariable String picName) {
-        System.out.println("getImage :" + picName);
+    public String getPicture(HttpServletRequest request,
+                             HttpServletResponse response, Model model, @PathVariable String picName) {
+        System.out.println("getPicture :" + picName);
         FileInputStream fis = null;
         OutputStream os = null;
         try {
@@ -77,7 +75,7 @@ public class GoodsCategoryController {
                 os.flush();
             }
         } catch (Exception e) {
-            System.out.println(" getImage e: " + e.getMessage());
+            System.out.println(" getPicture e: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
@@ -94,7 +92,7 @@ public class GoodsCategoryController {
             }
         }
 
-        return "getImage success ...";
+        return "getPicture success ...";
     }
 
 }

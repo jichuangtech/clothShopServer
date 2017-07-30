@@ -5,5 +5,7 @@ package com.jichuangtech.clothshopserver.constant;
  */
 public class GoodsConstant extends Constant{
 
-    public static final String API_GOODS = API + "/goods";
+    public static final String GOODS = "/goods";
+    public static final String API_GOODS = API + GOODS;
+
 }

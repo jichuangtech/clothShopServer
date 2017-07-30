@@ -5,6 +5,7 @@ import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,15 +28,15 @@ public class GoodsController {
         return "goods";
     }
 
-    @RequestMapping(GoodsConstant.LIST)
+    @RequestMapping()
     @ResponseBody
     public List<GoodsEntity> list() {
         return mGoodsRepository.findAll();
     }
 
-    @RequestMapping(GoodsConstant.LIST_BY_ID)
+    @RequestMapping("/{goodsId}")
     @ResponseBody
-    public GoodsEntity listById(int goodsId) {
+    public GoodsEntity listById(@PathVariable int goodsId) {
         System.out.print("listOne goodsId: " + goodsId +" \n");
         return mGoodsRepository.findOne(goodsId);
     }
