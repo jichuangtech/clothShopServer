@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -22,12 +24,14 @@ public class OrderEntity {
 	private byte orderStatus;
 	private byte shippingStatus;
 	private byte payStatus;
-	//商品总价
-	private BigDecimal goodsPrice;
+	private String address;
+	private String mobile;
+	private String consignee;
 	//订单总价
 	private BigDecimal totalAmount;
 
 	@Id
+	@GeneratedValue (strategy = GenerationType.IDENTITY)  
     @Column(name = "order_id", nullable = false)
     public int getOrderId() {
 		return orderId;
@@ -87,15 +91,6 @@ public class OrderEntity {
 		this.payStatus = payStatus;
 	}
 
-	@Basic
-    @Column(name = "goods_price", nullable = false)
-	public BigDecimal getGoodsPrice() {
-		return goodsPrice;
-	}
-
-	public void setGoodsPrice(BigDecimal goodsPrice) {
-		this.goodsPrice = goodsPrice;
-	}
 
 	@Basic
     @Column(name = "total_amount", nullable = false)
@@ -105,6 +100,36 @@ public class OrderEntity {
 
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	@Basic
+    @Column(name = "address", nullable = false)
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	@Basic
+    @Column(name = "mobile", nullable = false)
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	@Basic
+    @Column(name = "consignee", nullable = false)
+	public String getConsignee() {
+		return consignee;
+	}
+
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
 	}
 
 	

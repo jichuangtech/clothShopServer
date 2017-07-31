@@ -16,7 +16,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 public class ClientCallTest extends TestCase{
 	
     public void testJsonResponse() throws IOException, URISyntaxException {  
-        String url = "http://localhost:8080/clothshopserver/api/order/list?userId=16777215";  
+        String url = "http://localhost:8080/clothshopserver/api/order/16777215";  
 //    	String url = "http://localhost:8080/clothshopserver/api/goodsCategory/list";  
         ClientHttpRequest request = new SimpleClientHttpRequestFactory().createRequest(new URI(url), HttpMethod.GET); 
         request.getHeaders().set("Accept", "application/json");  
@@ -27,5 +27,22 @@ public class ClientCallTest extends TestCase{
   
         String jsonData = new String(bytes);  
         System.out.println(jsonData);  
+    }  
+    
+    public void testCreateOrder() throws IOException, URISyntaxException {  
+        String url = "http://localhost:8080/clothshopserver/api/order/16777215";  
+//    	String url = "http://localhost:8080/clothshopserver/api/goodsCategory/list";  
+        ClientHttpRequest request = new SimpleClientHttpRequestFactory().createRequest(new URI(url), HttpMethod.POST); 
+        request.getHeaders().set("Accept", "application/json");  
+        request.getHeaders().set("Content-Type", "application/json;UTF-8"); 
+        String requestJson = "{\"totalAmount\":0.00,\"address\":\"福建省厦门市瑞景商业广场\",\"mobile\":\"1885054234567\",\"consignee\":\"lxh\",\"goodsVO\":[{\"goodsId\":2,\"goodsPrice\":0.00,\"goodsNum\":1},{\"goodsId\":1,\"goodsPrice\":0.00,\"goodsNum\":2}]}";
+        request.getBody().write(requestJson.getBytes());
+        ClientHttpResponse response = request.execute();  
+        InputStream is = response.getBody();  
+        byte bytes[] = new byte[(int) response.getHeaders().getContentLength()];  
+        is.read(bytes);  
+        String jsonData = new String(bytes);  
+        System.out.println(jsonData);  
+        
     }  
 }

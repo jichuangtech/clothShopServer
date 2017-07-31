@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,15 +22,15 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 	
-	@RequestMapping(OrderConstant.LIST)
+	@RequestMapping(value="/{userId}",method = RequestMethod.GET)
 	@ResponseBody
-	public List<OrderDetailVO> list(int userId){
+	public List<OrderDetailVO> list(@PathVariable("userId")int userId){
 		return orderService.getList(userId);
 	}
 	
-	@RequestMapping(OrderConstant.ORDER_STATUS_LIST)
+	@RequestMapping(value="/{userId}/{orderStatus}",method = RequestMethod.GET)
 	@ResponseBody
-	public List<OrderDetailVO> getByOrderStatus(byte orderStatus,int userId){
+	public List<OrderDetailVO> getByOrderStatus(@PathVariable("orderStatus")byte orderStatus,@PathVariable("userId")int userId){
 		return orderService.getByOrderStatus(orderStatus, userId);
 	}
 	
@@ -43,8 +46,9 @@ public class OrderController {
 		return orderService.getByPayStatus(payStatus, userId);
 	}
 
-	
-	public void saveOrder(OrderEntity orderEntity){
-		orderService.saveOrder(orderEntity);
+	@RequestMapping(value="/{userId}",method=RequestMethod.POST)
+	@ResponseBody
+	public OrderDetailVO saveOrder(@PathVariable("userId")int userId,@RequestBody OrderDetailVO orderDetailVO){
+		return orderService.saveOrder(userId,orderDetailVO);
 	}
 }
