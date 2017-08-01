@@ -114,6 +114,9 @@ public class OrderService {
 	 * @return
 	 */
 	public List<OrderDetailVO> getByOrderStatus(byte orderStatus,int userId){
+		if(orderStatus == 0){
+			return getList(userId);
+		}
 		List<OrderEntity> orderEntityList = orderRepository.findByOrderStatusAndUserId(orderStatus, userId);
 		return getGoodsDetailInfo(orderEntityList);
 	}
