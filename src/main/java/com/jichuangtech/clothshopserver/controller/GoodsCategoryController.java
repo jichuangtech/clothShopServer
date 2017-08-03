@@ -5,6 +5,7 @@ import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
+import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,39 +61,10 @@ public class GoodsCategoryController {
 
     @RequestMapping(GoodsCategoryConstant.PICTURE + "/{picName}")
     @ResponseBody
-    public String getPicture(HttpServletRequest request,
+    public String getGoodsCategoryPicture(HttpServletRequest request,
                              HttpServletResponse response, Model model, @PathVariable String picName) {
-        System.out.println("getPicture :" + picName);
-        FileInputStream fis = null;
-        OutputStream os = null;
-        try {
-            fis = new FileInputStream(SERVER_IMAGE_PATH + picName + IMAGE_SUFFIX);
-            os = response.getOutputStream();
-            int count = 0;
-            byte[] buffer = new byte[1024 * 8];
-            while ((count = fis.read(buffer)) != -1) {
-                os.write(buffer, 0, count);
-                os.flush();
-            }
-        } catch (Exception e) {
-            System.out.println(" getPicture e: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fis != null) {
-                    fis.close();
-                }
-
-                if (fis != null) {
-                    os.close();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return "getPicture success ...";
+        PictureUtils.writePic(response,SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
+        return "getGoodsCategoryPicture success ...";
     }
 
 }
