@@ -13,10 +13,11 @@
 
   - ##### 商品
 
-    | 作用域                  | 接口说明   | 参数说明             |
-    | -------------------- | ------ | ---------------- |
-    | /api/goods           | 获取全部商品 | 无                |
-    | /api/goods/{goodsId} | 获取某个商品 | ``{goodId}``商品Id |
+    | 作用域                          | 接口说明    | 参数说明               |
+    | ---------------------------- | ------- | ------------------ |
+    | /api/goods                   | 获取全部商品  | 无                  |
+    | /api/goods/{goodsId}         | 获取某个商品  | ``{goodId}``商品Id   |
+    | /api/goods/picture/{picName} | 查看商品的图片 | ``{picName}``图片的名字 |
 
   - ##### 商品分类
 
@@ -28,11 +29,11 @@
     | /api/goodsCategories/picture/{picName}   | 查看商品分类的图片     | ``{picName}``图片的名字          |
 
   - ##### 订单
-	
-	  | 作用域                                                 | 接口说明            | 参数说明 |
-	  | ----------------------------------------               | ------------------  | ---- |
-	  | /clothshopserver/api/order/{userId}/{orderStatus}      | 查询用户订单				 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单|
-	  | /clothshopserver/api/order/{userId}                    | 生成订单         		 | {userId}:用户Id                                      |
+
+    | 作用域                                      | 接口说明   | 参数说明                                     |
+    | ---------------------------------------- | ------ | ---------------------------------------- |
+    | /clothshopserver/api/order/{userId}/{orderStatus} | 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
+    | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id                            |
 
 
   ​
