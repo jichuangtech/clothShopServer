@@ -49,6 +49,7 @@ public class GoodsEntity {
     private String sku;
     private String shippingAreaIds;
 
+
     @Id
     @Column(name = "goods_id", nullable = false)
     public int getGoodsId() {

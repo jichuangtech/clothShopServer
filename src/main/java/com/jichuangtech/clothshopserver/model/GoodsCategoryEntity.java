@@ -186,7 +186,6 @@ public class GoodsCategoryEntity {
     }
 
     @OneToMany(mappedBy = "catId", fetch = FetchType.EAGER)
-//    @OneToMany(mappedBy = "categoryId", fetch = FetchType.EAGER)
     public List<GoodsEntity> getGoodsList() {
         return goodsList;
     }

@@ -35,7 +35,18 @@
     | /clothshopserver/api/order/{userId}/{orderStatus} | 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
     | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id                            |
 
+  - ##### 收货地址
 
-  ​
+    | 作用域                                      | 接口说明   | 参数说明                                     |
+    | ---------------------------------------- | ------ | ---------------------------------------- |
+    | /clothshopserver/api/address/{userId}/{orderStatus} | 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
+    | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id                            |
 
-  ##### 
+
+  - ##### 收货地址
+
+    | 作用域                                      | 接口说明   | 参数说明                  |
+    | ---------------------------------------- | ------ | --------------------- |
+    | /clothshopserver/api/goodsSpec           | 查询所有规格 | 无                     |
+    | /clothshopserver/api/goodsSpec/{goodsSpecId} | 查询某个规格 | ``{goodsSpecId}``规格Id |
+    |                                          |        |                       |

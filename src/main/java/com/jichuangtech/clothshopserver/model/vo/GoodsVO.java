@@ -3,6 +3,9 @@ package com.jichuangtech.clothshopserver.model.vo;
 import java.math.BigDecimal;
 
 public class GoodsVO {
+	/**
+	 * 规格 , 单价
+	 */
 	private int goodsId;
 	/**本店价 */
 	private BigDecimal goodsPrice;
