@@ -2,6 +2,7 @@ package com.jichuangtech.clothshopserver.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Bingo on 2017/7/23.
@@ -48,6 +49,7 @@ public class GoodsEntity {
     private String spu;
     private String sku;
     private String shippingAreaIds;
+    private List<GoodsSpecificationEntity> goodsSpecs;
 
 
     @Id
@@ -521,6 +523,15 @@ public class GoodsEntity {
         result = 31 * result + (sku != null ? sku.hashCode() : 0);
         result = 31 * result + (shippingAreaIds != null ? shippingAreaIds.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "goodsId", fetch = FetchType.EAGER)
+    public List<GoodsSpecificationEntity> getGoodsSpecs() {
+        return goodsSpecs;
+    }
+
+    public void setGoodsSpecs(List<GoodsSpecificationEntity> goodsSpecs) {
+        this.goodsSpecs = goodsSpecs;
     }
 
 }
