@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "goods_brand", schema = "clothShop", catalog = "")
 public class GoodsBrandEntity {
-    private short id;
+    private int id;
     private String name;
     private String logo;
     private String desc;
@@ -21,11 +21,11 @@ public class GoodsBrandEntity {
 
     @Id
     @Column(name = "id", nullable = false)
-    public short getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(short id) {
+    public void setId(int id) {
         this.id = id;
     }
 
