@@ -50,6 +50,7 @@ public class GoodsEntity {
     private String sku;
     private String shippingAreaIds;
     private List<GoodsSpecificationEntity> goodsSpecs;
+    private List<GoodsImagesEntity> goodsDetailImages;
 
 
     @Id
@@ -533,5 +534,17 @@ public class GoodsEntity {
     public void setGoodsSpecs(List<GoodsSpecificationEntity> goodsSpecs) {
         this.goodsSpecs = goodsSpecs;
     }
+
+
+    @OneToMany(mappedBy = "goodsId", fetch = FetchType.EAGER)
+    public List<GoodsImagesEntity> getGoodsDetailImages() {
+        return goodsDetailImages;
+    }
+
+    public void setGoodsDetailImages(List<GoodsImagesEntity> goodsDetailImages) {
+        this.goodsDetailImages = goodsDetailImages;
+    }
+
+
 
 }
