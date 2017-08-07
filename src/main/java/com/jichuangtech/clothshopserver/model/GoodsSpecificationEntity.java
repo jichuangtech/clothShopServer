@@ -11,6 +11,26 @@ public class GoodsSpecificationEntity {
     private int id;
     private int goodsId;
     private int specId;
+    private String specName;
+    private double specPrice;
+
+    @Column(name = "spec_price")
+    public double getSpecPrice() {
+        return specPrice;
+    }
+
+    public void setSpecPrice(double specPrice) {
+        this.specPrice = specPrice;
+    }
+
+    @Column(name = "spec_name", nullable = false)
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
