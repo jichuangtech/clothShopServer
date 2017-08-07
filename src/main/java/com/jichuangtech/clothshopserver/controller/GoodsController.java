@@ -6,6 +6,7 @@ import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,19 @@ public class GoodsController {
     @ResponseBody
     public List<GoodsEntity> list() {
         return mGoodsRepository.findAll();
+    }
+
+
+    @RequestMapping(value = GoodsConstant.HOT)
+    @ResponseBody
+    public List<GoodsEntity> listHot() {
+        return mGoodsRepository.findAllByIsHot(new Byte("1"));
+    }
+
+    @RequestMapping(value = GoodsConstant.HOT + "/{goodsId}")
+    @ResponseBody
+    public GoodsEntity listHotById(@PathVariable int goodsId) {
+        return mGoodsRepository.findByIsHotAndGoodsId(new Byte("1"), goodsId);
     }
 
     @RequestMapping("/{goodsId}")
