@@ -13,13 +13,13 @@
 
   - ##### 商品
 
-    | 作用域                          | 接口说明     | 参数说明               |
-    | ---------------------------- | -------- | ------------------ |
-    | /api/goods                   | 获取全部商品   | 无                  |
-    | /api/goods/{goodsId}         | 获取某个商品   | ``{goodId}``商品Id   |
-    | /api/goods/picture/{picName} | 查看商品的图片  | ``{picName}``图片的名字 |
-    | /api/goods/hot               | 获取热销商品   | 无                  |
-    | /api/goods/hot/{goodsId}     | 获取某个热销商品 | ``{goodId}``商品Id   |
+    | 作用域                          | 接口说明           | 参数说明               |
+    | ---------------------------- | -------------- | ------------------ |
+    | /api/goods                   | 获取全部商品         | 无                  |
+    | /api/goods/{goodsId}         | 获取某个商品         | ``{goodId}``商品Id   |
+    | /api/goods/picture/{picName} | 查看商品的图片/详细信息图片 | ``{picName}``图片的名字 |
+    | /api/goods/hot               | 获取热销商品         | 无                  |
+    | /api/goods/hot/{goodsId}     | 获取某个热销商品       | ``{goodId}``商品Id   |
 
   - ##### 商品分类
 
