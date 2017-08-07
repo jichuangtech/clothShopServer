@@ -60,7 +60,7 @@ public class GoodsController {
     @ResponseBody
     public GoodsEntity listById(@PathVariable int goodsId) {
         System.out.print("listOne goodsId: " + goodsId +" \n");
-        return mGoodsRepository.findOne(goodsId);
+        return mGoodsRepository.findByGoodsId(goodsId);
     }
 
     @RequestMapping(GoodsConstant.PICTURE + "/{picName}")
