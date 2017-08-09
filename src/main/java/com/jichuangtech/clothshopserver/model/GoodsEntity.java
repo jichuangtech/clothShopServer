@@ -46,8 +46,8 @@ public class GoodsEntity {
     private Byte promType;
     private Integer promId;
     private BigDecimal commission;
-    private String spu;
-    private String sku;
+//    private String spu;
+//    private String sku;
     private String shippingAreaIds;
     private List<GoodsSpecificationEntity> goodsSpecs;
     private List<GoodsImagesEntity> goodsDetailImages;
@@ -404,25 +404,25 @@ public class GoodsEntity {
         this.commission = commission;
     }
 
-    @Basic
-    @Column(name = "spu", nullable = true, length = 128)
-    public String getSpu() {
-        return spu;
-    }
-
-    public void setSpu(String spu) {
-        this.spu = spu;
-    }
-
-    @Basic
-    @Column(name = "sku", nullable = true, length = 128)
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
+//    @Basic
+//    @Column(name = "spu", nullable = true, length = 128)
+//    public String getSpu() {
+//        return spu;
+//    }
+//
+//    public void setSpu(String spu) {
+//        this.spu = spu;
+//    }
+//
+//    @Basic
+//    @Column(name = "sku", nullable = true, length = 128)
+//    public String getSku() {
+//        return sku;
+//    }
+//
+//    public void setSku(String sku) {
+//        this.sku = sku;
+//    }
 
     @Basic
     @Column(name = "shipping_area_ids", nullable = false, length = 255)
@@ -476,8 +476,8 @@ public class GoodsEntity {
         if (promType != null ? !promType.equals(that.promType) : that.promType != null) return false;
         if (promId != null ? !promId.equals(that.promId) : that.promId != null) return false;
         if (commission != null ? !commission.equals(that.commission) : that.commission != null) return false;
-        if (spu != null ? !spu.equals(that.spu) : that.spu != null) return false;
-        if (sku != null ? !sku.equals(that.sku) : that.sku != null) return false;
+//        if (spu != null ? !spu.equals(that.spu) : that.spu != null) return false;
+//        if (sku != null ? !sku.equals(that.sku) : that.sku != null) return false;
         if (shippingAreaIds != null ? !shippingAreaIds.equals(that.shippingAreaIds) : that.shippingAreaIds != null)
             return false;
 
@@ -521,8 +521,8 @@ public class GoodsEntity {
         result = 31 * result + (promType != null ? promType.hashCode() : 0);
         result = 31 * result + (promId != null ? promId.hashCode() : 0);
         result = 31 * result + (commission != null ? commission.hashCode() : 0);
-        result = 31 * result + (spu != null ? spu.hashCode() : 0);
-        result = 31 * result + (sku != null ? sku.hashCode() : 0);
+//        result = 31 * result + (spu != null ? spu.hashCode() : 0);
+//        result = 31 * result + (sku != null ? sku.hashCode() : 0);
         result = 31 * result + (shippingAreaIds != null ? shippingAreaIds.hashCode() : 0);
         return result;
     }
