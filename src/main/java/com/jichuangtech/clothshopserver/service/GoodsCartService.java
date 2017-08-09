@@ -30,9 +30,16 @@ import java.util.List;
 public class GoodsCartService {
     @Autowired
     private GoodsCartRepository mGoodsCartRepository;
-    @Autowired
-    private GoodsRepository goodsRepository;
 
+    /**
+     * 查找用户所有购物车
+     *
+     * @return
+     */
+    public List<GoodsCartVO> getList(int userId) {
+        List<GoodsCartEntity> goodsCartEntityList = mGoodsCartRepository.findAllByUserId(userId);
+        return getGoodsCartDetailInfo(goodsCartEntityList);
+    }
 
     public GoodsCartVO saveGoodsCart(int userId, GoodsCartVO goodsCartVO) {
         GoodsCartEntity entity = createCart(userId, goodsCartVO);
@@ -53,6 +60,44 @@ public class GoodsCartService {
         entity.setSpecName(goodsVO.getSpecName());
         entity.setGoodsSn(goodsVO.getGoodsSn());
         return mGoodsCartRepository.save(entity);
+    }
+
+
+    /**
+     * 获取购物车的详细信息
+     *
+     * @param goodsCartEntityList
+     * @return
+     */
+    private List<GoodsCartVO> getGoodsCartDetailInfo(List<GoodsCartEntity> goodsCartEntityList) {
+        List<GoodsCartVO> goodsCartVOList = new ArrayList<>();
+        for (int i = 0; i < goodsCartEntityList.size(); i++) {
+            GoodsCartEntity goodsCartEntity = goodsCartEntityList.get(i);
+            GoodsCartVO goodsCartVO = createGoodsCartVO(goodsCartEntity);
+            goodsCartVOList.add(goodsCartVO);
+        }
+        return goodsCartVOList;
+    }
+
+    /**
+     * goodsCartEntity
+     *
+     * @param goodsCartEntity
+     */
+    private GoodsCartVO createGoodsCartVO(GoodsCartEntity goodsCartEntity) {
+        GoodsCartVO goodsCartVO = new GoodsCartVO();
+        goodsCartVO.setId(goodsCartEntity.getId());
+        GoodsVO goodsVO = new GoodsVO();
+
+        goodsVO.setGoodsId(goodsCartEntity.getGoodsId());
+        goodsVO.setGoodsSn(goodsCartEntity.getGoodsSn());
+        goodsVO.setSpecName(goodsCartEntity.getSpecName());
+        goodsVO.setGoodsNum(goodsCartEntity.getGoodsNum());
+        goodsVO.setGoodsPrice(goodsCartEntity.getGoodsPrice());
+        goodsVO.setGoodsName(goodsCartEntity.getGoodsName());
+
+        goodsCartVO.setGoodsVO(goodsVO);
+        return goodsCartVO;
     }
 
 }

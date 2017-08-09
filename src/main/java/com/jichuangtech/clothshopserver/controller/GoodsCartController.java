@@ -34,6 +34,11 @@ public class GoodsCartController {
     @Autowired
     private GoodsCartService mGoodsCartService;
 
+    @RequestMapping(value="/{userId}",method = RequestMethod.GET)
+    @ResponseBody
+    public List<GoodsCartVO> list(@PathVariable("userId")int userId){
+        return mGoodsCartService.getList(userId);
+    }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
     @ResponseBody
