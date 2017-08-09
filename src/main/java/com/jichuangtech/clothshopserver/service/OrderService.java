@@ -96,6 +96,8 @@ public class OrderService {
 			BigDecimal goodsPrice = orderGoodsEntity.getGoodsPrice();
 			goodsVO.setGoodsNum(goodsNum);
 			goodsVO.setGoodsPrice(goodsPrice);
+            goodsVO.setSpecName(orderGoodsEntity.getSpecName());
+            goodsVO.setGoodsSn(orderGoodsEntity.getGoodsSn());
 			int goodsId = orderGoodsEntity.getGoodsId();
 			goodsVO.setGoodsId(goodsId);
 			//根据商品id查找商品信息
@@ -174,6 +176,8 @@ public class OrderService {
 			orderGoodsEntity.setGoodsId(goodsVO.getGoodsId());
 			orderGoodsEntity.setGoodsNum(goodsVO.getGoodsNum());
 			orderGoodsEntity.setGoodsPrice(goodsVO.getGoodsPrice());
+            orderGoodsEntity.setGoodsSn(goodsVO.getGoodsSn());
+            orderGoodsEntity.setSpecName(goodsVO.getSpecName());
 			orderGoodsEntityList.add(orderGoodsEntity);
 		}
 		return orderGoodsRepository.save(orderGoodsEntityList);
