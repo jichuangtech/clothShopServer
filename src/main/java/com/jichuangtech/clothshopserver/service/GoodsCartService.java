@@ -100,4 +100,14 @@ public class GoodsCartService {
         return goodsCartVO;
     }
 
+    public GoodsCartVO deleteCart(int cartId) {
+        GoodsCartEntity entity = mGoodsCartRepository.findById(cartId);
+        GoodsCartVO goodsCartVO = new GoodsCartVO();
+        if(entity != null) {
+            goodsCartVO =createGoodsCartVO(entity);
+            mGoodsCartRepository.delete(mGoodsCartRepository.findById(cartId));
+        }
+
+        return goodsCartVO;
+    }
 }

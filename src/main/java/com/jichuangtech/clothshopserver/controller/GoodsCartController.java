@@ -34,6 +34,12 @@ public class GoodsCartController {
     @Autowired
     private GoodsCartService mGoodsCartService;
 
+    @RequestMapping(value="/{cartId}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public GoodsCartVO delete(@PathVariable("cartId")int cartId){
+        return mGoodsCartService.deleteCart(cartId);
+    }
+
     @RequestMapping(value="/{userId}",method = RequestMethod.GET)
     @ResponseBody
     public List<GoodsCartVO> list(@PathVariable("userId")int userId){
