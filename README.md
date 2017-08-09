@@ -46,8 +46,35 @@
 
   -   ##### 规格
 
-  | 作用域                                      | 接口说明   | 参数说明                  |
-  | ---------------------------------------- | ------ | --------------------- |
-  | /clothshopserver/api/goodsSpec           | 查询所有规格 | 无                     |
-  | /clothshopserver/api/goodsSpec/{goodsSpecId} | 查询某个规格 | ``{goodsSpecId}``规格Id |
-  |                                          |        |                       |
+      | 作用域                                      | 接口说明   | 参数说明                  |
+      | ---------------------------------------- | ------ | --------------------- |
+      | /clothshopserver/api/goodsSpec           | 查询所有规格 | 无                     |
+      | /clothshopserver/api/goodsSpec/{goodsSpecId} | 查询某个规格 | ``{goodsSpecId}``规格Id |
+      |                                          |        |                       |
+
+  -   ##### 购物车
+
+      | 作用域                     | 接口说明                | 参数说明                                |
+      | ----------------------- | ------------------- | ----------------------------------- |
+      | /api/goodsCart/{userId} | ``GET``，查询某用户的所有购物车 | ``{userId}``用户Id                    |
+      | /api/goodsCart/{userId} | ``PUT``，某用户生成购物车    | ``{userId}``用户Id，请求体``GoodsCartVO`` |
+      | /api/goodsCart/{cartId} | ``DELETE``，删除某购物车   | `{cartId}`要删除的购物车的Id                |
+
+      PS:  生成购物车的接口``PUT  /api/goodsCart/{userId}``，需要携带下面格式的``请求体``
+
+      ```json
+      {
+          "goodsVO":
+              {
+                  "goodsId":1,           //商品id
+                  "goodsPrice":12.00,    //商品价格
+                  "goodsNum":99,         //商品价格
+                  "goodsName":"美国网1",  //商品名字
+                  "specName":"码",        //规格
+                  "goodsSn":"13233232"    //商品货号
+              }
+
+      }
+      ```
+
+      ​
