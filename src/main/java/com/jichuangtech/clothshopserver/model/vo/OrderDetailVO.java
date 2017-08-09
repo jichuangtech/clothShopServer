@@ -21,7 +21,7 @@ public class OrderDetailVO {
 	/** 订单状态*/
 	private byte orderStatus;
 	
-	List<GoodsVO> GoodsVO;
+	private List<GoodsVO> GoodsVO;
 	public BigDecimal getTotalAmount() {
 		return totalAmount;
 	}
@@ -70,6 +70,9 @@ public class OrderDetailVO {
 	public void setOrderStatus(byte orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "[ mobile: " + mobile + ", consignee: " + consignee +"]";
+	}
 }

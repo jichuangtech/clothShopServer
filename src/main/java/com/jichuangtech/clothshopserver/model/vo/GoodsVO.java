@@ -12,6 +12,14 @@ public class GoodsVO {
 	/** 购买数量 */
 	private short goodsNum;
 	private String goodsName;
+	/**
+	 * 规格
+	 */
+	private String specName;
+	/**
+	 * 货号
+	 */
+	private String goodsSn;
 	public BigDecimal getGoodsPrice() {
 		return goodsPrice;
 	}
@@ -36,5 +44,20 @@ public class GoodsVO {
 	public void setGoodsId(int goodsId) {
 		this.goodsId = goodsId;
 	}
-	
+
+	public String getGoodsSn() {
+		return goodsSn;
+	}
+
+	public void setGoodsSn(String goodsSn) {
+		this.goodsSn = goodsSn;
+	}
+
+	public String getSpecName() {
+		return specName;
+	}
+
+	public void setSpecName(String specName) {
+		this.specName = specName;
+	}
 }

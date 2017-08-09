@@ -22,6 +22,8 @@ public class OrderGoodsEntity {
 	private int orderId;
 	private int goodsId;
 	private short goodsNum;
+	private String specName;
+	private String goodsSn;
 	//商品总价
 	private BigDecimal goodsPrice;
 
@@ -76,6 +78,25 @@ public class OrderGoodsEntity {
 		this.goodsPrice = goodsPrice;
 	}
 
+	@Basic
+	@Column(name = "goods_sn", nullable = false, length = 60)
+	public String getGoodsSn() {
+		return goodsSn;
+	}
 
+	public void setGoodsSn(String goodsSn) {
+		this.goodsSn = goodsSn;
+	}
+
+
+	@Basic
+	@Column(name = "spec_name", nullable = false, length = 64)
+	public String getSpecName() {
+		return specName;
+	}
+
+	public void setSpecName(String specName) {
+		this.specName = specName;
+	}
 	
 }
