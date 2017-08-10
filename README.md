@@ -1,5 +1,5 @@
 # clothShopServer
-- ### 金凤布料商城
+- ### 金凤针织商城服务端
 
   - 服务器地址:www.jichuangtech.site/clothshopserver
 
@@ -44,7 +44,7 @@
     | /clothshopserver/api/address/{userId}/{orderStatus} | 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
     | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id                            |
 
-  -   ##### 规格
+  - ##### 规格
 
       | 作用域                                      | 接口说明   | 参数说明                  |
       | ---------------------------------------- | ------ | --------------------- |
@@ -52,7 +52,7 @@
       | /clothshopserver/api/goodsSpec/{goodsSpecId} | 查询某个规格 | ``{goodsSpecId}``规格Id |
       |                                          |        |                       |
 
-  -   ##### 购物车
+  - ##### 购物车
 
       | 作用域                     | 接口说明                | 参数说明                                |
       | ----------------------- | ------------------- | ----------------------------------- |
