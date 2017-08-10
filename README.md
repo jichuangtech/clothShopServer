@@ -60,7 +60,7 @@
       | /api/goodsCart          | ``PUT``，某用户生成购物车    | 请求体``GoodsCartVO``   |
       | /api/goodsCart/{cartId} | ``DELETE``，删除某购物车   | `{cartId}`要删除的购物车的Id |
 
-      PS:  生成购物车的接口``PUT  /api/goodsCart/{userId}``，需要携带下面格式的``请求体``
+      PS:  生成购物车的接口``PUT  /api/goodsCart，需要携带下面格式的``请求体``
 
       ```json
       {
