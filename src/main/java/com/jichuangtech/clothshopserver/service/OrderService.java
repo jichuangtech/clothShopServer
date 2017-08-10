@@ -93,7 +93,7 @@ public class OrderService {
 			GoodsVO goodsVO = new GoodsVO();
 			OrderGoodsEntity orderGoodsEntity = orderGoodsEntityList.get(j);
 			short goodsNum = orderGoodsEntity.getGoodsNum();
-			BigDecimal goodsPrice = orderGoodsEntity.getGoodsPrice();
+			double goodsPrice = orderGoodsEntity.getGoodsPrice();
 			goodsVO.setGoodsNum(goodsNum);
 			goodsVO.setGoodsPrice(goodsPrice);
             goodsVO.setSpecName(orderGoodsEntity.getSpecName());

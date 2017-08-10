@@ -8,7 +8,7 @@ public class GoodsVO {
 	 */
 	private int goodsId;
 	/**本店价 */
-	private BigDecimal goodsPrice;
+	private double goodsPrice;
 	/** 购买数量 */
 	private short goodsNum;
 	private String goodsName;
@@ -16,14 +16,19 @@ public class GoodsVO {
 	 * 规格
 	 */
 	private String specName;
+
+	/**
+	 * 颜色
+	 */
+	private String color;
 	/**
 	 * 货号
 	 */
 	private String goodsSn;
-	public BigDecimal getGoodsPrice() {
+	public double getGoodsPrice() {
 		return goodsPrice;
 	}
-	public void setGoodsPrice(BigDecimal goodsPrice) {
+	public void setGoodsPrice(double goodsPrice) {
 		this.goodsPrice = goodsPrice;
 	}
 	public short getGoodsNum() {
@@ -59,5 +64,13 @@ public class GoodsVO {
 
 	public void setSpecName(String specName) {
 		this.specName = specName;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 }

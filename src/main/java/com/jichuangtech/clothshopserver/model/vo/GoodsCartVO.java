@@ -10,9 +10,30 @@ public class GoodsCartVO {
     private int id;
 
     /**
-     * 本物品的详细信息
+     * 用户Id
      */
-    GoodsVO goodsVO;
+
+    private int userId;
+
+    /**
+     * 商品id
+     */
+    private int goodsId;
+
+    /**
+     * 颜色id
+     */
+    private int colorId;
+
+    /**
+     * 货物数量
+     */
+    private short goodsNum;
+
+    /**
+     * 规格Id
+     */
+    private int specId;
 
     public int getId() {
         return id;
@@ -22,11 +43,44 @@ public class GoodsCartVO {
         this.id = id;
     }
 
-    public GoodsVO getGoodsVO() {
-        return goodsVO;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setGoodsVO(GoodsVO goodsVO) {
-        this.goodsVO = goodsVO;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
+
+    public int getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    public short getGoodsNum() {
+        return goodsNum;
+    }
+
+    public void setGoodsNum(short goodsNum) {
+        this.goodsNum = goodsNum;
+    }
+
+    public int getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(int specId) {
+        this.specId = specId;
+    }
+
 }

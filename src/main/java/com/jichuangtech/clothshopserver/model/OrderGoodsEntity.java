@@ -25,7 +25,7 @@ public class OrderGoodsEntity {
 	private String specName;
 	private String goodsSn;
 	//商品总价
-	private BigDecimal goodsPrice;
+	private double goodsPrice;
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -70,11 +70,11 @@ public class OrderGoodsEntity {
 
 	@Basic
     @Column(name = "goods_price", nullable = false)
-	public BigDecimal getGoodsPrice() {
+	public double getGoodsPrice() {
 		return goodsPrice;
 	}
 
-	public void setGoodsPrice(BigDecimal goodsPrice) {
+	public void setGoodsPrice(double goodsPrice) {
 		this.goodsPrice = goodsPrice;
 	}
 

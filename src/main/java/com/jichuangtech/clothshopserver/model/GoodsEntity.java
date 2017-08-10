@@ -555,6 +555,25 @@ public class GoodsEntity {
         this.goodsColors = goodsColors;
     }
 
+    public GoodsSpecificationEntity getGoodsSpec(int specId) {
+
+        for(GoodsSpecificationEntity spec : goodsSpecs) {
+            if(spec.getSpecId() == specId) {
+                return spec;
+            }
+        }
+        return null;
+    }
+
+    public GoodsColorEntity getGoodsColor(int colorId) {
+
+        for(GoodsColorEntity color : goodsColors) {
+            if(color.getColorId() == colorId) {
+                return color;
+            }
+        }
+        return null;
+    }
 
 
 }

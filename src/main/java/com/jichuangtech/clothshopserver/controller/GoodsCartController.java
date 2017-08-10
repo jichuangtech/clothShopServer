@@ -5,6 +5,7 @@ import com.jichuangtech.clothshopserver.constant.GoodsCartConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsBrandEntity;
 import com.jichuangtech.clothshopserver.model.GoodsCartEntity;
+import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsVO;
 import com.jichuangtech.clothshopserver.model.vo.OrderDetailVO;
@@ -36,19 +37,19 @@ public class GoodsCartController {
 
     @RequestMapping(value="/{cartId}",method = RequestMethod.DELETE)
     @ResponseBody
-    public GoodsCartVO delete(@PathVariable("cartId")int cartId){
+    public Response delete(@PathVariable("cartId")int cartId){
         return mGoodsCartService.deleteCart(cartId);
     }
 
     @RequestMapping(value="/{userId}",method = RequestMethod.GET)
     @ResponseBody
-    public List<GoodsCartVO> list(@PathVariable("userId")int userId){
+    public List<GoodsVO> list(@PathVariable("userId")int userId){
         return mGoodsCartService.getList(userId);
     }
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public GoodsCartVO saveGoodsCart(@PathVariable("userId") int userId, @RequestBody GoodsCartVO goodsCartVO) {
-        return mGoodsCartService.saveGoodsCart(userId, goodsCartVO);
+    public Response saveGoodsCart(@RequestBody GoodsCartVO goodsCartVO) {
+        return mGoodsCartService.saveGoodsCart(goodsCartVO);
     }
 }

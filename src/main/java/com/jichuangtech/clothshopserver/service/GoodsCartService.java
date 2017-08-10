@@ -1,10 +1,7 @@
 package com.jichuangtech.clothshopserver.service;
 
 import com.jichuangtech.clothshopserver.constant.OrderConstant;
-import com.jichuangtech.clothshopserver.model.GoodsCartEntity;
-import com.jichuangtech.clothshopserver.model.GoodsEntity;
-import com.jichuangtech.clothshopserver.model.OrderEntity;
-import com.jichuangtech.clothshopserver.model.OrderGoodsEntity;
+import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsVO;
 import com.jichuangtech.clothshopserver.model.vo.OrderDetailVO;
@@ -31,37 +28,51 @@ public class GoodsCartService {
     @Autowired
     private GoodsCartRepository mGoodsCartRepository;
 
+    @Autowired
+    private GoodsRepository mGoodsRepository;
+
     /**
      * 查找用户所有购物车
      *
      * @return
      */
-    public List<GoodsCartVO> getList(int userId) {
+    public List<GoodsVO> getList(int userId) {
         List<GoodsCartEntity> goodsCartEntityList = mGoodsCartRepository.findAllByUserId(userId);
-        return getGoodsCartDetailInfo(goodsCartEntityList);
+        return getGoodsVOs(goodsCartEntityList);
     }
 
-    public GoodsCartVO saveGoodsCart(int userId, GoodsCartVO goodsCartVO) {
-        GoodsCartEntity entity = createCart(userId, goodsCartVO);
-        goodsCartVO.setId(entity.getId());
-        return goodsCartVO;
+    public Response saveGoodsCart(GoodsCartVO goodsCartVO) {
+        Response response = new Response();
+        GoodsCartEntity entity = createCart(goodsCartVO);
+        if(entity == null) {
+            response.statusCode = -1;
+        }
+        return response;
     }
 
-    private GoodsCartEntity createCart(int userId, GoodsCartVO goodsCartVO) {
+    private GoodsCartEntity createCart(GoodsCartVO goodsCartVO) {
         Calendar calendar = Calendar.getInstance();
         GoodsCartEntity entity = new GoodsCartEntity();
-        GoodsVO goodsVO = goodsCartVO.getGoodsVO();
-        entity.setUserId(userId);
-        entity.setGoodsId(goodsVO.getGoodsId());
-        entity.setGoodsName(goodsVO.getGoodsName());
-        entity.setGoodsNum(goodsVO.getGoodsNum());
-        entity.setGoodsPrice(goodsVO.getGoodsPrice());
+        GoodsEntity goods = mGoodsRepository.findByGoodsId(goodsCartVO.getGoodsId());
+        entity.setUserId(goodsCartVO.getUserId());
+        entity.setGoodsId(goods.getGoodsId());
+        entity.setGoodsName(goods.getGoodsName());
+        entity.setGoodsNum(goodsCartVO.getGoodsNum());
         entity.setAddTime(calendar.getTimeInMillis());
-        entity.setSpecName(goodsVO.getSpecName());
-        entity.setGoodsSn(goodsVO.getGoodsSn());
+        entity.setGoodsSn(goods.getGoodsSn());
+        GoodsSpecificationEntity goodsSpecEntity = goods.getGoodsSpec(goodsCartVO.getSpecId());
+        if(goodsSpecEntity != null) {
+            entity.setSpecName(goodsSpecEntity.getSpecName());
+            entity.setGoodsPrice(goodsSpecEntity.getSpecPrice());
+        }
+
+        GoodsColorEntity color = goods.getGoodsColor(goodsCartVO.getColorId());
+        if(color != null) {
+            entity.setColorName(color.getColorName());
+        }
+
         return mGoodsCartRepository.save(entity);
     }
-
 
     /**
      * 获取购物车的详细信息
@@ -69,14 +80,14 @@ public class GoodsCartService {
      * @param goodsCartEntityList
      * @return
      */
-    private List<GoodsCartVO> getGoodsCartDetailInfo(List<GoodsCartEntity> goodsCartEntityList) {
-        List<GoodsCartVO> goodsCartVOList = new ArrayList<>();
+    private List<GoodsVO> getGoodsVOs(List<GoodsCartEntity> goodsCartEntityList) {
+        List<GoodsVO> goodsVOList = new ArrayList<>();
         for (int i = 0; i < goodsCartEntityList.size(); i++) {
             GoodsCartEntity goodsCartEntity = goodsCartEntityList.get(i);
-            GoodsCartVO goodsCartVO = createGoodsCartVO(goodsCartEntity);
-            goodsCartVOList.add(goodsCartVO);
+            GoodsVO goodsVO = createGoodsCartVO(goodsCartEntity);
+            goodsVOList.add(goodsVO);
         }
-        return goodsCartVOList;
+        return goodsVOList;
     }
 
     /**
@@ -84,30 +95,23 @@ public class GoodsCartService {
      *
      * @param goodsCartEntity
      */
-    private GoodsCartVO createGoodsCartVO(GoodsCartEntity goodsCartEntity) {
-        GoodsCartVO goodsCartVO = new GoodsCartVO();
-        goodsCartVO.setId(goodsCartEntity.getId());
+    private GoodsVO createGoodsCartVO(GoodsCartEntity goodsCartEntity) {
         GoodsVO goodsVO = new GoodsVO();
-
         goodsVO.setGoodsId(goodsCartEntity.getGoodsId());
         goodsVO.setGoodsSn(goodsCartEntity.getGoodsSn());
         goodsVO.setSpecName(goodsCartEntity.getSpecName());
         goodsVO.setGoodsNum(goodsCartEntity.getGoodsNum());
         goodsVO.setGoodsPrice(goodsCartEntity.getGoodsPrice());
         goodsVO.setGoodsName(goodsCartEntity.getGoodsName());
-
-        goodsCartVO.setGoodsVO(goodsVO);
-        return goodsCartVO;
+        goodsVO.setColor(goodsCartEntity.getColorName());
+        return goodsVO;
     }
 
-    public GoodsCartVO deleteCart(int cartId) {
+    public Response deleteCart(int cartId) {
         GoodsCartEntity entity = mGoodsCartRepository.findById(cartId);
-        GoodsCartVO goodsCartVO = new GoodsCartVO();
         if(entity != null) {
-            goodsCartVO =createGoodsCartVO(entity);
             mGoodsCartRepository.delete(mGoodsCartRepository.findById(cartId));
         }
-
-        return goodsCartVO;
+        return new Response();
     }
 }

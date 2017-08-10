@@ -14,9 +14,10 @@ public class GoodsCartEntity {
     private int goodsId;
     private String goodsSn;
     private String goodsName;
-    private BigDecimal goodsPrice;
+    private double goodsPrice;
     private short goodsNum;
     private String specName;
+    private String colorName;
     private Long addTime;
 
     @Id
@@ -72,11 +73,11 @@ public class GoodsCartEntity {
 
     @Basic
     @Column(name = "goods_price", nullable = false, precision = 2)
-    public BigDecimal getGoodsPrice() {
+    public double getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(BigDecimal goodsPrice) {
+    public void setGoodsPrice(double goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
@@ -90,6 +91,17 @@ public class GoodsCartEntity {
     public void setGoodsNum(short goodsNum) {
         this.goodsNum = goodsNum;
     }
+
+    @Basic
+    @Column(name = "color_name", nullable = false)
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
 
     @Basic
     @Column(name = "spec_name", nullable = false, length = 64)
@@ -125,7 +137,6 @@ public class GoodsCartEntity {
         if (goodsNum != that.goodsNum) return false;
         if (goodsSn != null ? !goodsSn.equals(that.goodsSn) : that.goodsSn != null) return false;
         if (goodsName != null ? !goodsName.equals(that.goodsName) : that.goodsName != null) return false;
-        if (goodsPrice != null ? !goodsPrice.equals(that.goodsPrice) : that.goodsPrice != null) return false;
         if (specName != null ? !specName.equals(that.specName) : that.specName != null) return false;
         if (addTime != null ? !addTime.equals(that.addTime) : that.addTime != null) return false;
         return true;
@@ -138,7 +149,6 @@ public class GoodsCartEntity {
         result = 31 * result + goodsId;
         result = 31 * result + (goodsSn != null ? goodsSn.hashCode() : 0);
         result = 31 * result + (goodsName != null ? goodsName.hashCode() : 0);
-        result = 31 * result + (goodsPrice != null ? goodsPrice.hashCode() : 0);
         result = 31 * result + (int) goodsNum;
         result = 31 * result + (specName != null ? specName.hashCode() : 0);
         result = 31 * result + (addTime != null ? addTime.hashCode() : 0);
