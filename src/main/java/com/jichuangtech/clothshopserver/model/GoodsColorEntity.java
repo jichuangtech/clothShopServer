@@ -11,6 +11,8 @@ public class GoodsColorEntity {
     private int id;
     private String colorName;
     private int goodsId;
+    private int colorId;
+
 
     @Id
     @Column(name = "id", nullable = false)
@@ -20,6 +22,16 @@ public class GoodsColorEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "color_id", nullable = true, length = 55)
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
     }
 
     @Basic
