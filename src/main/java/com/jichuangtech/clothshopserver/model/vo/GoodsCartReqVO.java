@@ -3,7 +3,7 @@ package com.jichuangtech.clothshopserver.model.vo;
 /**
  * Created by Bingo on 2017/8/10.
  */
-public class GoodsCartVO {
+public class GoodsCartReqVO {
     /**
      * 购物车的id
      */
