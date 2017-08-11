@@ -46,14 +46,14 @@ public class GoodsCategoryController {
     @ResponseBody
     public GoodsCategoryEntity listById(@PathVariable int goodsCategoryId) {
         System.out.print("listOne goodsCategoryId: " + goodsCategoryId + " \n");
-        return mGoodsCategoryRepository.findOne(goodsCategoryId);
+        return mGoodsCategoryRepository.findById(goodsCategoryId);
     }
 
     @RequestMapping("/{goodsCategoryId}" + GoodsConstant.GOODS)
     @ResponseBody
     public List<GoodsEntity> listGoodsById(@PathVariable int goodsCategoryId) {
         System.out.print("listOne listGoods: " + goodsCategoryId + " \n");
-        GoodsCategoryEntity goodsCategory = mGoodsCategoryRepository.findOne(goodsCategoryId);
+        GoodsCategoryEntity goodsCategory = mGoodsCategoryRepository.findById(goodsCategoryId);
         return goodsCategory.getGoodsList();
     }
 
