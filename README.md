@@ -55,13 +55,14 @@
 
   - ##### 购物车
 
-      | 作用域                     | 接口说明                | 参数说明                 |
-      | ----------------------- | ------------------- | -------------------- |
-      | /api/goodsCart/{userId} | ``GET``，查询某用户的所有购物车 | ``{userId}``用户Id     |
-      | /api/goodsCart          | ``PUT``，某用户生成购物车    | 请求体``GoodsCartVO``   |
-      | /api/goodsCart/{cartId} | ``DELETE``，删除某购物车   | `{cartId}`要删除的购物车的Id |
+      | 作用域                        | 接口说明                | 参数说明                      |
+      | -------------------------- | ------------------- | ------------------------- |
+      | /api/goodsCart/{userId}    | ``GET``，查询某用户的所有购物车 | ``{userId}``用户Id          |
+      | /api/goodsCart             | ``PUT``，某用户生成购物车    | 请求体``GoodsCartVO``        |
+      | /api/goodsCart/{cartId}    | ``DELETE``，删除某购物车   | `{cartId}`要删除的购物车的Id      |
+      | /api/goodsCart/goodsNumber | ``POST``，修改购物车商品数量  | 请求体``AlterGoodsNumberVO`` |
 
-      PS:  生成购物车的接口``PUT  /api/goodsCart，需要携带下面格式的 
+      PS:  生成购物车的接口``PUT  /api/goodsCart``，需要携带下面格式的 
 
       ``请求体``
 
@@ -74,6 +75,16 @@
           "specId":2
       }
       ```
+      ``POST  /api/goodsCart/goodsNumber``
+
+      ```son
+      {
+          "goodsCartId":6,     //购物车ID
+          "goodsNum":12111     //修改后，购物车商品的数量
+      }
+      ```
+
+      ​
 
   - 返回体
 
