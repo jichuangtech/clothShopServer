@@ -13,13 +13,14 @@
 
   - ##### 商品
 
-    | 作用域                          | 接口说明           | 参数说明               |
-    | ---------------------------- | -------------- | ------------------ |
-    | /api/goods                   | 获取全部商品         | 无                  |
-    | /api/goods/{goodsId}         | 获取某个商品         | ``{goodId}``商品Id   |
-    | /api/goods/picture/{picName} | 查看商品的图片/详细信息图片 | ``{picName}``图片的名字 |
-    | /api/goods/hot               | 获取热销商品         | 无                  |
-    | /api/goods/hot/{goodsId}     | 获取某个热销商品       | ``{goodId}``商品Id   |
+    | 作用域                          | 接口说明                | 参数说明               |
+    | ---------------------------- | ------------------- | ------------------ |
+    | /api/goods                   | 获取全部商品              | 无                  |
+    | /api/goods/{goodsId}         | 获取某个商品              | ``{goodId}``商品Id   |
+    | /api/goods/picture/{picName} | 查看商品的图片/详细信息图片      | ``{picName}``图片的名字 |
+    | /api/goods/hot               | 获取热销商品              | 无                  |
+    | /api/goods/recommend         | 获取推荐商品，可以用于显示banner | 无                  |
+    | /api/goods/hot/{goodsId}     | 获取某个热销商品            | ``{goodId}``商品Id   |
 
   - ##### 商品分类
 
@@ -74,13 +75,15 @@
       }
       ```
 
-      ``返回体``
+  - 返回体
 
-      ```json
-      {
-      //除了200都是错
-        "statusCode": 200
-      }
-      ```
 
-      ​
+  ```json
+  { 
+    "statusCode": -1,     //除了200成功，其他用于表示错误
+    "msg": null,          //对应 statusCode的描述信息，目前嗨未来进行赋值，都是null
+    "data": null 		    //响应给用户的数据，后期所有接口，都采用这种结构返回
+  }
+  ```
+
+  ​
