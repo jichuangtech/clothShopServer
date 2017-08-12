@@ -12,4 +12,5 @@ public interface GoodsRepository extends JpaRepository<GoodsEntity, Integer> {
 	public GoodsEntity findByGoodsId(int goodsId);
 	public GoodsEntity findByIsHotAndGoodsId(Byte isHot, int goodsId);
 	List<GoodsEntity> findAllByIsHot(Byte isHot);
+	List<GoodsEntity> findAllByIsRecommend(Byte isRecommend);
 }

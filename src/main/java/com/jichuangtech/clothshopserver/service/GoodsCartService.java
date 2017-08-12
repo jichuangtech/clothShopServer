@@ -23,11 +23,21 @@ public class GoodsCartService {
     private GoodsRepository mGoodsRepository;
 
     /**
-     * 查找用户所有购物车
+     * 查找所有用户的所有购物车
      *
      * @return
      */
-    public List<GoodsCartRespVO> getList(int userId) {
+    public List<GoodsCartRespVO> getList() {
+        List<GoodsCartEntity> goodsCartEntityList = mGoodsCartRepository.findAll();
+        return getGoodsCartRespVOs(goodsCartEntityList);
+    }
+
+    /**
+     * 查找userId用户所有购物车
+     *
+     * @return
+     */
+    public List<GoodsCartRespVO> getListByUserId(int userId) {
         List<GoodsCartEntity> goodsCartEntityList = mGoodsCartRepository.findAllByUserId(userId);
         return getGoodsCartRespVOs(goodsCartEntityList);
     }
@@ -102,10 +112,13 @@ public class GoodsCartService {
     }
 
     public Response deleteCart(int cartId) {
+        Response response  = new Response();
         GoodsCartEntity entity = mGoodsCartRepository.findById(cartId);
         if(entity != null) {
             mGoodsCartRepository.delete(mGoodsCartRepository.findById(cartId));
+        } else {
+            response.statusCode = -1;
         }
-        return new Response();
+        return response;
     }
 }

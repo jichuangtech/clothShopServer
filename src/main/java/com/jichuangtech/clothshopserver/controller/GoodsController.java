@@ -50,6 +50,12 @@ public class GoodsController {
         return mGoodsRepository.findAllByIsHot(new Byte("1"));
     }
 
+    @RequestMapping(value = GoodsConstant.RECOMMEND)
+    @ResponseBody
+    public List<GoodsEntity> listRecommend() {
+        return mGoodsRepository.findAllByIsRecommend(new Byte("1"));
+    }
+
     @RequestMapping(value = GoodsConstant.HOT + "/{goodsId}")
     @ResponseBody
     public GoodsEntity listHotById(@PathVariable int goodsId) {

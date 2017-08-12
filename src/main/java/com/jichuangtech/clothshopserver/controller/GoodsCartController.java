@@ -31,7 +31,7 @@ public class GoodsCartController {
     @RequestMapping(value="/{userId}",method = RequestMethod.GET)
     @ResponseBody
     public List<GoodsCartRespVO> list(@PathVariable("userId")int userId){
-        return mGoodsCartService.getList(userId);
+        return mGoodsCartService.getListByUserId(userId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
