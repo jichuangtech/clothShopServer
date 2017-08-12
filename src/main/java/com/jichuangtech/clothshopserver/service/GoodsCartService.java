@@ -1,11 +1,13 @@
 package com.jichuangtech.clothshopserver.service;
 
 import com.jichuangtech.clothshopserver.model.*;
+import com.jichuangtech.clothshopserver.model.vo.AlterCartNumberVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCartRepository;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,20 @@ public class GoodsCartService {
     public List<GoodsCartRespVO> getListByUserId(int userId) {
         List<GoodsCartEntity> goodsCartEntityList = mGoodsCartRepository.findAllByUserId(userId);
         return getGoodsCartRespVOs(goodsCartEntityList);
+    }
+
+    public Response alterNumber(AlterCartNumberVO vo) {
+        Response response  = new Response();
+        GoodsCartEntity cart = mGoodsCartRepository.findById(vo.goodsCartId);
+
+        if(cart != null) {
+            cart.setGoodsNum(vo.goodsNum);
+        } else {
+            response.statusCode = -1;
+            response.msg = "购物车不存在";
+        }
+
+        return response;
     }
 
     public Response saveGoodsCart(GoodsCartReqVO goodsCartVO) {
