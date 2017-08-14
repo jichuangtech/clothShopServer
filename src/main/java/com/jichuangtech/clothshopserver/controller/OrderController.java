@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,36 +19,43 @@ import com.jichuangtech.clothshopserver.service.OrderService;
 
 @Controller
 @RequestMapping(OrderConstant.API_ORDER)
+@Transactional
 public class OrderController {
 	@Autowired
-	OrderService orderService;
+	private OrderService orderService;
 	
 	@RequestMapping(value="/{userId}",method = RequestMethod.GET)
 	@ResponseBody
+	/**
+	 * 查找用户所有订单
+	 * @param userId
+	 * @return
+	 */
 	public List<OrderDetailVO> list(@PathVariable("userId")int userId){
 		return orderService.getList(userId);
 	}
 	
 	@RequestMapping(value="/{userId}/{orderStatus}",method = RequestMethod.GET)
 	@ResponseBody
+	/**
+	 * 根据订单状态查找用户订单
+	 * @param orderStatus
+	 * @param userId
+	 * @return
+	 */
 	public List<OrderDetailVO> getByOrderStatus(@PathVariable("orderStatus")byte orderStatus,@PathVariable("userId")int userId){
 		return orderService.getByOrderStatus(orderStatus, userId);
 	}
 	
-	@RequestMapping(OrderConstant.SHIPPING_STATUS_LIST)
-	@ResponseBody
-	public List<OrderDetailVO> getByShippingStatus(byte shippingStatus,int userId){
-		return orderService.getByShippingStatus(shippingStatus, userId);
-	}
-	
-	@RequestMapping(OrderConstant.PAY_STATUS_LIST)
-	@ResponseBody
-	public List<OrderDetailVO> getByPayStatus(byte payStatus,int userId){
-		return orderService.getByPayStatus(payStatus, userId);
-	}
 
 	@RequestMapping(value="/{userId}",method=RequestMethod.POST)
 	@ResponseBody
+	/**
+	 * 保存订单
+	 * @param userId
+	 * @param orderDetailVO
+	 * @return
+	 */
 	public OrderDetailVO saveOrder(@PathVariable("userId")int userId,@RequestBody OrderDetailVO orderDetailVO){
 		return orderService.saveOrder(userId,orderDetailVO);
 	}

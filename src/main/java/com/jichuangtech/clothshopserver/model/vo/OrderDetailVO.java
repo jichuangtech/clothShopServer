@@ -18,6 +18,8 @@ public class OrderDetailVO {
 	private String orderSn;
 	/** 订单号*/
 	private int orderId;
+	/** 用户标识*/
+	private int userId;
 	/** 订单状态*/
 	private byte orderStatus;
 	
@@ -63,6 +65,13 @@ public class OrderDetailVO {
 	}
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	public byte getOrderStatus() {
 		return orderStatus;

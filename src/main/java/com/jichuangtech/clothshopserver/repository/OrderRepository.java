@@ -20,18 +20,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
 	 * @return
 	 */
 	public List<OrderEntity> findByOrderStatusAndUserId(byte orderStatus,int userId);
-	/**
-	 * 根据发货状态查找用户订单
-	 * @param shippingStatus
-	 * @param userId
-	 * @return
-	 */
-	public List<OrderEntity> findByShippingStatusAndUserId(byte shippingStatus,int userId);
-	/**
-	 * 根据支付状态查找用户订单
-	 * @param payStatus
-	 * @param userId
-	 * @return
-	 */
-	public List<OrderEntity> findByPayStatusAndUserId(byte payStatus,int userId);
+	
 }

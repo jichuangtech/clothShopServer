@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jichuangtech.clothshopserver.constant.OrderConstant;
+import com.jichuangtech.clothshopserver.constant.UserConstant;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.model.OrderEntity;
 import com.jichuangtech.clothshopserver.model.OrderGoodsEntity;
@@ -36,7 +37,12 @@ public class OrderService {
 	 * @return
 	 */
 	public List<OrderDetailVO> getList(int userId){
-		List<OrderEntity> orderEntityList = orderRepository.findByUserId(userId);
+		List<OrderEntity> orderEntityList; 
+		if(UserConstant.USER_ALL == userId){
+			orderEntityList = orderRepository.findAll();
+		}else{
+			orderEntityList = orderRepository.findByUserId(userId);
+		}
 		return getGoodsDetailInfo(orderEntityList);
 	}
 	
@@ -49,32 +55,42 @@ public class OrderService {
 		List<OrderDetailVO> orderDetailVOList = new ArrayList<OrderDetailVO>();
 		for (int i = 0; i < orderEntityList.size(); i++) {
 			OrderEntity orderEntity = orderEntityList.get(i);
-			int orderId = orderEntity.getOrderId();
-			OrderDetailVO orderDetailVO = createOrderDetailVO(orderId,orderEntity);
+			OrderDetailVO orderDetailVO = createOrderDetailVO(orderEntity);
 			orderDetailVOList.add(orderDetailVO);
 		}
 		return orderDetailVOList;
 	}
 
 	/**
-	 * 获取orderDetailVO
+	 * 获取返回对象orderDetailVO
 	 * @param orderEntity
 	 */
-	private OrderDetailVO createOrderDetailVO(int orderId,OrderEntity orderEntity) {
+	private OrderDetailVO createOrderDetailVO(OrderEntity orderEntity) {
 		OrderDetailVO orderDetailVO = new OrderDetailVO();
-		BigDecimal totalAmount = orderEntity.getTotalAmount();
-		String address = orderEntity.getAddress();
-		String mobile = orderEntity.getMobile();
-		String consignee = orderEntity.getConsignee();
-		String orderSn = orderEntity.getOrderSn();
-		byte orderStatus = orderEntity.getOrderStatus();
+		int orderId = orderEntity.getOrderId();
 		orderDetailVO.setOrderId(orderId);
+		
+		int userId = orderEntity.getUserId();
+		orderDetailVO.setUserId(userId);
+		
+		String orderSn = orderEntity.getOrderSn();
 		orderDetailVO.setOrderSn(orderSn);
+		
+		BigDecimal totalAmount = orderEntity.getTotalAmount();
 		orderDetailVO.setTotalAmount(totalAmount);
+		
+		String address = orderEntity.getAddress();
 		orderDetailVO.setAddress(address);
+		
+		String mobile = orderEntity.getMobile();
 		orderDetailVO.setMobile(mobile);
+		
+		String consignee = orderEntity.getConsignee();
 		orderDetailVO.setConsignee(consignee);
+		
+		byte orderStatus = orderEntity.getOrderStatus();
 		orderDetailVO.setOrderStatus(orderStatus);
+		
 		List<GoodsVO> goodsVOList = getGoodsVO(orderId);
 		orderDetailVO.setGoodsVO(goodsVOList);
 		return orderDetailVO;
@@ -92,18 +108,29 @@ public class OrderService {
 		for (int j = 0; j < orderGoodsEntityList.size(); j++) {
 			GoodsVO goodsVO = new GoodsVO();
 			OrderGoodsEntity orderGoodsEntity = orderGoodsEntityList.get(j);
+			
 			short goodsNum = orderGoodsEntity.getGoodsNum();
-			double goodsPrice = orderGoodsEntity.getGoodsPrice();
 			goodsVO.setGoodsNum(goodsNum);
-			goodsVO.setGoodsPrice(goodsPrice);
-            goodsVO.setSpecName(orderGoodsEntity.getSpecName());
-            goodsVO.setGoodsSn(orderGoodsEntity.getGoodsSn());
+			
+			String specName = orderGoodsEntity.getSpecName();
+            goodsVO.setSpecName(specName);
+            
 			int goodsId = orderGoodsEntity.getGoodsId();
 			goodsVO.setGoodsId(goodsId);
 			//根据商品id查找商品信息
 			GoodsEntity goodsEntity = goodsRepository.findByGoodsId(goodsId);
 			String goodsName = goodsEntity.getGoodsName();
 			goodsVO.setGoodsName(goodsName);
+			
+			String originalImg = goodsEntity.getOriginalImg();
+			goodsVO.setOriginalImg(originalImg);
+			
+			BigDecimal shopPrice = goodsEntity.getShopPrice();
+			goodsVO.setShopPrice(shopPrice);
+			
+			String goodsSn = goodsEntity.getGoodsSn();
+			goodsVO.setGoodsSn(goodsSn);
+			
 			goodsVOList.add(goodsVO);
 		}
 		return goodsVOList;
@@ -116,32 +143,10 @@ public class OrderService {
 	 * @return
 	 */
 	public List<OrderDetailVO> getByOrderStatus(byte orderStatus,int userId){
-		if(orderStatus == 0){
+		if(OrderConstant.ORDER_USER_ALL == orderStatus){
 			return getList(userId);
 		}
 		List<OrderEntity> orderEntityList = orderRepository.findByOrderStatusAndUserId(orderStatus, userId);
-		return getGoodsDetailInfo(orderEntityList);
-	}
-	
-	/**
-	 * 根据发货状态查找用户订单
-	 * @param shippingStatus
-	 * @param userId
-	 * @return
-	 */
-	public List<OrderDetailVO> getByShippingStatus(byte shippingStatus,int userId){
-		List<OrderEntity> orderEntityList = orderRepository.findByShippingStatusAndUserId(shippingStatus, userId);
-		return getGoodsDetailInfo(orderEntityList);
-	}
-	
-	/**
-	 * 根据支付状态查找用户订单
-	 * @param payStatus
-	 * @param userId
-	 * @return
-	 */
-	public List<OrderDetailVO> getByPayStatus(byte payStatus,int userId){
-		List<OrderEntity> orderEntityList = orderRepository.findByPayStatusAndUserId(payStatus, userId);
 		return getGoodsDetailInfo(orderEntityList);
 	}
 	
@@ -175,7 +180,7 @@ public class OrderService {
 			orderGoodsEntity.setOrderId(orderId);
 			orderGoodsEntity.setGoodsId(goodsVO.getGoodsId());
 			orderGoodsEntity.setGoodsNum(goodsVO.getGoodsNum());
-			orderGoodsEntity.setGoodsPrice(goodsVO.getGoodsPrice());
+			orderGoodsEntity.setGoodsPrice(goodsVO.getShopPrice().doubleValue());
             orderGoodsEntity.setGoodsSn(goodsVO.getGoodsSn());
             orderGoodsEntity.setSpecName(goodsVO.getSpecName());
 			orderGoodsEntityList.add(orderGoodsEntity);
