@@ -2,6 +2,7 @@ package com.jichuangtech.clothshopserver.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,7 @@ import com.jichuangtech.clothshopserver.model.RegionEntity;
 import com.jichuangtech.clothshopserver.model.UserAddressEntity;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressVO;
 import com.jichuangtech.clothshopserver.service.UserAddressService;
-
+import com.jichuangtech.clothshopserver.model.Response;
 @Controller
 @RequestMapping(UserAddressConstant.API_USER_ADDRESS)
 public class UserAddressController {
@@ -30,8 +31,10 @@ public class UserAddressController {
 	 * @param userId
 	 * @return
 	 */
-	public List<UserAddressVO> list(@PathVariable("userId")int userId){
-		return userAddressService.list(userId);
+	public Response<List<UserAddressVO>> list(@PathVariable("userId")int userId){
+		Response<List<UserAddressVO>> response = new Response<List<UserAddressVO>>();
+		response.data = userAddressService.list(userId);
+		return response;
 	}
 	
 	@RequestMapping(value="/region/{parentId}",method = RequestMethod.GET)
@@ -41,19 +44,22 @@ public class UserAddressController {
 	 * @param parentId
 	 * @return
 	 */
-	public List<RegionEntity> list(@PathVariable("parentId")long parentId){
-		return userAddressService.list(parentId);
+	public Response<List<RegionEntity>> list(@PathVariable("parentId")long parentId){
+		Response<List<RegionEntity>> response = new Response<List<RegionEntity>>();
+		response.data = userAddressService.list(parentId);
+		return response;
 	}
 	
-	@RequestMapping(value="/defaultAddress",method = RequestMethod.POST)
+	@RequestMapping(value="/defaultaddress",method = RequestMethod.POST)
 	@ResponseBody
 	/**
 	 * 修改默认收货地址
 	 * @param userId
 	 * @param addressId
 	 */
-	public void updateDefaultAddress(@RequestParam("oldAddressId")int oldAddressId,@RequestParam("newAddressId")int newAddressId){
+	public Response updateDefaultAddress(@RequestParam("oldAddressId")int oldAddressId,@RequestParam("newAddressId")int newAddressId){
 		userAddressService.updateDefaultAddress(oldAddressId,newAddressId);
+		return new Response();
 	}
 	
 	@RequestMapping(value="/address",method = RequestMethod.POST)
@@ -63,7 +69,9 @@ public class UserAddressController {
 	 * @param userAddressEntity
 	 * @return
 	 */
-	public UserAddressVO saveUserAddress(@RequestBody UserAddressEntity userAddressEntity){
-		return userAddressService.saveUserAddress(userAddressEntity);
+	public Response<UserAddressVO> saveUserAddress(@RequestBody UserAddressEntity userAddressEntity){
+		Response<UserAddressVO> response = new Response<UserAddressVO>();
+		response.data = userAddressService.saveUserAddress(userAddressEntity);
+		return response;
 	}
 }
