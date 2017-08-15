@@ -1,29 +1,20 @@
 package com.jichuangtech.clothshopserver.model.vo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * user_address表
  * @author zxx
  *
  */
-@Entity
-@Table(name = "user_address", schema = "clothShop", catalog = "")
 public class UserAddressVO {
 	private int addressId;
 	private int userId;
 	private String consignee;
-	private String country;
-	private String province;
-	private String city;
-	private String district;
-	private String twon;
+	private String countryName;
+	private String provinceName;
+	private String cityName;
+	private String districtName;
+	private String twonName;
 	private String address;
 	private String zipcode;
 	private String mobile;
@@ -46,35 +37,36 @@ public class UserAddressVO {
 	public void setConsignee(String consignee) {
 		this.consignee = consignee;
 	}
-	public String getCountry() {
-		return country;
+	
+	public String getCountryName() {
+		return countryName;
 	}
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
-	public String getProvince() {
-		return province;
+	public String getProvinceName() {
+		return provinceName;
 	}
-	public void setProvince(String province) {
-		this.province = province;
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
 	}
-	public String getCity() {
-		return city;
+	public String getCityName() {
+		return cityName;
 	}
-	public void setCity(String city) {
-		this.city = city;
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
-	public String getDistrict() {
-		return district;
+	public String getDistrictName() {
+		return districtName;
 	}
-	public void setDistrict(String district) {
-		this.district = district;
+	public void setDistrictName(String districtName) {
+		this.districtName = districtName;
 	}
-	public String getTwon() {
-		return twon;
+	public String getTwonName() {
+		return twonName;
 	}
-	public void setTwon(String twon) {
-		this.twon = twon;
+	public void setTwonName(String twonName) {
+		this.twonName = twonName;
 	}
 	public String getAddress() {
 		return address;
