@@ -111,20 +111,64 @@
   </dependencies>
 
   <build>
-    <finalName>clothshopserver</finalName>   
+    <!-- 生成war文件的文件名 -->
+    <finalName>clothshopserver</finalName>
 
     <plugins>
+      <!-- 生成war文件的插件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+      <!-- 忽视单元测试错误异常 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.12.4</version>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+      </plugin>
+
+      <!-- 生成war过程需要整合项目依赖的包 -->
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- 打war包是个java文件编译的过程，当然是要指定jdk信息的-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-          <encoding>utf8</encoding>     
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
     </plugins>
-
+    <!-- 有些项目用eclipse生成war可以运行，用maven确不可以。eclipse记录了所有文件的发布路径，maven单独用的时候，需要配置好资源文件的发布路径哟 -->
+    <resources>
+      <resource>
+        <directory>src/main/resource</directory>
+        <includes>
+          <include>**/**</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
   </build>
 
 </project>
