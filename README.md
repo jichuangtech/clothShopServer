@@ -51,7 +51,7 @@
     | ---------------------------------------- | ------ | ---------------------------------------- |
     | /clothshopserver/api/useraddress/{userId}| ``GET``, 查询用户收货地址 | {userId}:用户Id|
     | /clothshopserver/api/useraddress/region/{parentId}| ``GET``, 查询地区信息 | {parentId}:上级地区Id，其中0表示查询国家地区信息,86为查询所有省份信息|
-    | /clothshopserver/api/useraddress/address | ``POST``, 新增收货地址 |请求体：UserAddressEntity|
+    | /clothshopserver/api/useraddress/address | ``POST``, 新增收货地址 |请求体看备注|
     | /clothshopserver/api/useraddress/defaultaddress| ``POST``, 修改默认地址 | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id|
     注：
     ``/clothshopserver/api/useraddress/{userId}``
