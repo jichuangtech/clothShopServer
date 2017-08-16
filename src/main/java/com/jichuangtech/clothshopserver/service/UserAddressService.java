@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jichuangtech.clothshopserver.constant.UserAddressConstant;
 import com.jichuangtech.clothshopserver.model.RegionEntity;
 import com.jichuangtech.clothshopserver.model.UserAddressEntity;
-import com.jichuangtech.clothshopserver.model.vo.Region;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressReqVO;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
 import com.jichuangtech.clothshopserver.repository.RegionRepository;
