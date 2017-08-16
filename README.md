@@ -35,8 +35,8 @@
 
     | 作用域                                      | 接口说明   | 参数说明                                     |
     | ---------------------------------------- | ------ | ---------------------------------------- |
-    | /clothshopserver/api/order/{userId}/{orderStatus} | ``GET``查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
-    | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id
+    | /clothshopserver/api/order/{userId}/{orderStatus} | ``GET``,查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
+    | /clothshopserver/api/order/{userId}      | ``POST``,生成订单   | {userId}:用户Id
     注：
     ``/clothshopserver/api/order/{userId}/{orderStatus}``
     ``返回体``
@@ -49,10 +49,10 @@
 
     | 作用域                                      | 接口说明   | 参数说明                                     |
     | ---------------------------------------- | ------ | ---------------------------------------- |
-    | /clothshopserver/api/useraddress/{userId}| ``GET`` 查询用户收货地址 | {userId}:用户Id|
-    | /clothshopserver/api/useraddress/region/{parentId}| ``GET`` 查询地区信息 | {parentId}:上级地区Id，其中0表示查询国家地区信息,86为查询所有省份信息|
-    | /clothshopserver/api/useraddress/address | ``POST`` 新增收货地址 |请求体：UserAddressEntity|
-    | /clothshopserver/api/useraddress/defaultaddress| ``POST`` 修改默认地址 | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id|
+    | /clothshopserver/api/useraddress/{userId}| ``GET``, 查询用户收货地址 | {userId}:用户Id|
+    | /clothshopserver/api/useraddress/region/{parentId}| ``GET``, 查询地区信息 | {parentId}:上级地区Id，其中0表示查询国家地区信息,86为查询所有省份信息|
+    | /clothshopserver/api/useraddress/address | ``POST``, 新增收货地址 |请求体：UserAddressEntity|
+    | /clothshopserver/api/useraddress/defaultaddress| ``POST``, 修改默认地址 | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id|
     注：
     ``/clothshopserver/api/useraddress/{userId}``
     ``返回体``
