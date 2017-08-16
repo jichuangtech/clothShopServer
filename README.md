@@ -35,8 +35,8 @@
 
     | 作用域                                      | 接口说明   | 参数说明                                     |
     | ---------------------------------------- | ------ | ---------------------------------------- |
-    | /clothshopserver/api/order/{userId}/{orderStatus} | ``GET``,查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
-    | /clothshopserver/api/order/{userId}      | ``POST``,生成订单   | {userId}:用户Id
+    | /clothshopserver/api/order/{userId}/{orderStatus} | ``GET``, 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
+    | /clothshopserver/api/order/{userId}      |  ``POST``,生成订单   | {userId}:用户Id
     注：
     ``/clothshopserver/api/order/{userId}/{orderStatus}``
     ``返回体``

@@ -8,15 +8,15 @@
             <!-- 使用MySQL方言 -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <!-- 数据库连接的URL地址 -->
-            <property name="hibernate.connection.url" value="jdbc:mysql://10.45.44.202:3306/clothShop"/>
-            <!-- <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/clothShop"/> -->
+            <!-- <property name="hibernate.connection.url" value="jdbc:mysql://10.45.44.202:3306/clothShop"/>-->
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/clothShop"/> 
             <!-- 数据库连接的驱动 -->
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <!-- 数据库连接的用户名 -->
             <property name="hibernate.connection.username" value="root"/>
             <!-- 数据库连接的密码 -->
-            <!-- <property name="hibernate.connection.password" value="zxc1992616jsj"/>-->
-            <property name="hibernate.connection.password" value="root123#"/>
+            <property name="hibernate.connection.password" value="zxc1992616jsj"/>
+            <!-- <property name="hibernate.connection.password" value="root123#"/>-->
             <property name="hibernate.archive.autodetection" value="class"/>
             <!-- 在显示SQL语句时格式化语句 -->
             <property name="hibernate.show_sql" value="true"/>
