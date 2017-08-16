@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -119,7 +120,7 @@ public class GoodsCartService {
         goodsCartVO.setGoodsSn(goodsCartEntity.getGoodsSn());
         goodsCartVO.setSpecName(goodsCartEntity.getSpecName());
         goodsCartVO.setGoodsNum(goodsCartEntity.getGoodsNum());
-        goodsCartVO.setGoodsPrice(goodsCartEntity.getGoodsPrice());
+        goodsCartVO.setShopPrice(new BigDecimal(goodsCartEntity.getGoodsPrice()));
         goodsCartVO.setGoodsName(goodsCartEntity.getGoodsName());
         goodsCartVO.setColor(goodsCartEntity.getColorName());
         goodsCartVO.setOriginalImg(goodsEntity.getOriginalImg());
