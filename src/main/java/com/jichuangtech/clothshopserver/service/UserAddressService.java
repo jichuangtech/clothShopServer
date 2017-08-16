@@ -1,5 +1,10 @@
 package com.jichuangtech.clothshopserver.service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,16 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.jichuangtech.clothshopserver.constant.UserAddressConstant;
 import com.jichuangtech.clothshopserver.model.RegionEntity;
 import com.jichuangtech.clothshopserver.model.UserAddressEntity;
-import com.jichuangtech.clothshopserver.model.vo.UserAddressVO;
+import com.jichuangtech.clothshopserver.model.vo.Region;
+import com.jichuangtech.clothshopserver.model.vo.UserAddressReqVO;
+import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
 import com.jichuangtech.clothshopserver.repository.RegionRepository;
 import com.jichuangtech.clothshopserver.repository.UserAddressRepository;
 
@@ -32,7 +39,7 @@ public class UserAddressService {
 	 * @param userId
 	 * @return
 	 */
-	public List<UserAddressVO> list(int userId){
+	public List<UserAddressRespVO> list(int userId){
 		List<UserAddressEntity> userAddressEntityList = userAddressRepository.findByUserId(userId);
 		return getUserAddressVO(userAddressEntityList);
 	}
@@ -41,13 +48,13 @@ public class UserAddressService {
 	 * 查找收货地址详情
 	 * @param userAddressEntityList
 	 */
-	private List<UserAddressVO> getUserAddressVO(List<UserAddressEntity> userAddressEntityList) {
-		List<UserAddressVO> userAddressVOList = new ArrayList<UserAddressVO>();
+	private List<UserAddressRespVO> getUserAddressVO(List<UserAddressEntity> userAddressEntityList) {
+		List<UserAddressRespVO> userAddressVOList = new ArrayList<UserAddressRespVO>();
 		Map<Long,String> regionIdNameMap = getRegionName(userAddressEntityList);
 		for (int i = 0; i < userAddressEntityList.size(); i++) {
 			
 			UserAddressEntity userAddressEntity = userAddressEntityList.get(i);
-			UserAddressVO userAddressVO = createUserAddressVO(userAddressEntity,regionIdNameMap);
+			UserAddressRespVO userAddressVO = createUserAddressVO(userAddressEntity,regionIdNameMap);
 			userAddressVOList.add(userAddressVO);
 		}
 		return userAddressVOList;
@@ -58,35 +65,27 @@ public class UserAddressService {
 	 * @param userAddressEntity
 	 * @param regionIdNameMap
 	 */
-	private UserAddressVO createUserAddressVO(UserAddressEntity userAddressEntity,
+	private UserAddressRespVO createUserAddressVO(UserAddressEntity userAddressEntity,
 			Map<Long, String> regionIdNameMap) {
-		UserAddressVO userAddressVO = new UserAddressVO();
+		UserAddressRespVO userAddressVO = new UserAddressRespVO();
 		userAddressVO.setAddressId(userAddressEntity.getAddressId());
 		
 		int userId = userAddressEntity.getUserId();
 		userAddressVO.setUserId(userId);
 		
-		long country = userAddressEntity.getCountry();
-		String coutryName = regionIdNameMap.get(country);
-		userAddressVO.setCountryName(coutryName);
-		
 		long province = userAddressEntity.getProvince();
 		String provinceName = regionIdNameMap.get(province);
-		userAddressVO.setProvinceName(provinceName);
 		
 		long city = userAddressEntity.getCity();
 		String cityName = regionIdNameMap.get(city);
-		userAddressVO.setCityName(cityName);
 		
 		long district = userAddressEntity.getDistrict();
 		String districtName = regionIdNameMap.get(district);
-		userAddressVO.setDistrictName(districtName);
 		
-		long twon = userAddressEntity.getTwon();
-		String twonName = regionIdNameMap.get(twon);
-		userAddressVO.setTwonName(twonName);
+		StringBuilder fullAddressBuilder = new StringBuilder();
+		fullAddressBuilder.append(provinceName).append(cityName).append(districtName).append(userAddressEntity.getAddress());
+		userAddressVO.setAddress(fullAddressBuilder.toString());
 		
-		userAddressVO.setAddress(userAddressEntity.getAddress());
 		userAddressVO.setConsignee(userAddressEntity.getConsignee());
 		userAddressVO.setMobile(userAddressEntity.getMobile());
 		userAddressVO.setZipcode(userAddressEntity.getZipcode());
@@ -102,11 +101,9 @@ public class UserAddressService {
 		Set<Long> regionIdSet = new HashSet<Long>();
 		for (int i = 0; i < userAddressEntityList.size(); i++) {
 			UserAddressEntity userAddressEntity = userAddressEntityList.get(i);
-			regionIdSet.add(userAddressEntity.getCountry());
 			regionIdSet.add(userAddressEntity.getProvince());
 			regionIdSet.add(userAddressEntity.getCity());
 			regionIdSet.add(userAddressEntity.getDistrict());
-			regionIdSet.add(userAddressEntity.getTwon());
 		}
 		List<RegionEntity> regionEntityList = regionRepository.findByIdIn(regionIdSet);
 		Map<Long,String> regionIdMap = new HashMap<Long,String>();
@@ -145,11 +142,44 @@ public class UserAddressService {
 	 * @param userAddressVO
 	 * @return
 	 */
-	public UserAddressVO saveUserAddress(UserAddressEntity userAddressEntity){
+	public UserAddressRespVO saveUserAddress(UserAddressReqVO userAddressReqVO){
+		UserAddressEntity userAddressEntity = createUserAddressEntity(userAddressReqVO);
 		UserAddressEntity newUserAddressEntity = userAddressRepository.save(userAddressEntity);
 		List<UserAddressEntity> userAddressEntityList = new ArrayList<UserAddressEntity>();
 		userAddressEntityList.add(newUserAddressEntity);
 		Map<Long,String> regionIdNameMap = getRegionName(userAddressEntityList);
 		return createUserAddressVO(newUserAddressEntity,regionIdNameMap);
 	}
+	
+	private UserAddressEntity createUserAddressEntity(
+			UserAddressReqVO userAddressReqVO) {
+		UserAddressEntity userAddressEntity = new UserAddressEntity();
+		userAddressEntity.setAddress(userAddressReqVO.getAddress());
+		userAddressEntity.setCity(userAddressReqVO.getCity());
+		userAddressEntity.setConsignee(userAddressReqVO.getConsignee());
+		userAddressEntity.setCountry(userAddressReqVO.getCountry());
+		userAddressEntity.setDistrict(userAddressReqVO.getDistrict());
+		userAddressEntity.setIsDefault(userAddressReqVO.getIsDefault());
+		userAddressEntity.setMobile(userAddressReqVO.getMobile());
+		userAddressEntity.setProvince(userAddressReqVO.getProvince());
+		userAddressEntity.setTwon(userAddressReqVO.getTwon());
+		userAddressEntity.setUserId(userAddressReqVO.getUserId());
+		userAddressEntity.setZipcode(userAddressReqVO.getZipcode());
+		return userAddressEntity;
+	}
+
+	/**
+	 * 获取指定的地址
+	 * @param addressId
+	 * @return
+	 */
+	public UserAddressRespVO getAddress(int addressId){
+		UserAddressEntity userAddressEntity = userAddressRepository.findOne(addressId);
+		List<UserAddressEntity> userAddressEntityList = new ArrayList<UserAddressEntity>();
+		userAddressEntityList.add(userAddressEntity);
+		Map<Long,String> regionIdNameMap = getRegionName(userAddressEntityList);
+		UserAddressRespVO userAddressVO = createUserAddressVO(userAddressEntity,regionIdNameMap);
+		return userAddressVO;
+	}
+
 }

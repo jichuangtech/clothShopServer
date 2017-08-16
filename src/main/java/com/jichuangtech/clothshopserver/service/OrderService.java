@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,16 @@ import com.jichuangtech.clothshopserver.constant.UserConstant;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.model.OrderEntity;
 import com.jichuangtech.clothshopserver.model.OrderGoodsEntity;
+import com.jichuangtech.clothshopserver.model.vo.GoodsReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsVO;
-import com.jichuangtech.clothshopserver.model.vo.OrderDetailVO;
+import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
+import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
+import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import com.jichuangtech.clothshopserver.repository.OrderGoodsRepository;
 import com.jichuangtech.clothshopserver.repository.OrderRepository;
+import com.jichuangtech.clothshopserver.repository.RegionRepository;
+import com.jichuangtech.clothshopserver.utils.ListUtils;
 
 @Service
 @Transactional
@@ -31,12 +38,17 @@ public class OrderService {
 	private OrderGoodsRepository orderGoodsRepository;
 	@Autowired
 	private GoodsRepository goodsRepository;
+	@Autowired
+	private RegionRepository regionRepository;
+	@Autowired
+	private UserAddressService userAddressService;
 	
 	/**
 	 * 查找用户所有订单
+	 * @param userId
 	 * @return
 	 */
-	public List<OrderDetailVO> getList(int userId){
+	public List<OrderRespVO> getList(int userId){
 		List<OrderEntity> orderEntityList; 
 		if(UserConstant.USER_ALL == userId){
 			orderEntityList = orderRepository.findAll();
@@ -51,74 +63,101 @@ public class OrderService {
 	 * @param orderEntityList
 	 * @return
 	 */
-	private List<OrderDetailVO> getGoodsDetailInfo(List<OrderEntity> orderEntityList) {
-		List<OrderDetailVO> orderDetailVOList = new ArrayList<OrderDetailVO>();
+	private List<OrderRespVO> getGoodsDetailInfo(List<OrderEntity> orderEntityList) {
+		List<OrderRespVO> orderDetailVOList = new ArrayList<OrderRespVO>();
+		//根据订单获得所有order_goods
+		List<OrderGoodsEntity> orderGoodsEntityList = getUserOrderGoodsEntityList(orderEntityList);
+		//获得所有goods
+		List<GoodsEntity> goodsEntityList = getUserRelGoodsEntityList(orderGoodsEntityList);
+		Map<Integer, List<OrderGoodsEntity>>  orderIdListMap = ListUtils.listToListMap(Integer.class, orderGoodsEntityList, "orderId");
+		Map<Integer, GoodsEntity> goodsIdEntityMap= ListUtils.listToEntityMap(Integer.class, goodsEntityList, "goodsId");
 		for (int i = 0; i < orderEntityList.size(); i++) {
 			OrderEntity orderEntity = orderEntityList.get(i);
-			OrderDetailVO orderDetailVO = createOrderDetailVO(orderEntity);
+			int orderId = orderEntity.getOrderId();
+			List<OrderGoodsEntity>  orderIdOrderGoodsEntityList = orderIdListMap.get(orderId);
+			OrderRespVO orderDetailVO = createOrderDetailVO(orderEntity,orderIdOrderGoodsEntityList,goodsIdEntityMap);
 			orderDetailVOList.add(orderDetailVO);
 		}
 		return orderDetailVOList;
 	}
 
 	/**
+	 * 根据order_goods获取goods
+	 * @param orderGoodsEntityList
+	 */
+	private List<GoodsEntity> getUserRelGoodsEntityList(
+			List<OrderGoodsEntity> orderGoodsEntityList) {
+		Set<Integer> goodsIdSet = ListUtils.listToFieldSet(Integer.class, orderGoodsEntityList, "goodsId");
+		List<GoodsEntity> goodsEntityList = goodsRepository.findByGoodsIdIn(goodsIdSet);
+		return goodsEntityList;
+	}
+
+	/**
+	 * 根据订单记录获得相关order_goods
+	 * @param orderEntityList
+	 */
+	private List<OrderGoodsEntity> getUserOrderGoodsEntityList(List<OrderEntity> orderEntityList) {
+		Set<Integer> orderIdSet = ListUtils.listToFieldSet(Integer.class,orderEntityList,"orderId");
+		List<OrderGoodsEntity> orderGoodsEntityList = orderGoodsRepository.findByOrderIdIn(orderIdSet);
+		return orderGoodsEntityList;
+	}
+
+	/**
 	 * 获取返回对象orderDetailVO
 	 * @param orderEntity
+	 * @param goodsIdEntityMap 
+	 * @param orderIdOrderGoodsEntityList 
 	 */
-	private OrderDetailVO createOrderDetailVO(OrderEntity orderEntity) {
-		OrderDetailVO orderDetailVO = new OrderDetailVO();
+	private OrderRespVO createOrderDetailVO(OrderEntity orderEntity, List<OrderGoodsEntity> orderIdOrderGoodsEntityList, Map<Integer, GoodsEntity> goodsIdEntityMap) {
+		OrderRespVO orderRespVO = new OrderRespVO();
 		int orderId = orderEntity.getOrderId();
-		orderDetailVO.setOrderId(orderId);
+		orderRespVO.setOrderId(orderId);
 		
 		int userId = orderEntity.getUserId();
-		orderDetailVO.setUserId(userId);
+		orderRespVO.setUserId(userId);
 		
 		String orderSn = orderEntity.getOrderSn();
-		orderDetailVO.setOrderSn(orderSn);
+		orderRespVO.setOrderSn(orderSn);
 		
 		BigDecimal totalAmount = orderEntity.getTotalAmount();
-		orderDetailVO.setTotalAmount(totalAmount);
+		orderRespVO.setTotalAmount(totalAmount);
 		
 		String address = orderEntity.getAddress();
-		orderDetailVO.setAddress(address);
+		orderRespVO.setAddress(address);
 		
 		String mobile = orderEntity.getMobile();
-		orderDetailVO.setMobile(mobile);
+		orderRespVO.setMobile(mobile);
 		
 		String consignee = orderEntity.getConsignee();
-		orderDetailVO.setConsignee(consignee);
+		orderRespVO.setConsignee(consignee);
 		
 		byte orderStatus = orderEntity.getOrderStatus();
-		orderDetailVO.setOrderStatus(orderStatus);
+		orderRespVO.setOrderStatus(orderStatus);
 		
-		List<GoodsVO> goodsVOList = getGoodsVO(orderId);
-		orderDetailVO.setGoodsVO(goodsVOList);
-		return orderDetailVO;
+		List<GoodsVO> goodsVOList = getGoodsVO(orderIdOrderGoodsEntityList,goodsIdEntityMap);
+		orderRespVO.setGoodsVO(goodsVOList);
+		return orderRespVO;
 	}
 
 	/**
 	 * 获取该订单的商品信息
-	 * @param orderId
+	 * @param orderIdOrderGoodsEntityList 该用户的order_goods记录
+	 * @param goodsIdEntityMap
 	 * @return
 	 */
-	private List<GoodsVO> getGoodsVO(int orderId) {
+	private List<GoodsVO> getGoodsVO(List<OrderGoodsEntity> orderIdOrderGoodsEntityList, Map<Integer, GoodsEntity> goodsIdEntityMap) {
 		List<GoodsVO> goodsVOList = new ArrayList<GoodsVO>();
-		//根据orderId查找order_goods表
-		List<OrderGoodsEntity> orderGoodsEntityList = orderGoodsRepository.findByOrderId(orderId);
-		for (int j = 0; j < orderGoodsEntityList.size(); j++) {
+		for (int j = 0; j < orderIdOrderGoodsEntityList.size(); j++) {
 			GoodsVO goodsVO = new GoodsVO();
-			OrderGoodsEntity orderGoodsEntity = orderGoodsEntityList.get(j);
+			OrderGoodsEntity orderGoodsEntity = orderIdOrderGoodsEntityList.get(j);
 			
 			short goodsNum = orderGoodsEntity.getGoodsNum();
 			goodsVO.setGoodsNum(goodsNum);
 			
-			String specName = orderGoodsEntity.getSpecName();
-            goodsVO.setSpecName(specName);
-            
 			int goodsId = orderGoodsEntity.getGoodsId();
 			goodsVO.setGoodsId(goodsId);
 			//根据商品id查找商品信息
-			GoodsEntity goodsEntity = goodsRepository.findByGoodsId(goodsId);
+			GoodsEntity goodsEntity = goodsIdEntityMap.get(goodsId);
 			String goodsName = goodsEntity.getGoodsName();
 			goodsVO.setGoodsName(goodsName);
 			
@@ -131,6 +170,16 @@ public class OrderService {
 			String goodsSn = goodsEntity.getGoodsSn();
 			goodsVO.setGoodsSn(goodsSn);
 			
+			//规格
+			String specKey = orderGoodsEntity.getSpecKey();
+			String specName = goodsEntity.getGoodsSpec(Integer.valueOf(specKey)).getSpecName();
+            goodsVO.setSpecName(specName);
+            
+            //颜色
+            int colorId = orderGoodsEntity.getColorId();
+            String colorName = goodsEntity.getGoodsColor(colorId).getColorName();
+            goodsVO.setColor(colorName);
+			
 			goodsVOList.add(goodsVO);
 		}
 		return goodsVOList;
@@ -142,7 +191,7 @@ public class OrderService {
 	 * @param userId
 	 * @return
 	 */
-	public List<OrderDetailVO> getByOrderStatus(byte orderStatus,int userId){
+	public List<OrderRespVO> getByOrderStatus(byte orderStatus,int userId){
 		if(OrderConstant.ORDER_USER_ALL == orderStatus){
 			return getList(userId);
 		}
@@ -154,17 +203,50 @@ public class OrderService {
 	 * 保存订单
 	 * @param orderEntity
 	 */
-	public OrderDetailVO saveOrder(int userId,OrderDetailVO orderDetailVO){
-		List<GoodsVO> goodsVOList = orderDetailVO.getGoodsVO();
+	public OrderRespVO saveOrder(int userId,OrderReqVO orderReqVO){
+		OrderRespVO orderRespVO = new OrderRespVO();
+		List<GoodsReqVO> goodsReqVOList = orderReqVO.getGoodsReqVOList();
+		
 		//写入订单表
-		OrderEntity orderEntity = createOrder(userId,orderDetailVO);
+		OrderEntity orderEntity = createOrder(userId,orderReqVO);
 		int orderId = orderEntity.getOrderId();
 		//写入订单商品表
-		createOrderGoods(orderId,goodsVOList);
-		orderDetailVO.setOrderId(orderId);
-		orderDetailVO.setOrderSn(orderEntity.getOrderSn());
-		orderDetailVO.setOrderStatus(OrderConstant.ORDER_UN_PAID);
-		return orderDetailVO;
+		createOrderGoods(orderId,goodsReqVOList);
+		orderRespVO.setOrderId(orderId);
+		orderRespVO.setTotalAmount(orderEntity.getTotalAmount());
+		return orderRespVO;
+	}
+
+	/**
+	 * 计算订单总价
+	 * @param goodsEntityList
+	 */
+	private double getTotalAmount(OrderReqVO orderReqVO) {
+		List<GoodsReqVO> goodsReqVOList = orderReqVO.getGoodsReqVOList();
+		//获取商品信息
+		List<GoodsEntity> goodsEntityList = getGoodsInfo(goodsReqVOList);
+		double totalAmount = 0.00;
+		Map<Integer, GoodsEntity>  goodsIdEntityMap = ListUtils.listToEntityMap(Integer.class, goodsEntityList, "goodsId");
+		for (int i = 0; i < goodsReqVOList.size(); i++) {
+			GoodsReqVO goodsReqVO = goodsReqVOList.get(i);
+			int goodsId = goodsReqVO.getGoodsId();
+			GoodsEntity goodsEntity = goodsIdEntityMap.get(goodsId);
+			int specId = goodsReqVO.getSpecId();
+			double specPrice = goodsEntity.getGoodsSpec(specId).getSpecPrice();
+			short num = goodsReqVO.getGoodsNum();
+			totalAmount += specPrice * num;
+		}
+		return totalAmount;
+	}
+
+	/**
+	 * 根据请求商品id获取商品信息
+	 * @param orderRespVO
+	 */
+	private List<GoodsEntity> getGoodsInfo(List<GoodsReqVO> goodsReqVOList) {
+		Set<Integer> goodsIdSet = ListUtils.listToFieldSet(Integer.class, goodsReqVOList, "goodsId");
+		List<GoodsEntity> goodsEntityList = goodsRepository.findByGoodsIdIn(goodsIdSet);
+		return goodsEntityList;
 	}
 
 	/**
@@ -172,17 +254,17 @@ public class OrderService {
 	 * @param orderId
 	 * @param goodsVOList
 	 */
-	private List<OrderGoodsEntity> createOrderGoods(int orderId, List<GoodsVO> goodsVOList) {
+	private List<OrderGoodsEntity> createOrderGoods(int orderId, List<GoodsReqVO> goodsReqVOList) {
 		List<OrderGoodsEntity> orderGoodsEntityList = new ArrayList<OrderGoodsEntity>();
-		for (int i = 0; i < goodsVOList.size(); i++) {
-			GoodsVO goodsVO = goodsVOList.get(i);
+		for (int i = 0; i < goodsReqVOList.size(); i++) {
+			GoodsReqVO goodsReqVO = goodsReqVOList.get(i);
 			OrderGoodsEntity orderGoodsEntity = new OrderGoodsEntity();
 			orderGoodsEntity.setOrderId(orderId);
-			orderGoodsEntity.setGoodsId(goodsVO.getGoodsId());
-			orderGoodsEntity.setGoodsNum(goodsVO.getGoodsNum());
-			orderGoodsEntity.setGoodsPrice(goodsVO.getShopPrice().doubleValue());
-            orderGoodsEntity.setGoodsSn(goodsVO.getGoodsSn());
-            orderGoodsEntity.setSpecName(goodsVO.getSpecName());
+			orderGoodsEntity.setGoodsId(goodsReqVO.getGoodsId());
+			
+			orderGoodsEntity.setGoodsNum(goodsReqVO.getGoodsNum());
+            orderGoodsEntity.setSpecKey(String.valueOf(goodsReqVO.getSpecId()));
+            orderGoodsEntity.setColorId(goodsReqVO.getColorId());
 			orderGoodsEntityList.add(orderGoodsEntity);
 		}
 		return orderGoodsRepository.save(orderGoodsEntityList);
@@ -192,7 +274,7 @@ public class OrderService {
 	 * 生成订单
 	 * @param orderDetailVO
 	 */
-	private OrderEntity createOrder(int userId,OrderDetailVO orderDetailVO) {
+	private OrderEntity createOrder(int userId,OrderReqVO orderReqVO) {
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		String orderSn = dateFormat.format(date);
@@ -200,10 +282,13 @@ public class OrderService {
 		orderEntity.setOrderSn(orderSn);
 		orderEntity.setUserId(userId);
 		orderEntity.setOrderStatus(OrderConstant.ORDER_UN_PAID);
-		orderEntity.setAddress(orderDetailVO.getAddress());
-		orderEntity.setConsignee(orderDetailVO.getConsignee());
-		orderEntity.setTotalAmount(orderDetailVO.getTotalAmount());
-		orderEntity.setMobile(orderDetailVO.getMobile());
+		UserAddressRespVO  userAddress = userAddressService.getAddress(orderReqVO.getAddressId());
+		orderEntity.setAddress(userAddress.getAddress());
+		orderEntity.setConsignee(userAddress.getConsignee());
+		//计算总价
+		double totalAmount = getTotalAmount(orderReqVO);
+		orderEntity.setTotalAmount(new BigDecimal(totalAmount));
+		orderEntity.setMobile(userAddress.getMobile());
 		return orderRepository.save(orderEntity);
 	}
 }

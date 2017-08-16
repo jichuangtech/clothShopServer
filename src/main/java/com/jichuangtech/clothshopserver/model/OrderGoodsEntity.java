@@ -1,7 +1,5 @@
 package com.jichuangtech.clothshopserver.model;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +20,10 @@ public class OrderGoodsEntity {
 	private int orderId;
 	private int goodsId;
 	private short goodsNum;
-	private String specName;
-	private String goodsSn;
+	private String specKey;
 	//商品总价
 	private double goodsPrice;
+	private int colorId;
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -78,25 +76,26 @@ public class OrderGoodsEntity {
 		this.goodsPrice = goodsPrice;
 	}
 
+
+	@Column(name = "spec_key", nullable = false)
+	public String getSpecKey() {
+		return specKey;
+	}
+
+	public void setSpecKey(String specKey) {
+		this.specKey = specKey;
+	}
+	
 	@Basic
-	@Column(name = "goods_sn", nullable = false, length = 60)
-	public String getGoodsSn() {
-		return goodsSn;
+	@Column(name = "color_id", nullable = false)
+	public int getColorId() {
+		return colorId;
 	}
 
-	public void setGoodsSn(String goodsSn) {
-		this.goodsSn = goodsSn;
+	public void setColorId(int colorId) {
+		this.colorId = colorId;
 	}
 
-
-	@Basic
-	@Column(name = "spec_name", nullable = false, length = 64)
-	public String getSpecName() {
-		return specName;
-	}
-
-	public void setSpecName(String specName) {
-		this.specName = specName;
-	}
+	
 	
 }

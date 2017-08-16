@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jichuangtech.clothshopserver.constant.OrderConstant;
 import com.jichuangtech.clothshopserver.model.OrderEntity;
-import com.jichuangtech.clothshopserver.model.vo.OrderDetailVO;
+import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
+import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
 import com.jichuangtech.clothshopserver.service.OrderService;
-
+import com.jichuangtech.clothshopserver.model.Response;
 @Controller
 @RequestMapping(OrderConstant.API_ORDER)
 @Transactional
@@ -31,8 +32,10 @@ public class OrderController {
 	 * @param userId
 	 * @return
 	 */
-	public List<OrderDetailVO> list(@PathVariable("userId")int userId){
-		return orderService.getList(userId);
+	public Response<List<OrderRespVO>> list(@PathVariable("userId")int userId){
+		Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
+		response.data = orderService.getList(userId);
+		return response;
 	}
 	
 	@RequestMapping(value="/{userId}/{orderStatus}",method = RequestMethod.GET)
@@ -43,8 +46,10 @@ public class OrderController {
 	 * @param userId
 	 * @return
 	 */
-	public List<OrderDetailVO> getByOrderStatus(@PathVariable("orderStatus")byte orderStatus,@PathVariable("userId")int userId){
-		return orderService.getByOrderStatus(orderStatus, userId);
+	public Response<List<OrderRespVO>> getByOrderStatus(@PathVariable("orderStatus")byte orderStatus,@PathVariable("userId")int userId){
+		Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
+		response.data = orderService.getByOrderStatus(orderStatus, userId);
+		return response;
 	}
 	
 
@@ -56,7 +61,9 @@ public class OrderController {
 	 * @param orderDetailVO
 	 * @return
 	 */
-	public OrderDetailVO saveOrder(@PathVariable("userId")int userId,@RequestBody OrderDetailVO orderDetailVO){
-		return orderService.saveOrder(userId,orderDetailVO);
+	public Response<OrderRespVO> saveOrder(@PathVariable("userId")int userId,@RequestBody OrderReqVO orderReqVO){
+		Response<OrderRespVO> response = new Response<OrderRespVO>();
+		response.data = orderService.saveOrder(userId,orderReqVO);
+		return response;
 	}
 }

@@ -6,19 +6,19 @@ package com.jichuangtech.clothshopserver.model.vo;
  * @author zxx
  *
  */
-public class UserAddressVO {
+public class UserAddressReqVO {
 	private int addressId;
 	private int userId;
 	private String consignee;
-	private String countryName;
-	private String provinceName;
-	private String cityName;
-	private String districtName;
-	private String twonName;
+	private long country = 86;
+	private long province;
+	private long city;
+	private long district;
+	private long twon = -1;
 	private String address;
-	private String zipcode;
+	private String zipcode = "000000";
 	private String mobile;
-	private byte isDefault;
+	private byte isDefault = 1;
 	public int getAddressId() {
 		return addressId;
 	}
@@ -37,36 +37,35 @@ public class UserAddressVO {
 	public void setConsignee(String consignee) {
 		this.consignee = consignee;
 	}
-	
-	public String getCountryName() {
-		return countryName;
+	public long getCountry() {
+		return country;
 	}
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
+	public void setCountry(long country) {
+		this.country = country;
 	}
-	public String getProvinceName() {
-		return provinceName;
+	public long getProvince() {
+		return province;
 	}
-	public void setProvinceName(String provinceName) {
-		this.provinceName = provinceName;
+	public void setProvince(long province) {
+		this.province = province;
 	}
-	public String getCityName() {
-		return cityName;
+	public long getCity() {
+		return city;
 	}
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
+	public void setCity(long city) {
+		this.city = city;
 	}
-	public String getDistrictName() {
-		return districtName;
+	public long getDistrict() {
+		return district;
 	}
-	public void setDistrictName(String districtName) {
-		this.districtName = districtName;
+	public void setDistrict(long district) {
+		this.district = district;
 	}
-	public String getTwonName() {
-		return twonName;
+	public long getTwon() {
+		return twon;
 	}
-	public void setTwonName(String twonName) {
-		this.twonName = twonName;
+	public void setTwon(long twon) {
+		this.twon = twon;
 	}
 	public String getAddress() {
 		return address;

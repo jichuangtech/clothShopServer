@@ -3,9 +3,7 @@ package com.jichuangtech.clothshopserver.model.vo;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.jichuangtech.clothshopserver.model.GoodsEntity;
-
-public class OrderDetailVO {
+public class OrderRespVO {
 	/** 订单总价*/
 	private BigDecimal totalAmount;
 	/** 地址*/

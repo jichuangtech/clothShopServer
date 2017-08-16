@@ -35,24 +35,34 @@
 
     | 作用域                                      | 接口说明   | 参数说明                                     |
     | ---------------------------------------- | ------ | ---------------------------------------- |
-    | /clothshopserver/api/order/{userId}/{orderStatus} | 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
-    | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id                            |
+    | /clothshopserver/api/order/{userId}/{orderStatus} | ``GET``查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
+    | /clothshopserver/api/order/{userId}      | 生成订单   | {userId}:用户Id
+    注：
+    ``/clothshopserver/api/order/{userId}/{orderStatus}``
+    ``返回体``
+    {"statusCode":200,"msg":null,"data":[{"totalAmount":0.00,"address":"福建省厦门市软件园二期","mobile":"1885054123456","consignee":"zxx","orderSn":"20170726","orderId":1,"userId":16777215,"orderStatus":1,"goodsVO":[{"goodsId":1,"shopPrice":0.00,"goodsNum":1,"goodsName":"锦纶加密美国网","specName":"千克","color":" 西瓜红","goodsSn":"","originalImg":""},{"goodsId":2,"shopPrice":0.00,"goodsNum":2,"goodsName":"锦纶闪光美国网","specName":"千克","color":"西瓜红","goodsSn":"","originalImg":""}]}]}
+    ``/clothshopserver/api/order/{userId}``
+    ``请求体``
+    {"addressId":7,"goodsReqVOList":[{"goodsId":2,"goodsNum":1,"specId":1,"colorId":1},{"goodsId":1,"goodsNum":2,"specId":1,"colorId":1}]}                            
 
   - ##### 收货地址
 
     | 作用域                                      | 接口说明   | 参数说明                                     |
     | ---------------------------------------- | ------ | ---------------------------------------- |
-    | /clothshopserver/api/useraddress/{userId}| GET 查询用户收货地址 | {userId}:用户Id|
-    | /clothshopserver/api/useraddress/region/{parentId}| GET 查询地区信息 | {parentId}:上级地区Id，其中0表示查询国家地区信息|
-    | /clothshopserver/api/useraddress/address | POST 新增收货地址 |请求体：UserAddressEntity|
-    | /clothshopserver/api/useraddress/defaultaddress| POST 修改默认地址 | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id|
+    | /clothshopserver/api/useraddress/{userId}| ``GET`` 查询用户收货地址 | {userId}:用户Id|
+    | /clothshopserver/api/useraddress/region/{parentId}| ``GET`` 查询地区信息 | {parentId}:上级地区Id，其中0表示查询国家地区信息,86为查询所有省份信息|
+    | /clothshopserver/api/useraddress/address | ``POST`` 新增收货地址 |请求体：UserAddressEntity|
+    | /clothshopserver/api/useraddress/defaultaddress| ``POST`` 修改默认地址 | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id|
     注：
-    /clothshopserver/api/useraddress/{userId}返回体：
-    {"statusCode":200,"msg":null,"data":[{"addressId":1,"userId":16777215,"consignee":"张晓雪","countryName":"中国","provinceName":"福建","cityName":"厦门","districtName":"思明区","twonName":"莲前街道","address":"软件园二期","zipcode":"361000","mobile":"18850541234","isDefault":0},{"addressId":2,"userId":16777215,"consignee":"刘雪花","countryName":"中国","provinceName":"福建","cityName":"厦门","districtName":"湖里区","twonName":"莲前街道","address":"SM城市广场","zipcode":"3610001","mobile":"18850123456","isDefault":1}]}
-    /clothshopserver/api/useraddress/region/{parentId}返回体：
-    {"statusCode":200,"msg":null,"data":[{"id":2,"name":"福建","level":2,"parentId":1},{"id":5,"name":"浙江","level":2,"parentId":1}]}
-    /clothshopserver/api/useraddress/address请求体：
-    {"userId":16777215,"consignee":"张晓雪","country":1,"province":2,"city":3,"district":7,"twon":8,"address":"软件园二期","zipcode":"361000","mobile":"18850541234","isDefault":1}
+    ``/clothshopserver/api/useraddress/{userId}``
+    ``返回体``
+    {"statusCode":200,"msg":null,"data":[{"addressId":1,"userId":16777215,"consignee":"张晓雪","address":"福建省厦门市思明区软件园二期","zipcode":"361000","mobile":"18850541234","isDefault":0},{"addressId":2,"userId":16777215,"consignee":"刘雪花","address":"福建省厦门市湖里区SM城市广场","zipcode":"3610001","mobile":"18850123456","isDefault":1}]}
+    ``/clothshopserver/api/useraddress/region/{parentId}``
+    ``返回体``
+    {"statusCode":200,"msg":null,"data":[{"id":130000,"name":"河北省","level":1,"parentId":86},{"id":140000,"name":"山西省","level":1,"parentId":86},{"id":150000,"name":"内蒙古自治区","level":1,"parentId":86},{"id":210000,"name":"辽宁省","level":1,"parentId":86},{"id":220000,"name":"吉林省","level":1,"parentId":86},{"id":230000,"name":"黑龙江省","level":1,"parentId":86},{"id":320000,"name":"江苏省","level":1,"parentId":86},{"id":330000,"name":"浙江省","level":1,"parentId":86},{"id":340000,"name":"安徽省","level":1,"parentId":86},{"id":350000,"name":"福建省","level":1,"parentId":86},{"id":360000,"name":"江西省","level":1,"parentId":86},{"id":370000,"name":"山东省","level":1,"parentId":86},{"id":410000,"name":"河南省","level":1,"parentId":86},{"id":420000,"name":"湖北省","level":1,"parentId":86},{"id":430000,"name":"湖南省","level":1,"parentId":86},{"id":440000,"name":"广东省","level":1,"parentId":86},{"id":450000,"name":"广西壮族自治区","level":1,"parentId":86},{"id":460000,"name":"海南省","level":1,"parentId":86},{"id":510000,"name":"四川省","level":1,"parentId":86},{"id":520000,"name":"贵州省","level":1,"parentId":86},{"id":530000,"name":"云南省","level":1,"parentId":86},{"id":540000,"name":"西藏自治区","level":1,"parentId":86},{"id":610000,"name":"陕西省","level":1,"parentId":86},{"id":620000,"name":"甘肃省","level":1,"parentId":86},{"id":630000,"name":"青海省","level":1,"parentId":86},{"id":640000,"name":"宁夏回族自治区","level":1,"parentId":86},{"id":650000,"name":"新疆维吾尔自治区","level":1,"parentId":86},{"id":710000,"name":"台湾省","level":1,"parentId":86},{"id":810000,"name":"香港特别行政区","level":1,"parentId":86},{"id":820000,"name":"澳门特别行政区","level":1,"parentId":86}]}
+    ``/clothshopserver/api/useraddress/address``
+    ``请求体``
+    {"userId":16777215,"consignee":"张晓雪","province":350000,"city":350200,"district":350203,"address":"瑞景商业广场","zipcode":"361000","mobile":"18850541234","isDefault":1}
 
   - ##### 规格
 

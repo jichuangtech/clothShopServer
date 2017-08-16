@@ -2,7 +2,6 @@ package com.jichuangtech.clothshopserver.controller;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jichuangtech.clothshopserver.constant.UserAddressConstant;
 import com.jichuangtech.clothshopserver.model.RegionEntity;
-import com.jichuangtech.clothshopserver.model.UserAddressEntity;
-import com.jichuangtech.clothshopserver.model.vo.UserAddressVO;
-import com.jichuangtech.clothshopserver.service.UserAddressService;
 import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.vo.UserAddressReqVO;
+import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
+import com.jichuangtech.clothshopserver.service.UserAddressService;
+import com.jichuangtech.clothshopserver.utils.JsonHelper;
 @Controller
 @RequestMapping(UserAddressConstant.API_USER_ADDRESS)
 public class UserAddressController {
@@ -31,8 +31,8 @@ public class UserAddressController {
 	 * @param userId
 	 * @return
 	 */
-	public Response<List<UserAddressVO>> list(@PathVariable("userId")int userId){
-		Response<List<UserAddressVO>> response = new Response<List<UserAddressVO>>();
+	public Response<List<UserAddressRespVO>> list(@PathVariable("userId")int userId){
+		Response<List<UserAddressRespVO>> response = new Response<List<UserAddressRespVO>>();
 		response.data = userAddressService.list(userId);
 		return response;
 	}
@@ -69,9 +69,10 @@ public class UserAddressController {
 	 * @param userAddressEntity
 	 * @return
 	 */
-	public Response<UserAddressVO> saveUserAddress(@RequestBody UserAddressEntity userAddressEntity){
-		Response<UserAddressVO> response = new Response<UserAddressVO>();
-		response.data = userAddressService.saveUserAddress(userAddressEntity);
+	public Response<UserAddressRespVO> saveUserAddress(@RequestBody UserAddressReqVO userAddressReqVO){
+		Response<UserAddressRespVO> response = new Response<UserAddressRespVO>();
+		response.data = userAddressService.saveUserAddress(userAddressReqVO);
+		System.out.println(JsonHelper.getJson(response.data));
 		return response;
 	}
 }
