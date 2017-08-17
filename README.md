@@ -33,10 +33,10 @@
 
   - ##### 订单
 
-    | 作用域                                      | 接口说明   | 参数说明                                     |
-    | ---------------------------------------- | ------ | ---------------------------------------- |
+    | 作用域                                      | 接口说明            | 参数说明                                     |
+    | ---------------------------------------- | --------------- | ---------------------------------------- |
     | /clothshopserver/api/order/{userId}/{orderStatus} | ``GET``, 查询用户订单 | {userId}:用户Id;{orderStatus}:订单状态，其中0表所有订单 |
-    | /clothshopserver/api/order/{userId}      |  ``POST``,生成订单   | {userId}:用户Id |
+    | /clothshopserver/api/order/{userId}      | ``POST``,生成订单   | {userId}:用户Id                            |
     注：
     ``/clothshopserver/api/order/{userId}/{orderStatus}``
     ``返回体``
@@ -47,12 +47,12 @@
 
   - ##### 收货地址
 
-    | 作用域                                      | 接口说明   | 参数说明                                     |
-    | ---------------------------------------- | ------ | ---------------------------------------- |
-    | /clothshopserver/api/useraddress/{userId}| ``GET``, 查询用户收货地址 | {userId}:用户Id|
-    | /clothshopserver/api/useraddress/region/{parentId}| ``GET``, 查询地区信息 | {parentId}:上级地区Id，其中0表示查询国家地区信息,86为查询所有省份信息|
-    | /clothshopserver/api/useraddress/address | ``POST``, 新增收货地址 |请求体看备注|
-    | /clothshopserver/api/useraddress/defaultaddress| ``POST``, 修改默认地址 | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id|
+    | 作用域                                      | 接口说明              | 参数说明                                     |
+    | ---------------------------------------- | ----------------- | ---------------------------------------- |
+    | /clothshopserver/api/useraddress/{userId} | ``GET``, 查询用户收货地址 | {userId}:用户Id                            |
+    | /clothshopserver/api/useraddress/region/{parentId} | ``GET``, 查询地区信息   | {parentId}:上级地区Id，其中0表示查询国家地区信息,86为查询所有省份信息 |
+    | /clothshopserver/api/useraddress/address | ``POST``, 新增收货地址  | 请求体看备注                                   |
+    | /clothshopserver/api/useraddress/defaultaddress | ``POST``, 修改默认地址  | 请求参数：oldAddressId:旧的默认地址id;newAddressId:新的默认地址id |
     注：
     ``/clothshopserver/api/useraddress/{userId}``
     ``返回体``
@@ -114,6 +114,20 @@
     "msg": null,          //对应 statusCode的描述信息，目前嗨未来进行赋值，都是null
     "data": null 		    //响应给用户的数据，后期所有接口，都采用这种结构返回
   }
+  ```
+
+- ###   微信小程序中用户登录和登录态维护
+
+  ```
+  1.小程序 wx.login()将返回数据code，通过wx.request()发送给服务端；
+  2.服务端用这个code等相关信息去微信服务器请求session_key 和 openid；
+  3.根据 2步骤请求到的数据 openid session_key unionid  ， 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时；
+  4.将 sessionid 返回给 小程序客户端；
+  5.小程序每次调用那些需要登录后才有权限的访问的后台服务时，你可以将保存在storage中的sessionid取出并携带在请求中；
+
+  相关链接：
+  （1）https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html#wxloginobject；
+  （2）http://www.jianshu.com/p/c5f6c98b2685
   ```
 
   ​
