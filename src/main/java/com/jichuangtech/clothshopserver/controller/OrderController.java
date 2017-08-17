@@ -1,69 +1,63 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.constant.OrderConstant;
+import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
+import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
+import com.jichuangtech.clothshopserver.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.jichuangtech.clothshopserver.constant.OrderConstant;
-import com.jichuangtech.clothshopserver.model.OrderEntity;
-import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
-import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
-import com.jichuangtech.clothshopserver.service.OrderService;
-import com.jichuangtech.clothshopserver.model.Response;
-@Controller
+@RestController
 @RequestMapping(OrderConstant.API_ORDER)
 @Transactional
 public class OrderController {
-	@Autowired
-	private OrderService orderService;
-	
-	@RequestMapping(value="/{userId}",method = RequestMethod.GET)
-	@ResponseBody
-	/**
-	 * 查找用户所有订单
-	 * @param userId
-	 * @return
-	 */
-	public Response<List<OrderRespVO>> list(@PathVariable("userId")int userId){
-		Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
-		response.data = orderService.getList(userId);
-		return response;
-	}
-	
-	@RequestMapping(value="/{userId}/{orderStatus}",method = RequestMethod.GET)
-	@ResponseBody
-	/**
-	 * 根据订单状态查找用户订单
-	 * @param orderStatus
-	 * @param userId
-	 * @return
-	 */
-	public Response<List<OrderRespVO>> getByOrderStatus(@PathVariable("orderStatus")byte orderStatus,@PathVariable("userId")int userId){
-		Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
-		response.data = orderService.getByOrderStatus(orderStatus, userId);
-		return response;
-	}
-	
+    @Autowired
+    private OrderService orderService;
 
-	@RequestMapping(value="/{userId}",method=RequestMethod.POST)
-	@ResponseBody
-	/**
-	 * 保存订单
-	 * @param userId
-	 * @param orderDetailVO
-	 * @return
-	 */
-	public Response<OrderRespVO> saveOrder(@PathVariable("userId")int userId,@RequestBody OrderReqVO orderReqVO){
-		Response<OrderRespVO> response = new Response<OrderRespVO>();
-		response.data = orderService.saveOrder(userId,orderReqVO);
-		return response;
-	}
+
+    /**
+     * 查找用户所有订单
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId) {
+        Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
+        response.data = orderService.getList(userId);
+        return response;
+    }
+
+
+    /**
+     * 根据订单状态查找用户订单
+     *
+     * @param orderStatus
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/{userId}/{orderStatus}", method = RequestMethod.GET)
+    public Response<List<OrderRespVO>> getByOrderStatus(@PathVariable("orderStatus") byte orderStatus, @PathVariable("userId") int userId) {
+        Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
+        response.data = orderService.getByOrderStatus(orderStatus, userId);
+        return response;
+    }
+
+
+    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
+    /**
+     * 保存订单
+     * @param userId
+     * @param orderDetailVO
+     * @return
+     */
+    public Response<OrderRespVO> saveOrder(@PathVariable("userId") int userId, @RequestBody OrderReqVO orderReqVO) {
+        Response<OrderRespVO> response = new Response<OrderRespVO>();
+        response.data = orderService.saveOrder(userId, orderReqVO);
+        return response;
+    }
 }

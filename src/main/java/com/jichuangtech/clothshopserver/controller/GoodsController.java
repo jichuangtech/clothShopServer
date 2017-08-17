@@ -1,18 +1,12 @@
 package com.jichuangtech.clothshopserver.controller;
 
-import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,55 +19,44 @@ import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SE
  * Created by Bingo on 2017/7/23.
  */
 
-@Controller
+@RestController
 @RequestMapping(GoodsConstant.API_GOODS)
 public class GoodsController {
 
     @Autowired
     private GoodsRepository mGoodsRepository;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index() {
-        return "goods";
-    }
-
-    @RequestMapping()
-    @ResponseBody
+    @RequestMapping(method = RequestMethod.GET)
     public List<GoodsEntity> list() {
         return mGoodsRepository.findAll();
     }
 
-
-    @RequestMapping(value = GoodsConstant.HOT)
-    @ResponseBody
+    @RequestMapping(value = GoodsConstant.HOT, method = RequestMethod.GET)
     public List<GoodsEntity> listHot() {
         return mGoodsRepository.findAllByIsHot(new Byte("1"));
     }
 
-    @RequestMapping(value = GoodsConstant.RECOMMEND)
+    @RequestMapping(value = GoodsConstant.RECOMMEND, method = RequestMethod.GET)
     @ResponseBody
     public List<GoodsEntity> listRecommend() {
         return mGoodsRepository.findAllByIsRecommend(new Byte("1"));
     }
 
-    @RequestMapping(value = GoodsConstant.HOT + "/{goodsId}")
-    @ResponseBody
+    @RequestMapping(value = GoodsConstant.HOT + "/{goodsId}", method = RequestMethod.GET)
     public GoodsEntity listHotById(@PathVariable int goodsId) {
         return mGoodsRepository.findByIsHotAndGoodsId(new Byte("1"), goodsId);
     }
 
-    @RequestMapping("/{goodsId}")
-    @ResponseBody
+    @RequestMapping(value = "/{goodsId}", method = RequestMethod.GET)
     public GoodsEntity listById(@PathVariable int goodsId) {
-        System.out.print("listOne goodsId: " + goodsId +" \n");
+        System.out.print("listOne goodsId: " + goodsId + " \n");
         return mGoodsRepository.findByGoodsId(goodsId);
     }
 
-    @RequestMapping(GoodsConstant.PICTURE + "/{picName}")
-    @ResponseBody
+    @RequestMapping(value = GoodsConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
     public String getGoodsPicture(HttpServletRequest request,
-                             HttpServletResponse response, Model model, @PathVariable String picName) {
-        PictureUtils.writePic(response,SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
+                                  HttpServletResponse response, Model model, @PathVariable String picName) {
+        PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
         return "getGoodsPicture success ...";
     }
 }

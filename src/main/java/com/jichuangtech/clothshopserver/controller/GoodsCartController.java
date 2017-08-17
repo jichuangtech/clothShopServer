@@ -6,8 +6,9 @@ import com.jichuangtech.clothshopserver.model.vo.AlterCartNumberVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
 import com.jichuangtech.clothshopserver.service.GoodsCartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,33 +17,31 @@ import java.util.List;
  * Created by Bingo on 2017/7/23.
  */
 
-@Controller
+@RestController
 @RequestMapping(GoodsCartConstant.API_GOODS_CART)
 public class GoodsCartController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoodsCartController.class);
 
     @Autowired
     private GoodsCartService mGoodsCartService;
 
     @RequestMapping(value = "/{cartId}", method = RequestMethod.DELETE)
-    @ResponseBody
     public Response delete(@PathVariable("cartId") int cartId) {
+        LOGGER.info("delete user");
         return mGoodsCartService.deleteCart(cartId);
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    @ResponseBody
     public List<GoodsCartRespVO> list(@PathVariable("userId") int userId) {
         return mGoodsCartService.getListByUserId(userId);
     }
 
     @RequestMapping(value = GoodsCartConstant.GOODS_NUMBER, method = RequestMethod.POST)
-    @ResponseBody
     public Response alterNumber(@RequestBody AlterCartNumberVO vo) {
         return mGoodsCartService.alterNumber(vo);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     public Response saveGoodsCart(@RequestBody GoodsCartReqVO goodsCartVO) {
         return mGoodsCartService.saveGoodsCart(goodsCartVO);
     }
