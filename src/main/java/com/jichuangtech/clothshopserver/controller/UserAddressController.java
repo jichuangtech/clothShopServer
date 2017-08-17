@@ -6,7 +6,7 @@ import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressReqVO;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
 import com.jichuangtech.clothshopserver.service.UserAddressService;
-import com.jichuangtech.clothshopserver.utils.JsonHelper;
+import com.jichuangtech.clothshopserver.utils.JsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,14 +63,14 @@ public class UserAddressController {
     /**
      * 新增收货地址
      *
-     * @param userAddressEntity
+     * @param userAddressReqVO
      * @return
      */
     @RequestMapping(value = "/address", method = RequestMethod.POST)
     public Response<UserAddressRespVO> saveUserAddress(@RequestBody UserAddressReqVO userAddressReqVO) {
         Response<UserAddressRespVO> response = new Response<UserAddressRespVO>();
         response.data = userAddressService.saveUserAddress(userAddressReqVO);
-        System.out.println(JsonHelper.getJson(response.data));
+        System.out.println(JsonMapper.nonDefaultMapper().toJson(response.data));
         return response;
     }
 }

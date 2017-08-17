@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.json.JSONArray;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,8 +124,8 @@ public class UserAddressService {
 	
 	/**
 	 * 修改默认收货地址
-	 * @param userId
-	 * @param addressId
+	 * @param oldAddressId
+	 * @param newAddressId
 	 */
 	@Transactional
 	public void updateDefaultAddress(int oldAddressId,int newAddressId){
