@@ -32,7 +32,7 @@ public class GoodsBrandController {
         return mGoodsBrandRepository.findAll();
     }
 
-    @RequestMapping(value = "/{goodsBrandId}h", method = RequestMethod.GET)
+    @RequestMapping(value = "/{goodsBrandId}", method = RequestMethod.GET)
     public GoodsBrandEntity listById(@PathVariable int goodsBrandId) {
         System.out.print("listOne goodsBrandId: " + goodsBrandId + " \n");
         return mGoodsBrandRepository.findById(goodsBrandId);
