@@ -1,4 +1,4 @@
-package com.jichuangtech.clothshopserver.utils;
+package com.jichuangtech.clothshopserver.filter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;

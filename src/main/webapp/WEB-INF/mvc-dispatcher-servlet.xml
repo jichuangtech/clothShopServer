@@ -11,6 +11,14 @@
        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:cloth.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <mvc:resources location="classpath:/META-INF/resources/" mapping="swagger-ui.html"/>
     <mvc:resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"/>
 
@@ -21,7 +29,7 @@
 
     <!--指明 controller 所在包，并扫描其中的注解-->
     <context:component-scan
-            base-package="com.jichuangtech.clothshopserver.controller,com.jichuangtech.clothshopserver.service"/>
+            base-package="com.jichuangtech.clothshopserver.controller,com.jichuangtech.clothshopserver"/>
 
     <!-- 静态资源(js、image等)的访问 -->
     <mvc:default-servlet-handler/>

@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.Map;
 
 /**
  * Created by yangjb on 2017/8/17.
@@ -82,9 +81,9 @@ public class HttpRequestUtils {
      * @param url 路径
      * @return
      */
-    public static Map httpGet(String url) {
+    public static String httpGet(String url) {
         //get请求返回结果
-        Map jsonResult = null;
+        String result = "";
         try {
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
             //发送get请求
@@ -94,9 +93,8 @@ public class HttpRequestUtils {
             /**请求发送成功，并得到响应**/
             if (response.getStatusLine().getStatusCode() == HttpStatus.OK.value()) {
                 /**读取服务器返回过来的json字符串数据**/
-                String strResult = EntityUtils.toString(response.getEntity());
+                result = EntityUtils.toString(response.getEntity());
                 /**把json字符串转换成json对象**/
-                jsonResult = JsonMapper.nonDefaultMapper().fromJson(strResult, Map.class);
                 url = URLDecoder.decode(url, "UTF-8");
             } else {
                 logger.error("get请求提交失败:" + url);
@@ -104,6 +102,6 @@ public class HttpRequestUtils {
         } catch (IOException e) {
             logger.error("get请求提交失败:" + url, e);
         }
-        return jsonResult;
+        return result;
     }
 }
