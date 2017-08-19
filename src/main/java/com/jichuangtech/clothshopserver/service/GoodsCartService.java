@@ -7,7 +7,6 @@ import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCartRepository;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,6 +124,7 @@ public class GoodsCartService {
         goodsCartVO.setColor(goodsCartEntity.getColorName());
         goodsCartVO.setOriginalImg(goodsEntity.getOriginalImg());
         goodsCartVO.setGoodsCartId(goodsCartEntity.getId());
+        goodsCartVO.setStoreCount(goodsEntity.getStoreCount());
         return goodsCartVO;
     }
 

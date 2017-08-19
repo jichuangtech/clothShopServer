@@ -19,7 +19,8 @@ public class GoodsVO {
 	private String goodsSn;
 	/** 商品主图片名 */
 	private String originalImg;
-	
+
+
 	
 	
 	public BigDecimal getShopPrice() {
