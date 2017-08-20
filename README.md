@@ -105,8 +105,18 @@
 
       ```son
       {
-          "goodsCartId":6,     //购物车ID
-          "goodsNum":12111     //修改后，购物车商品的数量
+          
+          "cartNumberVOList": [
+              {
+              "goodsCartId":4,   //修改购物车的id
+              "goodsNum":44      //修改购物车数量
+          },
+          {
+              "goodsCartId":6,
+              "goodsNum":66
+          }   
+          ]
+          
       }
       ```
 
