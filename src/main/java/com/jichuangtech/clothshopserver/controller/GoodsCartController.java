@@ -2,7 +2,8 @@ package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsCartConstant;
 import com.jichuangtech.clothshopserver.model.Response;
-import com.jichuangtech.clothshopserver.model.vo.AlterCartNumberVO;
+import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVO;
+import com.jichuangtech.clothshopserver.model.vo.CartNumberVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
 import com.jichuangtech.clothshopserver.service.GoodsCartService;
@@ -31,14 +32,19 @@ public class GoodsCartController {
         return mGoodsCartService.deleteCart(cartId);
     }
 
+    @RequestMapping(method = RequestMethod.GET)
+    public List<GoodsCartRespVO> list() {
+        return mGoodsCartService.getList();
+    }
+
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public List<GoodsCartRespVO> list(@PathVariable("userId") int userId) {
+    public List<GoodsCartRespVO> listByUserId(@PathVariable("userId") int userId) {
         return mGoodsCartService.getListByUserId(userId);
     }
 
     @RequestMapping(value = GoodsCartConstant.GOODS_NUMBER, method = RequestMethod.POST)
-    public Response alterNumber(@RequestBody AlterCartNumberVO vo) {
-        return mGoodsCartService.alterNumber(vo);
+    public Response alterNumber(@RequestBody AlterCartNumBerVO vo) {
+        return mGoodsCartService.alterNumbers(vo);
     }
 
     @RequestMapping(method = RequestMethod.POST)

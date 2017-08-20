@@ -1,7 +1,8 @@
 package com.jichuangtech.clothshopserver.service;
 
 import com.jichuangtech.clothshopserver.model.*;
-import com.jichuangtech.clothshopserver.model.vo.AlterCartNumberVO;
+import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVO;
+import com.jichuangtech.clothshopserver.model.vo.CartNumberVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCartRepository;
@@ -44,15 +45,27 @@ public class GoodsCartService {
         return getGoodsCartRespVOs(goodsCartEntityList);
     }
 
-    public Response alterNumber(AlterCartNumberVO vo) {
-        Response response  = new Response();
+    public Response alterNumbers(AlterCartNumBerVO vo) {
+        Response response = new Response();
+
+        for(CartNumberVO cartNumberVO : vo.cartNumberVOList) {
+            alterNumber(cartNumberVO, response);
+            if(response.statusCode != 200) {
+                break;
+            }
+        }
+        return response;
+    }
+
+    private Response alterNumber(CartNumberVO vo, Response response) {
         GoodsCartEntity cart = mGoodsCartRepository.findById(vo.goodsCartId);
 
         if(cart != null) {
             cart.setGoodsNum(vo.goodsNum);
+            mGoodsCartRepository.save(cart);
         } else {
             response.statusCode = -1;
-            response.msg = "购物车不存在";
+            response.msg = "购物车不存在, id: " + vo.goodsCartId;
         }
 
         return response;
