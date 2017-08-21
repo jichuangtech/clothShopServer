@@ -2,10 +2,7 @@ package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsCartConstant;
 import com.jichuangtech.clothshopserver.model.Response;
-import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVO;
-import com.jichuangtech.clothshopserver.model.vo.CartNumberVO;
-import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
-import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
+import com.jichuangtech.clothshopserver.model.vo.*;
 import com.jichuangtech.clothshopserver.service.GoodsCartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +25,14 @@ public class GoodsCartController {
 
     @RequestMapping(value = "/{cartId}", method = RequestMethod.DELETE)
     public Response delete(@PathVariable("cartId") int cartId) {
-        LOGGER.info("delete user");
+        LOGGER.info("delete goodsCarts cartId: " + cartId);
         return mGoodsCartService.deleteCart(cartId);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public Response delete(@RequestBody DeleteCartVO vo) {
+        LOGGER.info("delete goodsCarts cartIds: " + vo.cartIds);
+        return mGoodsCartService.deleteCart(vo.cartIds);
     }
 
     @RequestMapping(method = RequestMethod.GET)

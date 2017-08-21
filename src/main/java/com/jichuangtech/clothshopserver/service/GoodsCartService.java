@@ -148,7 +148,21 @@ public class GoodsCartService {
             mGoodsCartRepository.delete(mGoodsCartRepository.findById(cartId));
         } else {
             response.statusCode = -1;
+            response.msg = "要删除购物车不存在, id: " + cartId;
         }
+        return response;
+    }
+
+    public Response deleteCart(int[] cartIds) {
+        Response response = new Response();
+        for(int cartId : cartIds) {
+            response = deleteCart(cartId);
+            if(response.statusCode != 200) {
+                break;
+            }
+
+        }
+
         return response;
     }
 }
