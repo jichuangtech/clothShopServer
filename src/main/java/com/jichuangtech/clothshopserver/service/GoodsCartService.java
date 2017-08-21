@@ -1,13 +1,13 @@
 package com.jichuangtech.clothshopserver.service;
 
 import com.jichuangtech.clothshopserver.model.*;
-import com.jichuangtech.clothshopserver.model.vo.AlterCartNumberVO;
+import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVO;
+import com.jichuangtech.clothshopserver.model.vo.CartNumberVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCartRepository;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,15 +45,27 @@ public class GoodsCartService {
         return getGoodsCartRespVOs(goodsCartEntityList);
     }
 
-    public Response alterNumber(AlterCartNumberVO vo) {
-        Response response  = new Response();
+    public Response alterNumbers(AlterCartNumBerVO vo) {
+        Response response = new Response();
+
+        for(CartNumberVO cartNumberVO : vo.cartNumberVOList) {
+            alterNumber(cartNumberVO, response);
+            if(response.statusCode != 200) {
+                break;
+            }
+        }
+        return response;
+    }
+
+    private Response alterNumber(CartNumberVO vo, Response response) {
         GoodsCartEntity cart = mGoodsCartRepository.findById(vo.goodsCartId);
 
         if(cart != null) {
             cart.setGoodsNum(vo.goodsNum);
+            mGoodsCartRepository.save(cart);
         } else {
             response.statusCode = -1;
-            response.msg = "购物车不存在";
+            response.msg = "购物车不存在, id: " + vo.goodsCartId;
         }
 
         return response;
@@ -125,6 +137,7 @@ public class GoodsCartService {
         goodsCartVO.setColor(goodsCartEntity.getColorName());
         goodsCartVO.setOriginalImg(goodsEntity.getOriginalImg());
         goodsCartVO.setGoodsCartId(goodsCartEntity.getId());
+        goodsCartVO.setStoreCount(goodsEntity.getStoreCount());
         return goodsCartVO;
     }
 
@@ -135,7 +148,21 @@ public class GoodsCartService {
             mGoodsCartRepository.delete(mGoodsCartRepository.findById(cartId));
         } else {
             response.statusCode = -1;
+            response.msg = "要删除购物车不存在, id: " + cartId;
         }
+        return response;
+    }
+
+    public Response deleteCart(int[] cartIds) {
+        Response response = new Response();
+        for(int cartId : cartIds) {
+            response = deleteCart(cartId);
+            if(response.statusCode != 200) {
+                break;
+            }
+
+        }
+
         return response;
     }
 }

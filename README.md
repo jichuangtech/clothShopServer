@@ -9,7 +9,14 @@
     - http://www.ruanyifeng.com/blog/2011/09/restful.html
 
 
-- ### 接口
+- ### 接口 
+
+  ```
+  服务端已添加 swagger自动生成RESTFUI文档工具，查看API更方便。
+  访问地址：http://www.jichuangtech.site/clothshopserver/swagger-ui.html#/
+  ```
+
+  ​
 
   - ##### 商品
 
@@ -98,8 +105,18 @@
 
       ```son
       {
-          "goodsCartId":6,     //购物车ID
-          "goodsNum":12111     //修改后，购物车商品的数量
+          
+          "cartNumberVOList": [
+              {
+              "goodsCartId":4,   //修改购物车的id
+              "goodsNum":44      //修改购物车数量
+          },
+          {
+              "goodsCartId":6,
+              "goodsNum":66
+          }   
+          ]
+          
       }
       ```
 

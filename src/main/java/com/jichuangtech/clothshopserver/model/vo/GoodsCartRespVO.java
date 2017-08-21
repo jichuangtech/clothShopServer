@@ -14,6 +14,8 @@ public class GoodsCartRespVO extends GoodsVO{
      */
     private String originalImg;
 
+    private int storeCount;
+
     public int getGoodsCartId() {
         return goodsCartId;
     }
@@ -28,5 +30,13 @@ public class GoodsCartRespVO extends GoodsVO{
 
     public void setOriginalImg(String originalImg) {
         this.originalImg = originalImg;
+    }
+
+    public int getStoreCount() {
+        return storeCount;
+    }
+
+    public void setStoreCount(int storeCount) {
+        this.storeCount = storeCount;
     }
 }

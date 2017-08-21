@@ -2,9 +2,7 @@ package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsCartConstant;
 import com.jichuangtech.clothshopserver.model.Response;
-import com.jichuangtech.clothshopserver.model.vo.AlterCartNumberVO;
-import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
-import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
+import com.jichuangtech.clothshopserver.model.vo.*;
 import com.jichuangtech.clothshopserver.service.GoodsCartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +25,29 @@ public class GoodsCartController {
 
     @RequestMapping(value = "/{cartId}", method = RequestMethod.DELETE)
     public Response delete(@PathVariable("cartId") int cartId) {
-        LOGGER.info("delete user");
+        LOGGER.info("delete goodsCarts cartId: " + cartId);
         return mGoodsCartService.deleteCart(cartId);
     }
 
+    @RequestMapping(method = RequestMethod.DELETE)
+    public Response delete(@RequestBody DeleteCartVO vo) {
+        LOGGER.info("delete goodsCarts cartIds: " + vo.cartIds);
+        return mGoodsCartService.deleteCart(vo.cartIds);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<GoodsCartRespVO> list() {
+        return mGoodsCartService.getList();
+    }
+
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public List<GoodsCartRespVO> list(@PathVariable("userId") int userId) {
+    public List<GoodsCartRespVO> listByUserId(@PathVariable("userId") int userId) {
         return mGoodsCartService.getListByUserId(userId);
     }
 
     @RequestMapping(value = GoodsCartConstant.GOODS_NUMBER, method = RequestMethod.POST)
-    public Response alterNumber(@RequestBody AlterCartNumberVO vo) {
-        return mGoodsCartService.alterNumber(vo);
+    public Response alterNumber(@RequestBody AlterCartNumBerVO vo) {
+        return mGoodsCartService.alterNumbers(vo);
     }
 
     @RequestMapping(method = RequestMethod.POST)
