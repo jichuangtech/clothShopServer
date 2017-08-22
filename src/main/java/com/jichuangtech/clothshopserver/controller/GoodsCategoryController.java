@@ -5,6 +5,7 @@ import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
+import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class GoodsCategoryController {
     @Autowired
     private GoodsCategoryRepository mGoodsCategoryRepository;
 
+    @Autowired
+    private GoodsCategoryService mGoodsCategoryService;
+
     @RequestMapping()
     public List<GoodsCategoryEntity> list() {
         return mGoodsCategoryRepository.findAll();
@@ -35,15 +39,12 @@ public class GoodsCategoryController {
 
     @RequestMapping(value = "/{goodsCategoryId}", method = RequestMethod.GET)
     public GoodsCategoryEntity listById(@PathVariable int goodsCategoryId) {
-        System.out.print("listOne goodsCategoryId: " + goodsCategoryId + " \n");
-        return mGoodsCategoryRepository.findById(goodsCategoryId);
+        return mGoodsCategoryService.getCategory(goodsCategoryId);
     }
 
     @RequestMapping(value = "/{goodsCategoryId}" + GoodsConstant.GOODS, method = RequestMethod.GET)
     public List<GoodsEntity> listGoodsById(@PathVariable int goodsCategoryId) {
-        System.out.print("listOne listGoods: " + goodsCategoryId + " \n");
-        GoodsCategoryEntity goodsCategory = mGoodsCategoryRepository.findById(goodsCategoryId);
-        return goodsCategory.getGoodsList();
+        return mGoodsCategoryService.listGoods(goodsCategoryId);
     }
 
     @RequestMapping(value = GoodsCategoryConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
@@ -52,5 +53,6 @@ public class GoodsCategoryController {
         PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
         return "getGoodsCategoryPicture success ...";
     }
+
 
 }

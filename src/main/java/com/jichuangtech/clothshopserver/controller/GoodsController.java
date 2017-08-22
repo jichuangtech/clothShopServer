@@ -2,8 +2,14 @@ package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
+import com.jichuangtech.clothshopserver.model.Page;
+import com.jichuangtech.clothshopserver.model.vo.GoodsPaginationVO;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
+import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
+import com.jichuangtech.clothshopserver.utils.PaginationUtils;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +28,11 @@ import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SE
 @RestController
 @RequestMapping(GoodsConstant.API_GOODS)
 public class GoodsController {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoodsController.class);
     @Autowired
     private GoodsRepository mGoodsRepository;
+    @Autowired
+    private GoodsCategoryService mGoodsCategoryService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<GoodsEntity> list() {
@@ -52,6 +60,16 @@ public class GoodsController {
         System.out.print("listOne goodsId: " + goodsId + " \n");
         return mGoodsRepository.findByGoodsId(goodsId);
     }
+
+    @RequestMapping(value = GoodsConstant.PAGINATION, method = RequestMethod.GET)
+    public Page paginate(@RequestParam int catId, @RequestParam int pageSize, @RequestParam int pageIndex) {
+        List<GoodsEntity> srcData = mGoodsCategoryService.listGoods(catId);
+        Page page = new GoodsPaginationVO();
+        PaginationUtils.paginate(page, srcData, pageSize, pageIndex);
+        LOGGER.info(" paginate page: " + page);
+        return page;
+    }
+
 
     @RequestMapping(value = GoodsConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
     public String getGoodsPicture(HttpServletRequest request,
