@@ -4,9 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.jichuangtech.clothshopserver.controller.UserController;
+import com.jichuangtech.clothshopserver.model.Page;
+import com.jichuangtech.clothshopserver.utils.PaginationUtils;
 import junit.framework.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
@@ -14,6 +21,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 
 public class ClientCallTest extends TestCase{
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientCallTest.class);
 	
 //    public void testJsonResponse() throws IOException, URISyntaxException {  
 //        String url = "http://localhost:8080/clothshopserver/api/order/16777215";  
@@ -44,6 +52,7 @@ public class ClientCallTest extends TestCase{
         String jsonData = new String(bytes);  
         System.out.println(jsonData);  
         
+
     }*/  
     
     public void testUpdateOrderStatus() throws IOException, URISyntaxException {  
@@ -59,4 +68,24 @@ public class ClientCallTest extends TestCase{
         System.out.println(jsonData);  
         
     } 
+
+    }
+
+    public void testPage() {
+        List<String> names = new ArrayList<>();
+        names.add("1");
+        names.add("2");
+        names.add("3");
+        names.add("4");
+        names.add("5");
+        names.add("6");
+        names.add("7");
+        names.add("8");
+
+
+//        Page page = PaginationUtils.paginate(names, 2, 4);
+
+//        LOGGER.error("page.data: " + page.data);
+    }
+
 }
