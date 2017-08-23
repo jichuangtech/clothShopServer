@@ -29,7 +29,7 @@ public class ClientCallTest extends TestCase{
 //        System.out.println(jsonData);  
 //    }  
     
-    public void testCreateOrder() throws IOException, URISyntaxException {  
+    /*public void testCreateOrder() throws IOException, URISyntaxException {  
         String url = "http://localhost:8080/clothshopserver/api/order/16777215";  
 //    	String url = "http://localhost:8080/clothshopserver/api/goodsCategory/list";  
         ClientHttpRequest request = new SimpleClientHttpRequestFactory().createRequest(new URI(url), HttpMethod.POST); 
@@ -44,5 +44,19 @@ public class ClientCallTest extends TestCase{
         String jsonData = new String(bytes);  
         System.out.println(jsonData);  
         
-    }  
+    }*/  
+    
+    public void testUpdateOrderStatus() throws IOException, URISyntaxException {  
+        String url = "http://localhost:8080/clothshopserver/api/order/16777215/orderstatus/8/2";  
+        ClientHttpRequest request = new SimpleClientHttpRequestFactory().createRequest(new URI(url), HttpMethod.POST); 
+        request.getHeaders().set("Accept", "application/json");  
+        request.getHeaders().set("Content-Type", "application/json;UTF-8"); 
+        ClientHttpResponse response = request.execute();  
+        InputStream is = response.getBody();  
+        byte bytes[] = new byte[(int) response.getHeaders().getContentLength()];  
+        is.read(bytes);  
+        String jsonData = new String(bytes);  
+        System.out.println(jsonData);  
+        
+    } 
 }
