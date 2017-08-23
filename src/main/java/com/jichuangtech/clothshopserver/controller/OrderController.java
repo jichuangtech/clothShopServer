@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class OrderController {
      * @param userId
      * @return
      */
+    @ApiOperation(value = "获取用户所有订单信息")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId) {
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
@@ -43,6 +45,7 @@ public class OrderController {
      * @param userId
      * @return
      */
+    @ApiOperation(value = "根据订单状态查找用户订单", notes = "订单状态为0表示所有订单")
     @RequestMapping(value = "/{userId}/{orderStatus}", method = RequestMethod.GET)
     public Response<List<OrderRespVO>> getByOrderStatus(@PathVariable("orderStatus") byte orderStatus, @PathVariable("userId") int userId) {
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
@@ -50,25 +53,26 @@ public class OrderController {
         return response;
     }
 
-
-    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
     /**
      * 保存订单
      * @param userId
      * @param orderDetailVO
      * @return
      */
+    @ApiOperation(value = "保存用户订单")
+    @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
     public Response<OrderRespVO> saveOrder(@PathVariable("userId") int userId, @RequestBody OrderReqVO orderReqVO) {
         Response<OrderRespVO> response = new Response<OrderRespVO>();
         response.data = orderService.saveOrder(userId, orderReqVO);
         return response;
     }
     
-    @RequestMapping(value = "/{userId}/orderstatus/{orderId}/{orderStatus}", method = RequestMethod.POST)
     /**
      * 修改订单状态
      * @return
      */
+    @ApiOperation(value = "更新用户某个订单的订单状态")
+    @RequestMapping(value = "/{userId}/orderstatus/{orderId}/{orderStatus}", method = RequestMethod.POST)
     public Response<String> updateOrderStatus(@PathVariable("userId") int userId,@PathVariable("orderId") int orderId,@PathVariable("orderStatus") byte orderStatus){
     	orderService.updateOrderStatusByOrderId(userId,orderId,orderStatus);
     	Response<String> response = new Response<String>();

@@ -69,7 +69,6 @@ public class ClientCallTest extends TestCase{
         
     } 
 
-    }
 
     public void testPage() {
         List<String> names = new ArrayList<>();
