@@ -1,5 +1,13 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import io.swagger.annotations.Api;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import com.jichuangtech.clothshopserver.constant.UserAddressConstant;
 import com.jichuangtech.clothshopserver.model.RegionEntity;
 import com.jichuangtech.clothshopserver.model.Response;
@@ -7,13 +15,6 @@ import com.jichuangtech.clothshopserver.model.vo.UserAddressReqVO;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressRespDetailVO;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
 import com.jichuangtech.clothshopserver.service.UserAddressService;
-import com.jichuangtech.clothshopserver.utils.JsonMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import io.swagger.annotations.Api;
-
-import java.util.List;
 
 @Api(description = "收货地址模块接口")
 @RestController

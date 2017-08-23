@@ -6,11 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.jichuangtech.clothshopserver.constant.UserAddressConstant;
 import com.jichuangtech.clothshopserver.model.RegionEntity;
 import com.jichuangtech.clothshopserver.model.UserAddressEntity;
