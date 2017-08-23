@@ -16,7 +16,25 @@ public interface UserAddressRepository extends JpaRepository<UserAddressEntity, 
 	 */
 	public List<UserAddressEntity> findByUserId(int userId);
 	
+	public UserAddressEntity findByUserIdAndIsDefault(int userId,byte isDefault);
+	
+	@Modifying 
+	@Query("update UserAddressEntity set is_default = ?1 where user_id = ?2") 
+	/**
+	 * 根据userId更新是否默认地址
+	 * @param isDefault
+	 * @param userId
+	 * @return
+	 */
+	int updateIsDefaultByUserId(int isDefault, int userId); 
+	
 	@Modifying 
 	@Query("update UserAddressEntity set is_default = ?1 where address_id = ?2") 
-	int updateDefaultAddress(int isDefault, int addressId); 
+	/**
+	 * 根据addressId更新是否默认地址
+	 * @param isDefault
+	 * @param addressId
+	 * @return
+	 */
+	int updateIsDefaultByAddressId(int isDefault, int addressId); 
 }

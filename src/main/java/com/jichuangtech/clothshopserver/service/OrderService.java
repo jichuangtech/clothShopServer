@@ -282,7 +282,7 @@ public class OrderService {
 		orderEntity.setOrderSn(orderSn);
 		orderEntity.setUserId(userId);
 		orderEntity.setOrderStatus(OrderConstant.ORDER_UN_PAID);
-		UserAddressRespVO  userAddress = userAddressService.getAddress(orderReqVO.getAddressId());
+		UserAddressRespVO  userAddress = userAddressService.getAddressByAddressId(orderReqVO.getAddressId());
 		orderEntity.setAddress(userAddress.getAddress());
 		orderEntity.setConsignee(userAddress.getConsignee());
 		//计算总价
@@ -290,5 +290,15 @@ public class OrderService {
 		orderEntity.setTotalAmount(new BigDecimal(totalAmount));
 		orderEntity.setMobile(userAddress.getMobile());
 		return orderRepository.save(orderEntity);
+	}
+	
+	/**
+	 * 根据用户id修改订单状态
+	 * @param userId
+	 * @param orderStatus
+	 * @return
+	 */
+	public void updateOrderStatusByOrderId(int userId,int orderId,byte orderStatus){
+		orderRepository.updateOrderStatusByOrderId(orderStatus, orderId);
 	}
 }

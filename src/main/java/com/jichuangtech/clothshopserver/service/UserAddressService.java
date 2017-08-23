@@ -1,31 +1,27 @@
 package com.jichuangtech.clothshopserver.service;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.jichuangtech.clothshopserver.constant.UserAddressConstant;
 import com.jichuangtech.clothshopserver.model.RegionEntity;
 import com.jichuangtech.clothshopserver.model.UserAddressEntity;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressReqVO;
+import com.jichuangtech.clothshopserver.model.vo.UserAddressRespDetailVO;
 import com.jichuangtech.clothshopserver.model.vo.UserAddressRespVO;
 import com.jichuangtech.clothshopserver.repository.RegionRepository;
 import com.jichuangtech.clothshopserver.repository.UserAddressRepository;
+import com.jichuangtech.clothshopserver.utils.ListUtils;
 
 @Service
-
 public class UserAddressService {
 	@Autowired
 	private UserAddressRepository userAddressRepository;
@@ -36,7 +32,7 @@ public class UserAddressService {
 	 * @param userId
 	 * @return
 	 */
-	public List<UserAddressRespVO> list(int userId){
+	public List<UserAddressRespVO> listAddress(int userId){
 		List<UserAddressEntity> userAddressEntityList = userAddressRepository.findByUserId(userId);
 		return getUserAddressVO(userAddressEntityList);
 	}
@@ -118,7 +114,7 @@ public class UserAddressService {
 	 * @param parentId
 	 * @return
 	 */
-	public List<RegionEntity> list(long parentId){
+	public List<RegionEntity> listRegion(long parentId){
 		return regionRepository.findByParentId(parentId);
 	}
 	
@@ -128,9 +124,9 @@ public class UserAddressService {
 	 * @param newAddressId
 	 */
 	@Transactional
-	public void updateDefaultAddress(int oldAddressId,int newAddressId){
-		userAddressRepository.updateDefaultAddress(UserAddressConstant.NOT_DEFAULT_ADDRESS, oldAddressId);
-		userAddressRepository.updateDefaultAddress(UserAddressConstant.DEFAULT_ADDRESS, newAddressId);
+	public void updateDefaultAddress(int userId,int defaultAddressId){
+		userAddressRepository.updateIsDefaultByUserId(UserAddressConstant.NOT_DEFAULT_ADDRESS, userId);
+		userAddressRepository.updateIsDefaultByAddressId(UserAddressConstant.DEFAULT_ADDRESS, defaultAddressId);
 	}
 	
 	/**
@@ -140,6 +136,11 @@ public class UserAddressService {
 	 * @return
 	 */
 	public UserAddressRespVO saveUserAddress(UserAddressReqVO userAddressReqVO){
+		int userId = userAddressReqVO.getUserId();
+		List<UserAddressEntity> userList = userAddressRepository.findByUserId(userId);
+		if(ListUtils.isEmpty(userList)){
+			userAddressReqVO.setIsDefault((byte)UserAddressConstant.DEFAULT_ADDRESS);
+		}
 		UserAddressEntity userAddressEntity = createUserAddressEntity(userAddressReqVO);
 		UserAddressEntity newUserAddressEntity = userAddressRepository.save(userAddressEntity);
 		List<UserAddressEntity> userAddressEntityList = new ArrayList<UserAddressEntity>();
@@ -170,8 +171,17 @@ public class UserAddressService {
 	 * @param addressId
 	 * @return
 	 */
-	public UserAddressRespVO getAddress(int addressId){
+	public UserAddressRespVO getAddressByAddressId(int addressId){
 		UserAddressEntity userAddressEntity = userAddressRepository.findOne(addressId);
+		UserAddressRespVO userAddressRespVO = getUserAddressRespVO(userAddressEntity);
+		return userAddressRespVO;
+	}
+	
+	/**
+	 * 获取返回地址
+	 * @param userAddressEntity
+	 */
+	private UserAddressRespVO getUserAddressRespVO(UserAddressEntity userAddressEntity) {
 		List<UserAddressEntity> userAddressEntityList = new ArrayList<UserAddressEntity>();
 		userAddressEntityList.add(userAddressEntity);
 		Map<Long,String> regionIdNameMap = getRegionName(userAddressEntityList);
@@ -179,4 +189,47 @@ public class UserAddressService {
 		return userAddressVO;
 	}
 
+	/**
+	 * 删除指定收货地址
+	 * @param addressId
+	 */
+	public void deleteAddressByAddressId(int addressId){
+		userAddressRepository.delete(addressId);
+	}
+	
+	/**
+	 * 获取该用户的默认收货地址
+	 * @param userId
+	 * @return
+	 */
+	public UserAddressRespVO getDefaultAddress(int userId){
+		UserAddressEntity userAddressEntity = userAddressRepository.findByUserIdAndIsDefault(userId, (byte)UserAddressConstant.DEFAULT_ADDRESS);
+		UserAddressRespVO userAddressRespVO = getUserAddressRespVO(userAddressEntity);
+		return userAddressRespVO;
+	}
+
+	/**
+	 * 获取详细收货地址
+	 * @param addressId
+	 * @return
+	 */
+	public UserAddressRespDetailVO getDetailAddress(int addressId){
+		UserAddressEntity userAddressEntity = userAddressRepository.findOne(addressId);
+		return createUserAddressRespDetailVO(userAddressEntity);
+	}
+
+	private UserAddressRespDetailVO createUserAddressRespDetailVO(UserAddressEntity userAddressEntity){
+		UserAddressRespDetailVO userAddressRespDetailVO = new UserAddressRespDetailVO();
+		userAddressRespDetailVO.setAddress(userAddressEntity.getAddress());
+		userAddressRespDetailVO.setAddressId(userAddressEntity.getAddressId());
+		userAddressRespDetailVO.setCity(userAddressEntity.getCity());
+		userAddressRespDetailVO.setConsignee(userAddressEntity.getConsignee());
+		userAddressRespDetailVO.setDistrict(userAddressEntity.getDistrict());
+		userAddressRespDetailVO.setIsDefault(userAddressEntity.getIsDefault());
+		userAddressRespDetailVO.setMobile(userAddressEntity.getMobile());
+		userAddressRespDetailVO.setProvince(userAddressEntity.getProvince());
+		userAddressRespDetailVO.setUserId(userAddressEntity.getUserId());
+		userAddressRespDetailVO.setZipcode(userAddressEntity.getZipcode());
+		return userAddressRespDetailVO;
+	}
 }

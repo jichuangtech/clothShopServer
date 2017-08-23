@@ -141,4 +141,16 @@ public class ListUtils {
 		}
 		return fieldListMap;
 	}
+	
+	/**
+	 * empty return true,otherwise return false
+	 * @param list
+	 * @return
+	 */
+	public static boolean isEmpty(List list){
+		if(null == list || 0 == list.size()){
+			return true;
+		}
+		return false;
+	}
 }
