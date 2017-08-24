@@ -4,6 +4,9 @@ import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
+import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
+import com.jichuangtech.clothshopserver.model.vo.GoodsCategoryReqVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
 import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
@@ -54,5 +57,9 @@ public class GoodsCategoryController {
         return "getGoodsCategoryPicture success ...";
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public Response saveGoodsCategory(@RequestBody GoodsCategoryReqVO vo) {
+        return mGoodsCategoryService.saveGoodsCategory(vo);
+    }
 
 }
