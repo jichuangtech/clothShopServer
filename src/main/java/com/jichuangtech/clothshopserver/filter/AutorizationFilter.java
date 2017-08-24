@@ -26,6 +26,7 @@ public class AutorizationFilter implements Filter {
     static {
         //不用进行身份验证的URI
         filterUri.add("/");
+        filterUri.add("/login");
         filterUri.add("/onlogin");
         filterUri.add("/configuration/ui");
         filterUri.add("/swagger-resources");
@@ -64,7 +65,7 @@ public class AutorizationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        String sessionId = req.getParameter("sessionId");
+        String sessionId = req.getHeader("access_token");
         if (sessionId == null) {
             response.getWriter().write("sessionId param lost");
             return;
