@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.Random;
 
@@ -28,8 +27,6 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private SessionService sessionService;
-    @Autowired
-    private HttpSession session;
 
     @Value("${wx_session_api}")
     private String wxSessionApi;
