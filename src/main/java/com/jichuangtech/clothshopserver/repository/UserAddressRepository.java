@@ -26,7 +26,7 @@ public interface UserAddressRepository extends JpaRepository<UserAddressEntity, 
 	 * @param userId
 	 * @return
 	 */
-	int updateIsDefaultByUserId(int isDefault, int userId); 
+	int updateIsDefaultByUserId(byte isDefault, int userId); 
 	
 	@Modifying 
 	@Query("update UserAddressEntity set is_default = ?1 where address_id = ?2") 
@@ -36,5 +36,5 @@ public interface UserAddressRepository extends JpaRepository<UserAddressEntity, 
 	 * @param addressId
 	 * @return
 	 */
-	int updateIsDefaultByAddressId(int isDefault, int addressId); 
+	int updateIsDefaultByAddressId(byte isDefault, int addressId); 
 }

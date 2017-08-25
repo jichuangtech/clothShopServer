@@ -106,9 +106,9 @@ public class UserAddressController {
      * @return
      */
     @ApiOperation(value = "删除指定用户收货地址")
-    @RequestMapping(value = "/address/{addressId}", method = RequestMethod.POST)
-    public Response<String> deleteAddress(@PathVariable("addressId")int addressId){
-    	userAddressService.deleteAddressByAddressId(addressId);
+    @RequestMapping(value = "{userId}/address/{addressId}", method = RequestMethod.POST)
+    public Response<String> deleteAddress(@PathVariable("userId")int userId,@PathVariable("addressId")int addressId){
+    	userAddressService.deleteAddressByAddressId(userId,addressId);
     	return new Response<String>();
     }
     
@@ -117,7 +117,7 @@ public class UserAddressController {
      * @param addressId
      * @return
      */
-    @ApiOperation(value = "获取详细用户收货地址信息", notes = "地区返回的是地区码")
+    @ApiOperation(value = "获取详细用户收货地址信息", notes = "包括地区返回码和地区名")
     @RequestMapping(value = "/address/{addressId}", method = RequestMethod.GET)
     public Response<UserAddressRespDetailVO> getAddress(@PathVariable("addressId")int addressId){
     	UserAddressRespDetailVO  userAddressRespDetailVO = userAddressService.getDetailAddress(addressId);

@@ -6,9 +6,12 @@ public class UserAddressRespDetailVO {
 	private int addressId;
 	private int userId;
 	private String consignee;
-	private long province;
-	private long city;
-	private long district;
+	private long provinceCode;
+	private String provinceName;
+	private long cityCode;
+	private String cityName;
+	private long districtCode;
+	private String districtName;
 	private String address;
 	private String zipcode;
 	private String mobile;
@@ -31,23 +34,43 @@ public class UserAddressRespDetailVO {
 	public void setConsignee(String consignee) {
 		this.consignee = consignee;
 	}
-	public long getProvince() {
-		return province;
+	
+	
+	public long getProvinceCode() {
+		return provinceCode;
 	}
-	public void setProvince(long province) {
-		this.province = province;
+	public void setProvinceCode(long provinceCode) {
+		this.provinceCode = provinceCode;
 	}
-	public long getCity() {
-		return city;
+	public String getProvinceName() {
+		return provinceName;
 	}
-	public void setCity(long city) {
-		this.city = city;
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
 	}
-	public long getDistrict() {
-		return district;
+	public long getCityCode() {
+		return cityCode;
 	}
-	public void setDistrict(long district) {
-		this.district = district;
+	public void setCityCode(long cityCode) {
+		this.cityCode = cityCode;
+	}
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	public long getDistrictCode() {
+		return districtCode;
+	}
+	public void setDistrictCode(long districtCode) {
+		this.districtCode = districtCode;
+	}
+	public String getDistrictName() {
+		return districtName;
+	}
+	public void setDistrictName(String districtName) {
+		this.districtName = districtName;
 	}
 	public String getAddress() {
 		return address;

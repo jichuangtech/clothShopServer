@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class ListUtils { 
 	/**
-	 * 给定一个集合，获得<fieldName属性对应的value(唯一),实体>
+	 * 给定一个集合，获得一个map对象。key:fieldName属性对应的value(唯一),value:实体
 	 * @param key
 	 * @param list
 	 * @param keyName
@@ -103,7 +103,7 @@ public class ListUtils {
 	}
 	
 	/**
-	 * 给定一个集合，获得<fieldName属性对应的value,实体集合>
+	 * 给定一个集合，获得一个map对象。key:fieldName属性对应的value,value:实体集合
 	 * @param filedType
 	 * @param list
 	 * @param fieldName
