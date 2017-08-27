@@ -10,6 +10,7 @@ import com.jichuangtech.clothshopserver.model.vo.GoodsCategoryReqVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
 import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -61,5 +62,15 @@ public class GoodsCategoryController {
     public Response saveGoodsCategory(@RequestBody GoodsCategoryReqVO vo) {
         return mGoodsCategoryService.saveGoodsCategory(vo);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public Response deleteGoodsCategory(@ApiParam(name = "要被删除的商品分类的ID", required = true)  @RequestParam int categoryId) {
+        Response response = new Response();
+        int code = mGoodsCategoryService.delete(categoryId);
+        response.setStatusCode(code);
+        return response;
+    }
+
+
 
 }
