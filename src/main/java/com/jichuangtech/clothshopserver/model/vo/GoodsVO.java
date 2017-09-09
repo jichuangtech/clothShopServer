@@ -20,9 +20,34 @@ public class GoodsVO {
 	/** 商品主图片名 */
 	private String originalImg;
 
+	/**
+	 *  颜色Id
+	 */
+	private int colorId;
 
-	
-	
+	/**
+	 * 价格规格Id
+	 * @return
+     */
+	private int specId;
+
+
+	public int getColorId() {
+		return colorId;
+	}
+
+	public void setColorId(int colorId) {
+		this.colorId = colorId;
+	}
+
+	public int getSpecId() {
+		return specId;
+	}
+
+	public void setSpecId(int specId) {
+		this.specId = specId;
+	}
+
 	public BigDecimal getShopPrice() {
 		return shopPrice;
 	}

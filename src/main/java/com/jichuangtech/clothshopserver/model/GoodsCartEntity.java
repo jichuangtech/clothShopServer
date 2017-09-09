@@ -19,6 +19,8 @@ public class GoodsCartEntity {
     private String specName;
     private String colorName;
     private Long addTime;
+    private int colorId;
+    private int specId;
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -29,6 +31,26 @@ public class GoodsCartEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "color_id", nullable = false)
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
+    }
+
+    @Basic
+    @Column(name = "spec_id", nullable = false)
+    public int getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(int specId) {
+        this.specId = specId;
     }
 
     @Basic

@@ -90,6 +90,8 @@ public class GoodsCartService {
         entity.setGoodsNum(goodsCartVO.getGoodsNum());
         entity.setAddTime(calendar.getTimeInMillis());
         entity.setGoodsSn(goods.getGoodsSn());
+        entity.setSpecId(goodsCartVO.getSpecId());
+        entity.setColorId(goodsCartVO.getColorId());
         GoodsSpecificationEntity goodsSpecEntity = goods.getGoodsSpec(goodsCartVO.getSpecId());
         if(goodsSpecEntity != null) {
             entity.setSpecName(goodsSpecEntity.getSpecName());
@@ -138,6 +140,8 @@ public class GoodsCartService {
         goodsCartVO.setOriginalImg(goodsEntity.getOriginalImg());
         goodsCartVO.setGoodsCartId(goodsCartEntity.getId());
         goodsCartVO.setStoreCount(goodsEntity.getStoreCount());
+        goodsCartVO.setColorId(goodsCartEntity.getColorId());
+        goodsCartVO.setSpecId(goodsCartEntity.getSpecId());
         return goodsCartVO;
     }
 
