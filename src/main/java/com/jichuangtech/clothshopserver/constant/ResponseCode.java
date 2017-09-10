@@ -14,6 +14,7 @@ public class ResponseCode {
 
     //商品系列返回码
     public static final int COODE_GOODS_x = 100;
+    public static final int COODE_GOODS_ADD_ERROR = 101;
 
     //商品分类系列返回码
     public static final int COODE_GOODS_CATEGORY_D = 300;

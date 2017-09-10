@@ -3,9 +3,12 @@ package com.jichuangtech.clothshopserver.controller;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.model.Page;
+import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.vo.GoodsAddVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsPaginationVO;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
+import com.jichuangtech.clothshopserver.service.GoodsService;
 import com.jichuangtech.clothshopserver.utils.PaginationUtils;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import org.slf4j.Logger;
@@ -31,8 +34,12 @@ public class GoodsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoodsController.class);
     @Autowired
     private GoodsRepository mGoodsRepository;
+
     @Autowired
     private GoodsCategoryService mGoodsCategoryService;
+
+    @Autowired
+    private GoodsService mGoodsService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<GoodsEntity> list() {
@@ -76,5 +83,13 @@ public class GoodsController {
                                   HttpServletResponse response, Model model, @PathVariable String picName) {
         PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
         return "getGoodsPicture success ...";
+    }
+    @RequestMapping(method = RequestMethod.POST)
+    public Response saveGoods(@RequestBody GoodsAddVO goodsAddVO) {
+        Response response = new Response();
+        int code = mGoodsService.saveGoods(goodsAddVO);
+        LOGGER.info(" saveGoods goodsVo: " + goodsAddVO);
+        response.setStatusCode(code);
+        return response;
     }
 }

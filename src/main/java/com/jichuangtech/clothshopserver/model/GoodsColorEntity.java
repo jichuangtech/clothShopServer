@@ -16,6 +16,7 @@ public class GoodsColorEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -25,7 +26,7 @@ public class GoodsColorEntity {
     }
 
     @Basic
-    @Column(name = "color_id", nullable = true, length = 55)
+    @Column(name = "color_id", nullable = false, length = 55)
     public int getColorId() {
         return colorId;
     }

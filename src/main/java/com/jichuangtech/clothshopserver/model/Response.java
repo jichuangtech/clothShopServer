@@ -23,14 +23,14 @@ public class Response <T>{
 
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
-        refreshMsg();
+        setMsg();
     }
 
     public void setMsg(String msg) {
         this.msg = msg;
     }
 
-    private void refreshMsg() {
+    private void setMsg() {
         msg = ResponseCode.getMsg(statusCode);
     }
 }

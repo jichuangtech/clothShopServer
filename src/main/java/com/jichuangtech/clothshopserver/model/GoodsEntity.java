@@ -25,8 +25,8 @@ public class GoodsEntity {
     private BigDecimal shopPrice;
     private BigDecimal costPrice;
     private String keywords;
-    private String goodsRemark;
-    private String goodsContent;
+    private String goodsRemark;   //简单描述
+    private String goodsContent;  //详细描述
     private String originalImg;
     private byte isReal;
     private byte isOnSale;
@@ -56,6 +56,7 @@ public class GoodsEntity {
 
     @Id
     @Column(name = "goods_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getGoodsId() {
         return goodsId;
     }
@@ -105,7 +106,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "click_count", nullable = false)
+    @Column(name = "click_count", nullable = true)
     public int getClickCount() {
         return clickCount;
     }
@@ -145,7 +146,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "weight", nullable = false)
+    @Column(name = "weight", nullable = true)
     public int getWeight() {
         return weight;
     }
@@ -155,7 +156,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "market_price", nullable = false, precision = 2)
+    @Column(name = "market_price", nullable = true, precision = 2)
     public BigDecimal getMarketPrice() {
         return marketPrice;
     }
@@ -165,7 +166,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "shop_price", nullable = false, precision = 2)
+    @Column(name = "shop_price", nullable = true, precision = 2)
     public BigDecimal getShopPrice() {
         return shopPrice;
     }
@@ -185,7 +186,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "keywords", nullable = false, length = 255)
+    @Column(name = "keywords", nullable = true, length = 255)
     public String getKeywords() {
         return keywords;
     }
@@ -225,7 +226,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "is_real", nullable = false)
+    @Column(name = "is_real", nullable = true)
     public byte getIsReal() {
         return isReal;
     }
@@ -235,7 +236,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "is_on_sale", nullable = false)
+    @Column(name = "is_on_sale", nullable = true)
     public byte getIsOnSale() {
         return isOnSale;
     }
@@ -245,7 +246,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "is_free_shipping", nullable = false)
+    @Column(name = "is_free_shipping", nullable = true)
     public byte getIsFreeShipping() {
         return isFreeShipping;
     }
@@ -255,7 +256,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "on_time", nullable = false)
+    @Column(name = "on_time", nullable = true)
     public int getOnTime() {
         return onTime;
     }
@@ -265,7 +266,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "sort", nullable = false)
+    @Column(name = "sort", nullable = true)
     public short getSort() {
         return sort;
     }
@@ -285,7 +286,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "is_new", nullable = false)
+    @Column(name = "is_new", nullable = true)
     public byte getIsNew() {
         return isNew;
     }
@@ -305,7 +306,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "last_update", nullable = false)
+    @Column(name = "last_update", nullable = true)
     public int getLastUpdate() {
         return lastUpdate;
     }
@@ -315,7 +316,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "goods_type", nullable = false)
+    @Column(name = "goods_type", nullable = true)
     public short getGoodsType() {
         return goodsType;
     }
@@ -345,7 +346,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "exchange_integral", nullable = false)
+    @Column(name = "exchange_integral", nullable = true)
     public int getExchangeIntegral() {
         return exchangeIntegral;
     }
@@ -355,7 +356,7 @@ public class GoodsEntity {
     }
 
     @Basic
-    @Column(name = "suppliers_id", nullable = false)
+    @Column(name = "suppliers_id", nullable = true)
     public short getSuppliersId() {
         return suppliersId;
     }
@@ -425,7 +426,7 @@ public class GoodsEntity {
 //    }
 
     @Basic
-    @Column(name = "shipping_area_ids", nullable = false, length = 255)
+    @Column(name = "shipping_area_ids", nullable = true, length = 255)
     public String getShippingAreaIds() {
         return shippingAreaIds;
     }
@@ -575,5 +576,48 @@ public class GoodsEntity {
         return null;
     }
 
-
+    @Override
+    public String toString() {
+        return "GoodsEntity{" +
+                "goodsId=" + goodsId +
+                ", catId=" + catId +
+                ", extendCatId=" + extendCatId +
+                ", goodsSn='" + goodsSn + '\'' +
+                ", goodsName='" + goodsName + '\'' +
+                ", clickCount=" + clickCount +
+                ", brandId=" + brandId +
+                ", storeCount=" + storeCount +
+                ", commentCount=" + commentCount +
+                ", weight=" + weight +
+                ", marketPrice=" + marketPrice +
+                ", shopPrice=" + shopPrice +
+                ", costPrice=" + costPrice +
+                ", keywords='" + keywords + '\'' +
+                ", goodsRemark='" + goodsRemark + '\'' +
+                ", goodsContent='" + goodsContent + '\'' +
+                ", originalImg='" + originalImg + '\'' +
+                ", isReal=" + isReal +
+                ", isOnSale=" + isOnSale +
+                ", isFreeShipping=" + isFreeShipping +
+                ", onTime=" + onTime +
+                ", sort=" + sort +
+                ", isRecommend=" + isRecommend +
+                ", isNew=" + isNew +
+                ", isHot=" + isHot +
+                ", lastUpdate=" + lastUpdate +
+                ", goodsType=" + goodsType +
+                ", specType=" + specType +
+                ", giveIntegral=" + giveIntegral +
+                ", exchangeIntegral=" + exchangeIntegral +
+                ", suppliersId=" + suppliersId +
+                ", salesSum=" + salesSum +
+                ", promType=" + promType +
+                ", promId=" + promId +
+                ", commission=" + commission +
+                ", shippingAreaIds='" + shippingAreaIds + '\'' +
+                ", goodsSpecs=" + goodsSpecs +
+                ", goodsDetailImages=" + goodsDetailImages +
+                ", goodsColors=" + goodsColors +
+                '}';
+    }
 }
