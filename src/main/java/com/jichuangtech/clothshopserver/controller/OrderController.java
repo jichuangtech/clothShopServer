@@ -1,10 +1,14 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.constant.Constant;
 import com.jichuangtech.clothshopserver.constant.OrderConstant;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
 import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
 import com.jichuangtech.clothshopserver.service.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +23,10 @@ import java.util.List;
 @RequestMapping(OrderConstant.API_ORDER)
 @Transactional
 public class OrderController {
+    private static final String TAG = OrderController.class.getSimpleName();
+    private static Logger sLogger = LoggerFactory.getLogger(Constant.MODULE_NAME);
     @Autowired
     private OrderService orderService;
-
-
     /**
      * 查找用户所有订单
      *
@@ -34,6 +38,20 @@ public class OrderController {
     public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId) {
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
         response.data = orderService.getList(userId);
+        return response;
+    }
+
+    @ApiOperation(value = "获取用户所有订单信息")
+    @RequestMapping(value = "/detail/{orderId}", method = RequestMethod.GET)
+    public Response<OrderRespVO> getOrderDetail(@PathVariable("orderId") int orderId) {
+        Response<OrderRespVO> response = new Response<>();
+        response.data = orderService.getOrderDetail(orderId);
+
+        if(response.data == null) {
+            response.statusCode = ResponseCode.COODE_ORDER_NOT_FOUND;
+            response.setMsg("order id: '" + orderId + "' not found ..");
+        }
+        sLogger.info(" getOrderDetail response: " + response);
         return response;
     }
 

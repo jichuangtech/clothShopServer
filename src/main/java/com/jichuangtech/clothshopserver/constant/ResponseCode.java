@@ -24,6 +24,7 @@ public class ResponseCode {
 
     //订单系列返回码
     public static final int COODE_ORDER_x = 500;
+    public static final int COODE_ORDER_NOT_FOUND = 501;
 
     //收货地址系列返回码
     public static final int COODE_ADDRESS_x = 600;

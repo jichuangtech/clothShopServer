@@ -33,4 +33,13 @@ public class Response <T>{
     private void setMsg() {
         msg = ResponseCode.getMsg(statusCode);
     }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "statusCode=" + statusCode +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

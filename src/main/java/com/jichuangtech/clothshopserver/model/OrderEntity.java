@@ -29,6 +29,17 @@ public class OrderEntity {
 	private String consignee;
 	//订单总价
 	private BigDecimal totalAmount;
+	private int addressId;
+
+	@Basic
+	@Column(name = "address_id", nullable = false)
+	public int getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
+	}
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)  

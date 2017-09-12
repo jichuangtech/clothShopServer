@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.jichuangtech.clothshopserver.model.OrderEntity;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
+
+	public OrderEntity findByOrderId(int orderId);
 	/**
 	 * 根据用户id查找订单
 	 * @param userId
@@ -31,6 +33,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
 	 * @param addressId
 	 * @return
 	 */
-	int updateOrderStatusByOrderId(int orderStatus, int orderId); 
-	
+	int updateOrderStatusByOrderId(int orderStatus, int orderId);
+
 }

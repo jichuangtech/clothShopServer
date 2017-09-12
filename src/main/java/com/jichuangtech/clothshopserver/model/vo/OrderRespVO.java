@@ -20,6 +20,10 @@ public class OrderRespVO {
 	private int userId;
 	/** 订单状态*/
 	private byte orderStatus;
+	/**
+	 * 该订单的收货地址Id
+	 */
+	private int addressId;
 	
 	private List<GoodsVO> GoodsVO;
 	public BigDecimal getTotalAmount() {
@@ -81,5 +85,13 @@ public class OrderRespVO {
 	@Override
 	public String toString() {
 		return "[ mobile: " + mobile + ", consignee: " + consignee +"]";
+	}
+
+	public int getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
 	}
 }

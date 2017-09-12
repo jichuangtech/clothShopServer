@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.sun.org.apache.xml.internal.resolver.readers.OASISXMLCatalogReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,18 @@ public class OrderService {
 	private RegionRepository regionRepository;
 	@Autowired
 	private UserAddressService userAddressService;
-	
+
+
+	public OrderRespVO getOrderDetail(int orderId) {
+		List<OrderEntity> orders = new ArrayList<>();
+		OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
+		if(orderEntity == null) {
+			return null;
+		}
+		orders.add(orderEntity);
+		List<OrderRespVO> vos = getGoodsDetailInfo(orders);
+		return vos != null && vos.size() > 0 ? vos.get(0) : null;
+	}
 	/**
 	 * 查找用户所有订单
 	 * @param userId
@@ -124,6 +136,7 @@ public class OrderService {
 		
 		String address = orderEntity.getAddress();
 		orderRespVO.setAddress(address);
+		orderRespVO.setAddressId(orderEntity.getAddressId());
 		
 		String mobile = orderEntity.getMobile();
 		orderRespVO.setMobile(mobile);
@@ -201,7 +214,7 @@ public class OrderService {
 	
 	/**
 	 * 保存订单
-	 * @param orderEntity
+	 * @param userId
 	 */
 	public OrderRespVO saveOrder(int userId,OrderReqVO orderReqVO){
 		OrderRespVO orderRespVO = new OrderRespVO();
@@ -219,7 +232,7 @@ public class OrderService {
 
 	/**
 	 * 计算订单总价
-	 * @param goodsEntityList
+	 * @param orderReqVO
 	 */
 	private double getTotalAmount(OrderReqVO orderReqVO) {
 		List<GoodsReqVO> goodsReqVOList = orderReqVO.getGoodsReqVOList();
@@ -281,6 +294,7 @@ public class OrderService {
 		OrderEntity orderEntity = new OrderEntity();
 		orderEntity.setOrderSn(orderSn);
 		orderEntity.setUserId(userId);
+		orderEntity.setAddressId(orderReqVO.getAddressId());
 		orderEntity.setOrderStatus(OrderConstant.ORDER_UN_PAID);
 		UserAddressRespVO  userAddress = userAddressService.getAddressByAddressId(orderReqVO.getAddressId());
 		orderEntity.setAddress(userAddress.getAddress());
