@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Bingo on 2017/8/20.
  */
-public class AlterCartNumBerVO {
+public class AlterCartNumBerVo {
 
     public List<CartNumberVO> cartNumberVOList;
 }

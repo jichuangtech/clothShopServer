@@ -1,7 +1,7 @@
 package com.jichuangtech.clothshopserver.service;
 
 import com.jichuangtech.clothshopserver.model.*;
-import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVO;
+import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVo;
 import com.jichuangtech.clothshopserver.model.vo.CartNumberVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
 import com.jichuangtech.clothshopserver.model.vo.GoodsCartRespVO;
@@ -45,7 +45,7 @@ public class GoodsCartService {
         return getGoodsCartRespVOs(goodsCartEntityList);
     }
 
-    public Response alterNumbers(AlterCartNumBerVO vo) {
+    public Response alterNumbers(AlterCartNumBerVo vo) {
         Response response = new Response();
 
         for(CartNumberVO cartNumberVO : vo.cartNumberVOList) {

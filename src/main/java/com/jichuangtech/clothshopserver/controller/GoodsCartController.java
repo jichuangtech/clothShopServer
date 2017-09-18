@@ -46,7 +46,7 @@ public class GoodsCartController {
     }
 
     @RequestMapping(value = GoodsCartConstant.GOODS_NUMBER, method = RequestMethod.POST)
-    public Response alterNumber(@RequestBody AlterCartNumBerVO vo) {
+    public Response alterNumber(@RequestBody AlterCartNumBerVo vo) {
         return mGoodsCartService.alterNumbers(vo);
     }
 

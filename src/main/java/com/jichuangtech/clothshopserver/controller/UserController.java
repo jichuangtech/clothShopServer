@@ -1,6 +1,8 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.model.vo.UsersVO;
 import com.jichuangtech.clothshopserver.service.SessionService;
+import com.jichuangtech.clothshopserver.service.UsersService;
 import com.jichuangtech.clothshopserver.utils.HttpRequestUtils;
 import com.jichuangtech.clothshopserver.utils.JsonMapper;
 import io.swagger.annotations.Api;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -27,7 +30,8 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private SessionService sessionService;
-
+    @Autowired
+    private UsersService usersService;
     @Value("${wx_session_api}")
     private String wxSessionApi;
     @Value("${app_id}")
@@ -60,5 +64,11 @@ public class UserController {
         String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
         sessionService.put(sessionThirdId, sessionKey + "_" + openid);
         return sessionThirdId;
+    }
+
+    @ApiOperation(value = "列出所有用户", notes = "返回所有用户信息")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public List<UsersVO> listAll() {
+        return usersService.list();
     }
 }
