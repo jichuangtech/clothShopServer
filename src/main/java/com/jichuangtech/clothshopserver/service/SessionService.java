@@ -3,6 +3,7 @@ package com.jichuangtech.clothshopserver.service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.apache.http.util.TextUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
@@ -31,7 +32,7 @@ public class SessionService {
     public String get(String key) {
         try {
             String value = session.get(key);
-            if (value == null) {
+            if (value == null || TextUtils.isEmpty(value)) {
                 return null;
             }
             //更新一下key的缓存时间
