@@ -1,12 +1,18 @@
 package com.jichuangtech.clothshopserver.filter;
 
 import com.google.common.collect.Sets;
+import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
+import com.jichuangtech.clothshopserver.utils.JsonHelper;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -56,6 +62,7 @@ public class AutorizationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
         String remoteHost = req.getRemoteHost();
+        LOGGER.info("requestURI : " + requestURI  + ", remoteHost: " + remoteHost);
         if (filterUri.contains(requestURI)) {
             chain.doFilter(request, response);
             return;
@@ -69,18 +76,23 @@ public class AutorizationFilter implements Filter {
         }
         String sessionId = req.getHeader("access_token");
         if (sessionId == null) {
+            LOGGER.info("sessionId param lost");
             response.getWriter().write("sessionId param lost");
             return;
         }
 
         //下面代码进行刷新缓存
         String value = sessionService.get(sessionId);
+        LOGGER.info("sessionId : " + sessionId + ", value: " + value);
         if (value != null) {
             chain.doFilter(request, response);
             return;
         }
-        response.getWriter().write("invalid user");
-        LOGGER.info("context path is {},remote host is {}", requestURI, remoteHost);
+        Response resp = new Response();
+        resp.msg = "invalid user";
+        resp.statusCode = 400;
+        response.getWriter().write(JsonHelper.getJson(resp));
+        LOGGER.info("invalid user");
     }
 
     @Override
