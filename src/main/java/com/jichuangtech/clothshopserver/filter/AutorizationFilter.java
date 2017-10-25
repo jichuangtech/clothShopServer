@@ -13,6 +13,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Set;
+import java.util.logging.LogManager;
 
 /**
  * Created by yangjb on 2017/8/18.
@@ -47,6 +48,7 @@ public class AutorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //不是生产环境不开启session验证
+        LOGGER.info("isProdect: " + isProdect);
         if (!isProdect) {
             chain.doFilter(request, response);
             return;
@@ -70,12 +72,14 @@ public class AutorizationFilter implements Filter {
             response.getWriter().write("sessionId param lost");
             return;
         }
+
+        //下面代码进行刷新缓存
         String value = sessionService.get(sessionId);
         if (value != null) {
             chain.doFilter(request, response);
             return;
         }
-        response.getWriter().write("valid user");
+        response.getWriter().write("invalid user");
         LOGGER.info("context path is {},remote host is {}", requestURI, remoteHost);
     }
 

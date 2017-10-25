@@ -56,13 +56,17 @@ public class UserController {
         Map map = JsonMapper.nonDefaultMapper().fromJson(result, Map.class);
         String sessionKey = (String) map.get("session_key");
         if (sessionKey == null) {
-            return (String) map.get("errmsg");
+            String errMsg = (String) map.get("errmsg");
+            LOGGER.info("onlogin sessionKey is null errMsg: " + errMsg);
+            return errMsg;
         }
         String openid = (String) map.get("openid");
         int randomValue = new Random(10).nextInt();
         //随机去一个数当sessionId
         String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
         sessionService.put(sessionThirdId, sessionKey + "_" + openid);
+        LOGGER.info("onlogin sessionKey: " + sessionKey
+                + ", openid: " + openid);
         return sessionThirdId;
     }
 
