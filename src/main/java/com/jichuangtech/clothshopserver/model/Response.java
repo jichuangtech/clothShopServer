@@ -34,6 +34,18 @@ public class Response <T>{
         msg = ResponseCode.getMsg(statusCode);
     }
 
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public T getData() {
+        return data;
+    }
+
     @Override
     public String toString() {
         return "Response{" +
