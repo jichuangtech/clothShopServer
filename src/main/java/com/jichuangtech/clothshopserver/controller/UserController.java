@@ -64,7 +64,7 @@ public class UserController {
         int randomValue = new Random(10).nextInt();
         //随机去一个数当sessionId
         String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
-        sessionService.put(sessionThirdId, sessionKey + "_" + openid);
+        sessionService.put(sessionThirdId, openid);
         LOGGER.info("onlogin sessionKey: " + sessionKey
                 + ", openid: " + openid);
         return sessionThirdId;
