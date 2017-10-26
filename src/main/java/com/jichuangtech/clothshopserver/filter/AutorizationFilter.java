@@ -1,6 +1,7 @@
 package com.jichuangtech.clothshopserver.filter;
 
 import com.google.common.collect.Sets;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.utils.JsonHelper;
@@ -74,10 +75,13 @@ public class AutorizationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        Response resp = new Response();
         String sessionId = req.getHeader("access_token");
         if (sessionId == null) {
             LOGGER.info("sessionId param lost");
-            response.getWriter().write("sessionId param lost");
+            resp.msg = "not found access_token in your headers";
+            resp.statusCode = ResponseCode.ACCESS_TOKEN_NOT_FOUND;
+            response.getWriter().write(JsonHelper.getJson(resp));
             return;
         }
 
@@ -88,9 +92,9 @@ public class AutorizationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        Response resp = new Response();
-        resp.msg = "invalid user";
-        resp.statusCode = 400;
+
+        resp.msg = "invalid token";
+        resp.statusCode = ResponseCode.TOKEN_INVALID;
         response.getWriter().write(JsonHelper.getJson(resp));
         LOGGER.info("invalid user");
     }
