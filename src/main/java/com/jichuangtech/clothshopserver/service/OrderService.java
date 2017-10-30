@@ -67,7 +67,11 @@ public class OrderService {
 		}else{
 			orderEntityList = orderRepository.findByUserId(userId);
 		}
-		return getGoodsDetailInfo(orderEntityList);
+
+        if(orderEntityList != null && orderEntityList.size() > 0 ) {
+            return getGoodsDetailInfo(orderEntityList);
+        }
+        return null;
 	}
 	
 	/**
@@ -76,7 +80,7 @@ public class OrderService {
 	 * @return
 	 */
 	private List<OrderRespVO> getGoodsDetailInfo(List<OrderEntity> orderEntityList) {
-		List<OrderRespVO> orderDetailVOList = new ArrayList<OrderRespVO>();
+		List<OrderRespVO> orderDetailVOList = new ArrayList<>();
 		//根据订单获得所有order_goods
 		List<OrderGoodsEntity> orderGoodsEntityList = getUserOrderGoodsEntityList(orderEntityList);
 		//获得所有goods

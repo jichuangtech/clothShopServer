@@ -44,7 +44,9 @@ public class OrderController {
      */
     @ApiOperation(value = "获取用户所有订单信息")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId) {
+    public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId,
+                                            @RequestHeader("access_token") String accessToken) {
+        userId = getUserId(accessToken);
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
         response.data = orderService.getList(userId);
         return response;
@@ -81,7 +83,8 @@ public class OrderController {
         LOGGER.info("getByOrderStatus userId: " + userId
                 + ", orderStatus: " + orderStatus
                 + ", accessToken: " + accessToken);
-        Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
+        Response<List<OrderRespVO>> response = new Response<>();
+        userId = getUserId(accessToken);
         response.data = orderService.getByOrderStatus(orderStatus, userId);
         return response;
     }
@@ -98,7 +101,7 @@ public class OrderController {
                                            @RequestBody OrderReqVO orderReqVO,
                                            @RequestHeader("access_token") String accessToken) {
         Response<OrderRespVO> response = new Response<>();
-        userId = usersService.getUserIdByOpenId(accessToken);
+        userId = getUserId(accessToken);
         response.data = orderService.saveOrder(userId, orderReqVO);
         return response;
     }
@@ -109,9 +112,17 @@ public class OrderController {
      */
     @ApiOperation(value = "更新用户某个订单的订单状态")
     @RequestMapping(value = "/{userId}/orderstatus/{orderId}/{orderStatus}", method = RequestMethod.POST)
-    public Response<String> updateOrderStatus(@PathVariable("userId") int userId,@PathVariable("orderId") int orderId,@PathVariable("orderStatus") byte orderStatus){
+    public Response<String> updateOrderStatus(@PathVariable("userId") int userId,
+                                              @PathVariable("orderId") int orderId,
+                                              @PathVariable("orderStatus") byte orderStatus,
+                                              @RequestHeader("access_token") String accessToken){
+        userId = getUserId(accessToken);
     	orderService.updateOrderStatusByOrderId(userId,orderId,orderStatus);
     	Response<String> response = new Response<String>();
     	return response;
+    }
+
+    private int getUserId(String token) {
+        return usersService.getUserIdByOpenId(sessionService.get(token));
     }
 }

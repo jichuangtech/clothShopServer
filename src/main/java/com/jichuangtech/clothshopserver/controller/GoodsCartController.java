@@ -52,7 +52,7 @@ public class GoodsCartController {
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public List<GoodsCartRespVO> listByUserId(@PathVariable("userId") int userId,
                                               @RequestHeader("access_token") String accessToken) {
-        userId = usersService.getUserIdByOpenId(sessionService.get(accessToken));
+        userId = getUserId(accessToken);
         LOGGER.info(" goodsCard listByUserId userId: " + userId);
         return mGoodsCartService.getListByUserId(userId);
     }
@@ -65,7 +65,11 @@ public class GoodsCartController {
     @RequestMapping(method = RequestMethod.POST)
     public Response saveGoodsCart(@RequestBody GoodsCartReqVO goodsCartVO,
                                   @RequestHeader("access_token") String accessToken) {
-        goodsCartVO.setUserId(usersService.getUserIdByOpenId(sessionService.get(accessToken)));
+        goodsCartVO.setUserId(getUserId(accessToken));
         return mGoodsCartService.saveGoodsCart(goodsCartVO);
+    }
+
+    private int getUserId(String token) {
+        return usersService.getUserIdByOpenId(sessionService.get(token));
     }
 }
