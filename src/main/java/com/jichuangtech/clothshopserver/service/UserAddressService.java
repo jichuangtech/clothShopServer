@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import com.jichuangtech.clothshopserver.utils.ListUtils;
 
 @Service
 public class UserAddressService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserAddressService.class.getSimpleName());
 	@Autowired
 	private UserAddressRepository userAddressRepository;
 	@Autowired
@@ -33,7 +36,10 @@ public class UserAddressService {
 	 */
 	public List<UserAddressRespVO> listAddress(int userId){
 		List<UserAddressEntity> userAddressEntityList = userAddressRepository.findByUserId(userId);
-		return getUserAddressVO(userAddressEntityList);
+		if(userAddressEntityList != null && userAddressEntityList.size() > 0) {
+			return getUserAddressVO(userAddressEntityList);
+		}
+		return null;
 	}
 	
 	/**
@@ -189,7 +195,7 @@ public class UserAddressService {
 
 	/**
 	 * 删除指定收货地址,如果删除的是默认地址需要新指定一个默认地址
-	 * @param addressId
+	 * @param deleteAddressId
 	 */
 	@Transactional
 	public void deleteAddressByAddressId(int userId,int deleteAddressId){

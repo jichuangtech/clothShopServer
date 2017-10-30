@@ -94,8 +94,11 @@ public class OrderController {
      */
     @ApiOperation(value = "保存用户订单")
     @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-    public Response<OrderRespVO> saveOrder(@PathVariable("userId") int userId, @RequestBody OrderReqVO orderReqVO) {
-        Response<OrderRespVO> response = new Response<OrderRespVO>();
+    public Response<OrderRespVO> saveOrder(@PathVariable("userId") int userId,
+                                           @RequestBody OrderReqVO orderReqVO,
+                                           @RequestHeader("access_token") String accessToken) {
+        Response<OrderRespVO> response = new Response<>();
+        userId = usersService.getUserIdByOpenId(accessToken);
         response.data = orderService.saveOrder(userId, orderReqVO);
         return response;
     }
