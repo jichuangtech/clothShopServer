@@ -4,6 +4,8 @@ import com.jichuangtech.clothshopserver.constant.GoodsCartConstant;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.model.vo.*;
 import com.jichuangtech.clothshopserver.service.GoodsCartService;
+import com.jichuangtech.clothshopserver.service.SessionService;
+import com.jichuangtech.clothshopserver.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,15 @@ import java.util.List;
 public class GoodsCartController {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoodsCartController.class);
 
+
     @Autowired
     private GoodsCartService mGoodsCartService;
+
+    @Autowired
+    private UsersService usersService;
+
+    @Autowired
+    private SessionService sessionService;
 
     @RequestMapping(value = "/{cartId}", method = RequestMethod.DELETE)
     public Response delete(@PathVariable("cartId") int cartId) {
@@ -41,7 +50,10 @@ public class GoodsCartController {
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public List<GoodsCartRespVO> listByUserId(@PathVariable("userId") int userId) {
+    public List<GoodsCartRespVO> listByUserId(@PathVariable("userId") int userId,
+                                              @RequestHeader("access_token") String accessToken) {
+        userId = usersService.getUserIdByOpenId(sessionService.get(accessToken));
+        LOGGER.info(" goodsCard listByUserId userId: " + userId);
         return mGoodsCartService.getListByUserId(userId);
     }
 
@@ -51,7 +63,9 @@ public class GoodsCartController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Response saveGoodsCart(@RequestBody GoodsCartReqVO goodsCartVO) {
+    public Response saveGoodsCart(@RequestBody GoodsCartReqVO goodsCartVO,
+                                  @RequestHeader("access_token") String accessToken) {
+        goodsCartVO.setUserId(usersService.getUserIdByOpenId(sessionService.get(accessToken)));
         return mGoodsCartService.saveGoodsCart(goodsCartVO);
     }
 }

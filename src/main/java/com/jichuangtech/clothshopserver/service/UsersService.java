@@ -53,11 +53,11 @@ public class UsersService {
         return entity;
     }
 
-    public long getUserIdByOpenId(String openId) {
-        long userId = -1;
+    public int getUserIdByOpenId(String openId) {
+        int userId = -1;
         UsersEntity entity = getUserByOpenId(openId);
         if(entity != null) {
-            userId  = entity.getUserId();
+            userId  = Math.toIntExact(entity.getUserId());
         }
         LOGGER.info(" getUserIdByOpenId entity: " + entity + ", openId: " + openId);
         return userId;
