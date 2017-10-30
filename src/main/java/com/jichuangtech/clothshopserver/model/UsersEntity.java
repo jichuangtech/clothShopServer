@@ -60,7 +60,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "email", nullable = false, length = 60)
+    @Column(name = "email", nullable = true, length = 60)
     public String getEmail() {
         return email;
     }
@@ -70,7 +70,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 32)
+    @Column(name = "password", nullable = true, length = 32)
     public String getPassword() {
         return password;
     }
@@ -90,7 +90,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "sex", nullable = false)
+    @Column(name = "sex", nullable = true)
     public byte getSex() {
         return sex;
     }
@@ -100,7 +100,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthday", nullable = true)
     public int getBirthday() {
         return birthday;
     }
@@ -110,7 +110,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "user_money", nullable = false, precision = 2)
+    @Column(name = "user_money", nullable = true, precision = 2)
     public BigDecimal getUserMoney() {
         return userMoney;
     }
@@ -120,7 +120,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "frozen_money", nullable = false, precision = 2)
+    @Column(name = "frozen_money", nullable = true, precision = 2)
     public BigDecimal getFrozenMoney() {
         return frozenMoney;
     }
@@ -140,7 +140,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "pay_points", nullable = false)
+    @Column(name = "pay_points", nullable = true)
     public int getPayPoints() {
         return payPoints;
     }
@@ -150,7 +150,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "reg_time", nullable = false)
+    @Column(name = "reg_time", nullable = true)
     public int getRegTime() {
         return regTime;
     }
@@ -160,7 +160,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "last_login", nullable = false)
+    @Column(name = "last_login", nullable = true)
     public int getLastLogin() {
         return lastLogin;
     }
@@ -170,7 +170,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "last_ip", nullable = false, length = 15)
+    @Column(name = "last_ip", nullable = true, length = 15)
     public String getLastIp() {
         return lastIp;
     }
@@ -180,7 +180,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "qq", nullable = false, length = 20)
+    @Column(name = "qq", nullable = true, length = 20)
     public String getQq() {
         return qq;
     }
@@ -190,7 +190,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "mobile", nullable = false, length = 20)
+    @Column(name = "mobile", nullable = true, length = 20)
     public String getMobile() {
         return mobile;
     }
@@ -200,7 +200,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "mobile_validated", nullable = false)
+    @Column(name = "mobile_validated", nullable = true)
     public byte getMobileValidated() {
         return mobileValidated;
     }
@@ -280,7 +280,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "email_validated", nullable = false)
+    @Column(name = "email_validated", nullable = true)
     public byte getEmailValidated() {
         return emailValidated;
     }
@@ -494,5 +494,13 @@ public class UsersEntity {
         result = 31 * result + (craetedAt != null ? craetedAt.hashCode() : 0);
         result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UsersEntity{" +
+                "userId=" + userId +
+                ", openid='" + openid + '\'' +
+                '}';
     }
 }

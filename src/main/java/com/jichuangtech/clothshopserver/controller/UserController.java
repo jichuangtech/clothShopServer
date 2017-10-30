@@ -1,5 +1,7 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.Token;
 import com.jichuangtech.clothshopserver.model.vo.UsersVO;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.service.UsersService;
@@ -45,8 +47,9 @@ public class UserController {
      */
     @ApiOperation(value = "小程序登录", notes = "必须要传code过来,根据这个code,服务器这边会生成一个session_key返回。当做身份验证。<br/>调用正确返回 sessionId。调用失败返回错误信息")
     @RequestMapping(value = "/onlogin", method = RequestMethod.GET)
-    public String onlogin(@ApiParam(name = "验证码", required = true) String code) {
+    public Response<Token> onlogin(@ApiParam(name = "验证码", required = true) String code) {
         LOGGER.info("user.code is {}", code);
+        Response<Token> response = new Response<>();
         String requestUrl = wxSessionApi + "?" +
                 "appid=" + appId + "&" +
                 "secret=" + secret + "&" +
@@ -58,16 +61,24 @@ public class UserController {
         if (sessionKey == null) {
             String errMsg = (String) map.get("errmsg");
             LOGGER.info("onlogin sessionKey is null errMsg: " + errMsg);
-            return errMsg;
+            response.msg = errMsg;
+            response.statusCode = (int) map.get("errcode");
+        } else {
+            String openid = (String) map.get("openid");
+            //进行判断是否有用户存在，不存在则进行创建
+            usersService.validateUser(openid);
+            int randomValue = new Random(10).nextInt();
+            //随机去一个数当sessionId
+            String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
+            sessionService.put(sessionThirdId, openid);
+            LOGGER.info("onlogin sessionKey: " + sessionKey
+                    + ", openid: " + openid
+                    + ", sessionThirdId: " + sessionThirdId);
+            Token token = new Token(sessionThirdId);
+            response.data = token;
         }
-        String openid = (String) map.get("openid");
-        int randomValue = new Random(10).nextInt();
-        //随机去一个数当sessionId
-        String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
-        sessionService.put(sessionThirdId, openid);
-        LOGGER.info("onlogin sessionKey: " + sessionKey
-                + ", openid: " + openid);
-        return sessionThirdId;
+
+        return response;
     }
 
     @ApiOperation(value = "列出所有用户", notes = "返回所有用户信息")

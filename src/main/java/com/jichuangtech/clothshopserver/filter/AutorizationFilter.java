@@ -5,22 +5,17 @@ import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.utils.JsonHelper;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Set;
-import java.util.logging.LogManager;
 
 /**
  * Created by yangjb on 2017/8/18.
@@ -30,23 +25,30 @@ import java.util.logging.LogManager;
 public class AutorizationFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutorizationFilter.class);
     private static final Set<String> filterUri = Sets.newHashSet();
-
-    static {
-        //不用进行身份验证的URI
-        filterUri.add("/");
-        filterUri.add("/login");
-        filterUri.add("/onlogin");
-        filterUri.add("/configuration/ui");
-        filterUri.add("/swagger-resources");
-        filterUri.add("/webjars/springfox-swagger-ui/lib/underscore-min.map");
-        filterUri.add("/swagger-ui.html");
-        filterUri.add("/v2/api-docs");
-    }
+    private static final String PRODUCT_REQUESTURI_PRREF = "/clothshopserver";
 
     @Autowired
     private SessionService sessionService;
     @Value("${is_product}")
-    private boolean isProdect;
+    private static boolean isProduct;
+
+    static {
+        //不用进行身份验证的URI
+        String prefix = "";
+
+        if(isProduct) {
+            prefix  = PRODUCT_REQUESTURI_PRREF;
+        }
+
+        filterUri.add(prefix + "/");
+        filterUri.add(prefix + "/login");
+        filterUri.add(prefix + "/onlogin");
+        filterUri.add(prefix + "/configuration/ui");
+        filterUri.add(prefix + "/swagger-resources");
+        filterUri.add(prefix + "/webjars/springfox-swagger-ui/lib/underscore-min.map");
+        filterUri.add(prefix + "/swagger-ui.html");
+        filterUri.add(prefix + "/v2/api-docs");
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -55,15 +57,15 @@ public class AutorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //不是生产环境不开启session验证
-        LOGGER.info("isProdect: " + isProdect);
-        if (!isProdect) {
+        LOGGER.info("isProduct: " + isProduct);
+        if (!isProduct) {
             chain.doFilter(request, response);
             return;
         }
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
         String remoteHost = req.getRemoteHost();
-        LOGGER.info("requestURI : " + requestURI  + ", remoteHost: " + remoteHost);
+        LOGGER.info("requestURI : " + requestURI + ", remoteHost: " + remoteHost);
         if (filterUri.contains(requestURI)) {
             chain.doFilter(request, response);
             return;
@@ -78,10 +80,10 @@ public class AutorizationFilter implements Filter {
         Response resp = new Response();
         String sessionId = req.getHeader("access_token");
         if (sessionId == null) {
-            LOGGER.info("sessionId param lost");
             resp.msg = "not found access_token in your headers";
             resp.statusCode = ResponseCode.ACCESS_TOKEN_NOT_FOUND;
             response.getWriter().write(JsonHelper.getJson(resp));
+            LOGGER.info(resp.msg);
             return;
         }
 
@@ -96,7 +98,7 @@ public class AutorizationFilter implements Filter {
         resp.msg = "invalid token";
         resp.statusCode = ResponseCode.TOKEN_INVALID;
         response.getWriter().write(JsonHelper.getJson(resp));
-        LOGGER.info("invalid user");
+        LOGGER.info(resp.msg);
     }
 
     @Override

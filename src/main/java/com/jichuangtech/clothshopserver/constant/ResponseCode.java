@@ -7,9 +7,9 @@ import java.util.Map;
  * Created by Bingo on 2017/8/27.
  */
 public class ResponseCode {
+
     public static final int ACCESS_TOKEN_NOT_FOUND = 101;
     public static final int TOKEN_INVALID = 102;
-
     public static final int CODE_SUCCESS = 200;
 
     public static final int CODE_DELETE_NOT_FOUND = 201;

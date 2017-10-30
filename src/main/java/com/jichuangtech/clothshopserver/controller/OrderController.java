@@ -4,9 +4,12 @@ import com.jichuangtech.clothshopserver.constant.Constant;
 import com.jichuangtech.clothshopserver.constant.OrderConstant;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.UsersEntity;
 import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
 import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
 import com.jichuangtech.clothshopserver.service.OrderService;
+import com.jichuangtech.clothshopserver.service.SessionService;
+import com.jichuangtech.clothshopserver.service.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,15 @@ import java.util.List;
 @Transactional
 public class OrderController {
     private static final String TAG = OrderController.class.getSimpleName();
-    private static Logger sLogger = LoggerFactory.getLogger(Constant.MODULE_NAME);
+    private static Logger LOGGER = LoggerFactory.getLogger(Constant.MODULE_NAME);
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private SessionService sessionService;
+
+    @Autowired
+    private UsersService usersService;
     /**
      * 查找用户所有订单
      *
@@ -51,7 +60,7 @@ public class OrderController {
             response.statusCode = ResponseCode.COODE_ORDER_NOT_FOUND;
             response.setMsg("order id: '" + orderId + "' not found ..");
         }
-        sLogger.info(" getOrderDetail response: " + response);
+        LOGGER.info(" getOrderDetail response: " + response);
         return response;
     }
 
@@ -65,7 +74,13 @@ public class OrderController {
      */
     @ApiOperation(value = "根据订单状态查找用户订单", notes = "订单状态为0表示所有订单")
     @RequestMapping(value = "/{userId}/{orderStatus}", method = RequestMethod.GET)
-    public Response<List<OrderRespVO>> getByOrderStatus(@PathVariable("orderStatus") byte orderStatus, @PathVariable("userId") int userId) {
+    public Response<List<OrderRespVO>> getByOrderStatus(@PathVariable("orderStatus") byte orderStatus,
+                                                        @PathVariable("userId") int userId,
+                                                        @RequestHeader("access_token") String accessToken) {
+
+        LOGGER.info("getByOrderStatus userId: " + userId
+                + ", orderStatus: " + orderStatus
+                + ", accessToken: " + accessToken);
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
         response.data = orderService.getByOrderStatus(orderStatus, userId);
         return response;
