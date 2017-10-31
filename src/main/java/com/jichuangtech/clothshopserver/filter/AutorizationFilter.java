@@ -5,22 +5,20 @@ import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.utils.JsonHelper;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
-import java.util.logging.LogManager;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * Created by yangjb on 2017/8/18.
@@ -54,16 +52,30 @@ public class AutorizationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        //解决跨域问题
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+
+
         //不是生产环境不开启session验证
         LOGGER.info("isProdect: " + isProdect);
         if (!isProdect) {
             chain.doFilter(request, response);
             return;
         }
+        List<ScheduledFuture<?>> scheduledFutures;
+
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
         String remoteHost = req.getRemoteHost();
-        LOGGER.info("requestURI : " + requestURI  + ", remoteHost: " + remoteHost);
+        LOGGER.info("requestURI : " + requestURI + ", remoteHost: " + remoteHost);
+        if (StringUtils.startsWithIgnoreCase(requestURI, "/clothshopserver")) {
+            requestURI = requestURI.substring(16);
+        }
         if (filterUri.contains(requestURI)) {
             chain.doFilter(request, response);
             return;
