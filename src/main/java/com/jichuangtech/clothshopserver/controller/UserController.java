@@ -65,7 +65,7 @@ public class UserController {
             response.statusCode = (int) map.get("errcode");
         } else {
             String openid = (String) map.get("openid");
-            //进行判断是否有用户存在，不存在则进行创建
+            // 进行判断是否有用户存在，不存在则进行创建
             usersService.validateUser(openid);
             int randomValue = new Random(10).nextInt();
             //随机去一个数当sessionId

@@ -24,15 +24,16 @@ import java.util.Set;
 @Component("autorizationFilter")
 public class AutorizationFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutorizationFilter.class);
-    private static final Set<String> filterUri = Sets.newHashSet();
+    private final Set<String> filterUri = Sets.newHashSet();
     private static final String PRODUCT_REQUESTURI_PRREF = "/clothshopserver";
 
     @Autowired
     private SessionService sessionService;
     @Value("${is_product}")
-    private static boolean isProduct;
+    private boolean isProduct;
 
-    static {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
         //不用进行身份验证的URI
         String prefix = "";
 
@@ -48,10 +49,6 @@ public class AutorizationFilter implements Filter {
         filterUri.add(prefix + "/webjars/springfox-swagger-ui/lib/underscore-min.map");
         filterUri.add(prefix + "/swagger-ui.html");
         filterUri.add(prefix + "/v2/api-docs");
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
     }
 
     @Override
