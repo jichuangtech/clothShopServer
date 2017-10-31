@@ -14,8 +14,11 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * Created by yangjb on 2017/8/18.
@@ -53,16 +56,30 @@ public class AutorizationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        //解决跨域问题
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+
+
         //不是生产环境不开启session验证
         LOGGER.info("isProduct: " + isProduct);
         if (!isProduct) {
             chain.doFilter(request, response);
             return;
         }
+        List<ScheduledFuture<?>> scheduledFutures;
+
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
         String remoteHost = req.getRemoteHost();
         LOGGER.info("requestURI : " + requestURI + ", remoteHost: " + remoteHost);
+        if (StringUtils.startsWithIgnoreCase(requestURI, "/clothshopserver")) {
+            requestURI = requestURI.substring(16);
+        }
         if (filterUri.contains(requestURI)) {
             chain.doFilter(request, response);
             return;
