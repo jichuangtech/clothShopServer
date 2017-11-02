@@ -20,6 +20,8 @@ public class GoodsAddVO {
     private int isHot;
     private List<Spec> specs;
     private List<Integer> colorIds;
+    private String image; //商品显示图片
+    private List<String> detailInfoImages;  //详细信息的图片列表
 
     public String getGoodsName() {
         return goodsName;
@@ -130,6 +132,22 @@ public class GoodsAddVO {
         }
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<String> getDetailInfoImages() {
+        return detailInfoImages;
+    }
+
+    public void setDetailInfoImages(List<String> detailInfoImages) {
+        this.detailInfoImages = detailInfoImages;
+    }
+
     @Override
     public String toString() {
         return "GoodsAddVO{" +
@@ -143,6 +161,8 @@ public class GoodsAddVO {
                 ", isHot=" + isHot +
                 ", specs=" + specs +
                 ", colorIds=" + colorIds +
+                ", image='" + image + '\'' +
+                ", detailInfoImages=" + detailInfoImages +
                 '}';
     }
 }

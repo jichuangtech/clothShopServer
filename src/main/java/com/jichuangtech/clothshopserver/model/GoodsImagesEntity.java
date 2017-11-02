@@ -14,6 +14,7 @@ public class GoodsImagesEntity {
 
     @Id
     @Column(name = "img_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getImgId() {
         return imgId;
     }
