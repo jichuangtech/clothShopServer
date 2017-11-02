@@ -1,12 +1,17 @@
 package com.jichuangtech.clothshopserver.service;
 
+import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.GoodsAddVO;
 import com.jichuangtech.clothshopserver.repository.*;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Bingo on 2017/9/9.
@@ -36,13 +41,13 @@ public class GoodsService {
         //（1）保存到商品
         int goodsId = saveGoodsEntity(goodsAddVO);
         LOGGER.info(" saveGoods goodsId: " + goodsId);
-        if(goodsId < 0) {
+        if (goodsId < 0) {
             return -1;
         }
         //（2）颜色的保存
         code = saveGoodsColors(goodsId, goodsAddVO);
         LOGGER.info("saveGoodsColors code: " + code);
-        if(code == 200) {
+        if (code == 200) {
             //（3）规格的保存
             code = saveGoodsSpec(goodsId, goodsAddVO);
             LOGGER.info(" saveGoodsSpec code: " + code);
@@ -56,8 +61,8 @@ public class GoodsService {
 
     private int saveGoodsDetailInfoImages(int goodsId, GoodsAddVO vo) {
         int code = 200;
-        for(String image : vo.getDetailInfoImages()) {
-            GoodsImagesEntity entity  = new GoodsImagesEntity();
+        for (String image : vo.getDetailInfoImages()) {
+            GoodsImagesEntity entity = new GoodsImagesEntity();
             entity.setImageUrl(image);
             entity.setGoodsId(goodsId);
             mGoodsImageRepository.save(entity);
@@ -68,10 +73,10 @@ public class GoodsService {
 
     private int saveGoodsSpec(int goodsId, GoodsAddVO vo) {
         int code = 200;
-        for(GoodsAddVO.Spec spec : vo.getSpecs()) {
+        for (GoodsAddVO.Spec spec : vo.getSpecs()) {
             GoodsSpecEntity specEntity = mGoodsSpecRepository.findOne(spec.getSpecId());
 
-            if(specEntity != null) {
+            if (specEntity != null) {
                 GoodsSpecificationEntity entity = new GoodsSpecificationEntity();
                 entity.setGoodsId(goodsId);
                 entity.setSpecId(specEntity.getId());
@@ -89,9 +94,9 @@ public class GoodsService {
 
     private int saveGoodsColors(int goodsId, GoodsAddVO vo) {
         int code = 200;
-        for(int color : vo.getColorIds()) {
+        for (int color : vo.getColorIds()) {
             ColorEntity colorEntity = mColorRepository.findOne(color);
-            if(colorEntity != null) {
+            if (colorEntity != null) {
                 GoodsColorEntity entity = new GoodsColorEntity();
                 entity.setColorId(color);
                 entity.setColorName(colorEntity.getColorName());
@@ -107,8 +112,19 @@ public class GoodsService {
 
     private int saveGoodsEntity(GoodsAddVO vo) {
         GoodsEntity entity = new GoodsEntity();
+        if (vo.getImage() != null) {
+            try {
+                File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, vo.getImage().getOriginalFilename());
+                boolean newFile = file.createNewFile();
+                if (newFile) {
+                    FileUtils.writeByteArrayToFile(file, vo.getImage().getBytes());
+                    entity.setOriginalImg(vo.getImage().getName());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         // TODO: 2017/11/2 保存商品显示图片
-        entity.setOriginalImg(vo.getImage());
         entity.setGoodsName(vo.getGoodsName());
         entity.setCatId(vo.getCategoryId());
         entity.setGoodsSn(vo.getGoodsSn());

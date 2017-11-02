@@ -84,8 +84,9 @@ public class GoodsController {
         PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
         return "getGoodsPicture success ...";
     }
+
     @RequestMapping(method = RequestMethod.POST)
-    public Response saveGoods(@RequestBody GoodsAddVO goodsAddVO) {
+    public Response saveGoods(GoodsAddVO goodsAddVO) {
         Response response = new Response();
         int code = mGoodsService.saveGoods(goodsAddVO);
         LOGGER.info(" saveGoods goodsVo: " + goodsAddVO);

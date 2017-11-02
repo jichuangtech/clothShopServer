@@ -1,5 +1,7 @@
 package com.jichuangtech.clothshopserver.model.vo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,9 @@ public class GoodsAddVO {
 
     private int categoryId;
 
-    /** 商品编号  */
+    /**
+     * 商品编号
+     */
     private String goodsSn;
 
     private short storeCount;
@@ -20,7 +24,7 @@ public class GoodsAddVO {
     private int isHot;
     private List<Spec> specs;
     private List<Integer> colorIds;
-    private String image; //商品显示图片
+    private MultipartFile image; //商品显示图片
     private List<String> detailInfoImages;  //详细信息的图片列表
 
     public String getGoodsName() {
@@ -132,11 +136,11 @@ public class GoodsAddVO {
         }
     }
 
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 

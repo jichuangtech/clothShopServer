@@ -57,7 +57,7 @@ public class AutorizationFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token,Content-Type");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String method = httpServletRequest.getMethod();
