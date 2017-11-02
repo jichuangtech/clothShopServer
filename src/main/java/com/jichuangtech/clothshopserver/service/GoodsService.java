@@ -5,6 +5,7 @@ import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.GoodsAddVO;
 import com.jichuangtech.clothshopserver.repository.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,31 +62,43 @@ public class GoodsService {
 
     private int saveGoodsDetailInfoImages(int goodsId, GoodsAddVO vo) {
         int code = 200;
-        for (String image : vo.getDetailInfoImages()) {
-            GoodsImagesEntity entity = new GoodsImagesEntity();
-            entity.setImageUrl(image);
-            entity.setGoodsId(goodsId);
-            mGoodsImageRepository.save(entity);
-        }
+//        for (String image : vo.getDetailInfoImages()) {
+//            GoodsImagesEntity entity = new GoodsImagesEntity();
+//            entity.setImageUrl(image);
+//            entity.setGoodsId(goodsId);
+//            mGoodsImageRepository.save(entity);
+//        }
 
         return code;
     }
 
     private int saveGoodsSpec(int goodsId, GoodsAddVO vo) {
         int code = 200;
-        for (GoodsAddVO.Spec spec : vo.getSpecs()) {
-            GoodsSpecEntity specEntity = mGoodsSpecRepository.findOne(spec.getSpecId());
-
+        if (StringUtils.isNotBlank(vo.getCodePrice())) {
+            GoodsSpecEntity specEntity = mGoodsSpecRepository.findOne(2);
             if (specEntity != null) {
                 GoodsSpecificationEntity entity = new GoodsSpecificationEntity();
                 entity.setGoodsId(goodsId);
                 entity.setSpecId(specEntity.getId());
                 entity.setSpecName(specEntity.getName());
-                entity.setSpecPrice(spec.getPrice());
+                entity.setSpecPrice(Double.parseDouble(vo.getCodePrice()));
                 mGoodsSpecificationRepository.save(entity);
             } else {
                 code = -1;
-                return code;
+            }
+        }
+
+        if (StringUtils.isNotBlank(vo.getKgPrice())) {
+            GoodsSpecEntity specEntity = mGoodsSpecRepository.findOne(1);
+            if (specEntity != null) {
+                GoodsSpecificationEntity entity = new GoodsSpecificationEntity();
+                entity.setGoodsId(goodsId);
+                entity.setSpecId(specEntity.getId());
+                entity.setSpecName(specEntity.getName());
+                entity.setSpecPrice(Double.parseDouble(vo.getKgPrice()));
+                mGoodsSpecificationRepository.save(entity);
+            } else {
+                code = -1;
             }
         }
 
@@ -115,11 +128,12 @@ public class GoodsService {
         if (vo.getImage() != null) {
             try {
                 File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, vo.getImage().getOriginalFilename());
-                boolean newFile = file.createNewFile();
-                if (newFile) {
-                    FileUtils.writeByteArrayToFile(file, vo.getImage().getBytes());
-                    entity.setOriginalImg(vo.getImage().getName());
+                if (!file.exists()) {
+                    file.createNewFile();
                 }
+
+                FileUtils.writeByteArrayToFile(file, vo.getImage().getBytes());
+                entity.setOriginalImg(vo.getImage().getOriginalFilename());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -135,7 +149,6 @@ public class GoodsService {
         entity.setIsHot((byte) vo.getIsHot());
         entity.setIsRecommend((byte) vo.getIsRecommend());
 
-        entity.setOriginalImg("");
         GoodsEntity newGoods = mGoodsRepository.save(entity);
         LOGGER.info("saveGoodsEntity newGoods: " + newGoods);
         return newGoods != null ? newGoods.getGoodsId() : -1;

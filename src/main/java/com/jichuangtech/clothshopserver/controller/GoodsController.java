@@ -88,6 +88,9 @@ public class GoodsController {
     @RequestMapping(method = RequestMethod.POST)
     public Response saveGoods(GoodsAddVO goodsAddVO) {
         Response response = new Response();
+        if (goodsAddVO.getImage() == null) {
+            return response;
+        }
         int code = mGoodsService.saveGoods(goodsAddVO);
         LOGGER.info(" saveGoods goodsVo: " + goodsAddVO);
         response.setStatusCode(code);
