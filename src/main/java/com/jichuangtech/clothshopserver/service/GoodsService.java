@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.logging.LogManager;
-
 /**
  * Created by Bingo on 2017/9/9.
  */
@@ -30,6 +28,9 @@ public class GoodsService {
     @Autowired
     private GoodsRepository mGoodsRepository;
 
+    @Autowired
+    private GoodsImageRepository mGoodsImageRepository;
+
     public int saveGoods(GoodsAddVO goodsAddVO) {
         int code = 200;
         //（1）保存到商品
@@ -47,10 +48,21 @@ public class GoodsService {
             LOGGER.info(" saveGoodsSpec code: " + code);
         }
 
-        //（4）图片
-        // TODO: 2017/9/9  
-        //（5）参数图片介绍
-        // TODO: 2017/9/9  
+        //（4）参数图片介绍
+        // TODO: 2017/9/9
+        code = saveGoodsDetailInfoImages(goodsId, goodsAddVO);
+        return code;
+    }
+
+    private int saveGoodsDetailInfoImages(int goodsId, GoodsAddVO vo) {
+        int code = 200;
+        for(String image : vo.getDetailInfoImages()) {
+            GoodsImagesEntity entity  = new GoodsImagesEntity();
+            entity.setImageUrl(image);
+            entity.setGoodsId(goodsId);
+            mGoodsImageRepository.save(entity);
+        }
+
         return code;
     }
 
@@ -95,6 +107,8 @@ public class GoodsService {
 
     private int saveGoodsEntity(GoodsAddVO vo) {
         GoodsEntity entity = new GoodsEntity();
+        // TODO: 2017/11/2 保存商品显示图片
+        entity.setOriginalImg(vo.getImage());
         entity.setGoodsName(vo.getGoodsName());
         entity.setCatId(vo.getCategoryId());
         entity.setGoodsSn(vo.getGoodsSn());
