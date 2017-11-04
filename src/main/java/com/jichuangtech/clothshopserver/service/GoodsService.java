@@ -5,6 +5,7 @@ import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.GoodsAddVO;
 import com.jichuangtech.clothshopserver.repository.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +128,7 @@ public class GoodsService {
         GoodsEntity entity = new GoodsEntity();
         if (vo.getImage() != null) {
             try {
-                File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, vo.getImage().getOriginalFilename());
+                File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, FilenameUtils.getBaseName(vo.getImage().getOriginalFilename()));
                 if (!file.exists()) {
                     file.createNewFile();
                 }
