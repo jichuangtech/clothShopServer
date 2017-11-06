@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by yangjb on 2017/8/23.
  * helloWorld
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     /**
      * 后台管理系统登陆
@@ -26,8 +30,9 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getByOrderStatus(String username, String password) {
         if (StringUtils.equalsIgnoreCase("admin", username) && StringUtils.equalsIgnoreCase("admin", password)) {
-            sessionService.put("123456", "123");
-            return "123456";
+            String id = httpServletRequest.getSession().getId();
+            sessionService.put(id, id);
+            return id;
         }
         return "no";
     }

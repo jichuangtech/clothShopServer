@@ -57,18 +57,18 @@ public class AutorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //解决跨域问题
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token");
-        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String method = httpServletRequest.getMethod();
-        if (StringUtils.equalsIgnoreCase(method, "OPTIONS")) {
-            chain.doFilter(request, response);
-            return;
-        }
+//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+//        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+//        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+//        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token,Content-Type");
+//        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+//        String method = httpServletRequest.getMethod();
+//        if (StringUtils.equalsIgnoreCase(method, "OPTIONS")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
 
         //不是生产环境不开启session验证
         LOGGER.info("isProduct: " + isProduct);
@@ -99,6 +99,10 @@ public class AutorizationFilter implements Filter {
         Response resp = new Response();
         String sessionId = req.getHeader("access_token");
         if (sessionId == null) {
+            sessionId = req.getSession(false).getId();
+        }
+        if (sessionId == null) {
+            LOGGER.info("sessionId param lost");
             resp.msg = "not found access_token in your headers";
             resp.statusCode = ResponseCode.ACCESS_TOKEN_NOT_FOUND;
             response.getWriter().write(JsonHelper.getJson(resp));
