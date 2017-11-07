@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +40,8 @@ public class AutorizationFilter implements Filter {
         //不用进行身份验证的URI
         String prefix = "";
 
-        if(isProduct) {
-            prefix  = PRODUCT_REQUESTURI_PRREF;
+        if (isProduct) {
+            prefix = PRODUCT_REQUESTURI_PRREF;
         }
 
         filterUri.add(prefix + "/");
@@ -99,7 +99,8 @@ public class AutorizationFilter implements Filter {
         Response resp = new Response();
         String sessionId = req.getHeader("access_token");
         if (sessionId == null) {
-            sessionId = req.getSession(false).getId();
+            HttpSession session = req.getSession(false);
+            sessionId = session == null ? null : session.getId();
         }
         if (sessionId == null) {
             LOGGER.info("sessionId param lost");
