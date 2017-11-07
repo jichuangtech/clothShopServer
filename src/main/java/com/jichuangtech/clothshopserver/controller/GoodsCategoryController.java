@@ -1,5 +1,6 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
@@ -50,10 +51,10 @@ public class GoodsCategoryController {
         return mGoodsCategoryService.listGoods(goodsCategoryId);
     }
 
-    @RequestMapping(value = GoodsCategoryConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
+    @RequestMapping(value = GoodsCategoryConstant.PICTURE + "/{picName:.+}", method = RequestMethod.GET)
     public String getGoodsCategoryPicture(HttpServletRequest request,
                                           HttpServletResponse response, Model model, @PathVariable String picName) {
-        PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
+        PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName);
         return "getGoodsCategoryPicture success ...";
     }
 

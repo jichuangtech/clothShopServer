@@ -41,7 +41,7 @@ public class AutorizationFilter implements Filter {
         String prefix = "";
 
         if (isProduct) {
-            prefix = PRODUCT_REQUESTURI_PRREF;
+//            prefix = PRODUCT_REQUESTURI_PRREF;
         }
 
         filterUri.add(prefix + "/");

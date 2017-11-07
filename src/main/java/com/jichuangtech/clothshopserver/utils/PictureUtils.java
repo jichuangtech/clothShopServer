@@ -13,12 +13,12 @@ import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SE
  */
 public class PictureUtils {
 
-    public static void writePic(HttpServletResponse response, String serverPath, String picName, String imageSuffix) {
+    public static void writePic(HttpServletResponse response, String serverPath, String picName) {
         System.out.println("getPicture :" + picName);
         FileInputStream fis = null;
         OutputStream os = null;
         try {
-            fis = new FileInputStream(serverPath + picName + imageSuffix);
+            fis = new FileInputStream(serverPath + picName);
             os = response.getOutputStream();
             int count = 0;
             byte[] buffer = new byte[1024 * 8];

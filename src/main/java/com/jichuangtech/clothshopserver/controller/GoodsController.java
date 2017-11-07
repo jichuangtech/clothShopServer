@@ -81,7 +81,7 @@ public class GoodsController {
     @RequestMapping(value = GoodsConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
     public String getGoodsPicture(HttpServletRequest request,
                                   HttpServletResponse response, Model model, @PathVariable String picName) {
-        PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName, IMAGE_SUFFIX);
+        PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName);
         return "getGoodsPicture success ...";
     }
 
