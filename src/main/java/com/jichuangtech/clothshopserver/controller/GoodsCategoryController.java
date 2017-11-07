@@ -5,8 +5,6 @@ import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.model.Response;
-import com.jichuangtech.clothshopserver.model.vo.GoodsCartReqVO;
-import com.jichuangtech.clothshopserver.model.vo.GoodsCategoryReqVO;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
 import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
@@ -14,6 +12,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,18 +58,17 @@ public class GoodsCategoryController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Response saveGoodsCategory(@RequestBody GoodsCategoryReqVO vo) {
-        return mGoodsCategoryService.saveGoodsCategory(vo);
+    public Response saveGoodsCategory(String name, MultipartFile image) {
+        return mGoodsCategoryService.saveGoodsCategory(name, image);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public Response deleteGoodsCategory(@ApiParam(name = "要被删除的商品分类的ID", required = true)  @RequestParam int categoryId) {
+    public Response deleteGoodsCategory(@ApiParam(name = "要被删除的商品分类的ID", required = true) @RequestParam int categoryId) {
         Response response = new Response();
         int code = mGoodsCategoryService.delete(categoryId);
         response.setStatusCode(code);
         return response;
     }
-
 
 
 }
