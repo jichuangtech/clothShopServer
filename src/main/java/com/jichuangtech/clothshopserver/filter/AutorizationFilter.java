@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
-import com.jichuangtech.clothshopserver.utils.JsonHelper;
+import com.jichuangtech.clothshopserver.utils.JsonMapper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +104,7 @@ public class AutorizationFilter implements Filter {
             LOGGER.info("sessionId param lost");
             resp.msg = "not found access_token in your headers";
             resp.statusCode = ResponseCode.ACCESS_TOKEN_NOT_FOUND;
-            response.getWriter().write(JsonHelper.getJson(resp));
+            response.getWriter().write(JsonMapper.nonDefaultMapper().toJson(resp));
             return;
         }
 
@@ -118,7 +118,7 @@ public class AutorizationFilter implements Filter {
 
         resp.msg = "invalid token";
         resp.statusCode = ResponseCode.TOKEN_INVALID;
-        response.getWriter().write(JsonHelper.getJson(resp));
+        response.getWriter().write(JsonMapper.nonDefaultMapper().toJson(resp));
         LOGGER.info("invalid user");
     }
 
