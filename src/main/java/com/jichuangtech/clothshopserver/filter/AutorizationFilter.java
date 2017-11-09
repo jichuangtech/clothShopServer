@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -52,12 +54,13 @@ public class AutorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //解决跨域问题
-//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-//        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
-//        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-//        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-//        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token,Content-Type");
-//        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        //此处需要设置授权域名。由于fetch开启了   credentials: "include"  。所以不能配置成 '*' 。部署到线上时改成线上的地址
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access-token,Content-Type");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
 //        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 //        String method = httpServletRequest.getMethod();
 //        if (StringUtils.equalsIgnoreCase(method, "OPTIONS")) {
@@ -92,9 +95,10 @@ public class AutorizationFilter implements Filter {
             return;
         }
         Response resp = new Response();
-        String sessionId = req.getHeader("access_token");
+        String sessionId = req.getHeader("access_token") == null ? req.getHeader("access-token") : req.getHeader("access_token");
         if (sessionId == null) {
-            sessionId = req.getSession(false).getId();
+            HttpSession session = req.getSession(false);
+            sessionId = session == null ? null : session.getId();
         }
         if (sessionId == null) {
             LOGGER.info("sessionId param lost");
