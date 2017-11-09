@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
-import com.jichuangtech.clothshopserver.utils.JsonHelper;
+import com.jichuangtech.clothshopserver.utils.JsonMapper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.concurrent.ScheduledFuture;
 @Component("autorizationFilter")
 public class AutorizationFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutorizationFilter.class);
+    public static final String CLOTHSHOPSERVER = "/clothshopserver";
     private final Set<String> filterUri = Sets.newHashSet();
     private static final String PRODUCT_REQUESTURI_PRREF = "/clothshopserver";
 
@@ -38,37 +40,25 @@ public class AutorizationFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         //不用进行身份验证的URI
-        String prefix = "";
-
-        if (isProduct) {
-//            prefix = PRODUCT_REQUESTURI_PRREF;
-        }
-
-        filterUri.add(prefix + "/");
-        filterUri.add(prefix + "/login");
-        filterUri.add(prefix + "/onlogin");
-        filterUri.add(prefix + "/configuration/ui");
-        filterUri.add(prefix + "/swagger-resources");
-        filterUri.add(prefix + "/webjars/springfox-swagger-ui/lib/underscore-min.map");
-        filterUri.add(prefix + "/swagger-ui.html");
-        filterUri.add(prefix + "/v2/api-docs");
+        filterUri.add("/");
+        filterUri.add("/login");
+        filterUri.add("/onlogin");
+        filterUri.add("/configuration/ui");
+        filterUri.add("/swagger-resources");
+        filterUri.add("/webjars/springfox-swagger-ui/lib/underscore-min.map");
+        filterUri.add("/swagger-ui.html");
+        filterUri.add("/v2/api-docs");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //解决跨域问题
-//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-//        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
-//        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-//        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-//        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token,Content-Type");
-//        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
-//        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-//        String method = httpServletRequest.getMethod();
-//        if (StringUtils.equalsIgnoreCase(method, "OPTIONS")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access-token,Content-Type");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
 
         //不是生产环境不开启session验证
         LOGGER.info("isProduct: " + isProduct);
@@ -76,13 +66,12 @@ public class AutorizationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        List<ScheduledFuture<?>> scheduledFutures;
 
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
         String remoteHost = req.getRemoteHost();
         LOGGER.info("requestURI : " + requestURI + ", remoteHost: " + remoteHost);
-        if (StringUtils.startsWithIgnoreCase(requestURI, "/clothshopserver")) {
+        if (StringUtils.startsWithIgnoreCase(requestURI, CLOTHSHOPSERVER)) {
             requestURI = requestURI.substring(16);
         }
         if (filterUri.contains(requestURI)) {
@@ -97,7 +86,7 @@ public class AutorizationFilter implements Filter {
             return;
         }
         Response resp = new Response();
-        String sessionId = req.getHeader("access_token");
+        String sessionId = req.getHeader("access_token") == null ? req.getHeader("access-token") : req.getHeader("access_token");
         if (sessionId == null) {
             HttpSession session = req.getSession(false);
             sessionId = session == null ? null : session.getId();
@@ -106,8 +95,8 @@ public class AutorizationFilter implements Filter {
             LOGGER.info("sessionId param lost");
             resp.msg = "not found access_token in your headers";
             resp.statusCode = ResponseCode.ACCESS_TOKEN_NOT_FOUND;
-            response.getWriter().write(JsonHelper.getJson(resp));
             LOGGER.info(resp.msg);
+            response.getWriter().write(JsonMapper.nonDefaultMapper().toJson(resp));
             return;
         }
 
@@ -121,8 +110,8 @@ public class AutorizationFilter implements Filter {
 
         resp.msg = "invalid token";
         resp.statusCode = ResponseCode.TOKEN_INVALID;
-        response.getWriter().write(JsonHelper.getJson(resp));
         LOGGER.info(resp.msg);
+        response.getWriter().write(JsonMapper.nonDefaultMapper().toJson(resp));
     }
 
     @Override
