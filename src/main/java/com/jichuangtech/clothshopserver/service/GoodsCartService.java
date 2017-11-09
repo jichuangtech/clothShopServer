@@ -1,5 +1,6 @@
 package com.jichuangtech.clothshopserver.service;
 
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.AlterCartNumBerVo;
 import com.jichuangtech.clothshopserver.model.vo.CartNumberVO;
@@ -75,7 +76,7 @@ public class GoodsCartService {
         Response response = new Response();
         GoodsCartEntity entity = createCart(goodsCartVO);
         if(entity == null) {
-            response.statusCode = -1;
+            response.setStatusCode(ResponseCode.CODE_GOODS_CART_ADD_ERROR);
         }
         return response;
     }

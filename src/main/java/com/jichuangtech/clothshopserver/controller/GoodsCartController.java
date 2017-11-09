@@ -1,6 +1,7 @@
 package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsCartConstant;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.model.vo.*;
 import com.jichuangtech.clothshopserver.service.GoodsCartService;
@@ -29,9 +30,6 @@ public class GoodsCartController {
     @Autowired
     private UsersService usersService;
 
-    @Autowired
-    private SessionService sessionService;
-
     @RequestMapping(value = "/{cartId}", method = RequestMethod.DELETE)
     public Response delete(@PathVariable("cartId") int cartId) {
         LOGGER.info("delete goodsCarts cartId: " + cartId);
@@ -45,16 +43,27 @@ public class GoodsCartController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<GoodsCartRespVO> list() {
-        return mGoodsCartService.getList();
+    public Response<List<GoodsCartRespVO>> list() {
+        Response<List<GoodsCartRespVO>> response = new Response<>();
+        response.data = mGoodsCartService.getList();
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_CART_GET_ERROR);
+        }
+        return response;
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public List<GoodsCartRespVO> listByUserId(@PathVariable("userId") int userId,
+    public Response<List<GoodsCartRespVO>> listByUserId(@PathVariable("userId") int userId,
                                               @RequestHeader("access_token") String accessToken) {
-        userId = getUserId(accessToken);
+        Response<List<GoodsCartRespVO>> response = new Response<>();
+        userId = usersService.getUserIdByToken(accessToken);
+        response.data = mGoodsCartService.getListByUserId(userId);
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_CART_GET_ERROR);
+        }
         LOGGER.info(" goodsCard listByUserId userId: " + userId);
-        return mGoodsCartService.getListByUserId(userId);
+        return response;
     }
 
     @RequestMapping(value = GoodsCartConstant.GOODS_NUMBER, method = RequestMethod.POST)
@@ -65,11 +74,7 @@ public class GoodsCartController {
     @RequestMapping(method = RequestMethod.POST)
     public Response saveGoodsCart(@RequestBody GoodsCartReqVO goodsCartVO,
                                   @RequestHeader("access_token") String accessToken) {
-        goodsCartVO.setUserId(getUserId(accessToken));
+        goodsCartVO.setUserId(usersService.getUserIdByToken(accessToken));
         return mGoodsCartService.saveGoodsCart(goodsCartVO);
-    }
-
-    private int getUserId(String token) {
-        return usersService.getUserIdByOpenId(sessionService.get(token));
     }
 }

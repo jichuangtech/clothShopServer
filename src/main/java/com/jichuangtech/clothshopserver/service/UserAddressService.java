@@ -36,10 +36,10 @@ public class UserAddressService {
 	 */
 	public List<UserAddressRespVO> listAddress(int userId){
 		List<UserAddressEntity> userAddressEntityList = userAddressRepository.findByUserId(userId);
-		if(userAddressEntityList != null && userAddressEntityList.size() > 0) {
+		if(userAddressEntityList != null && !userAddressEntityList.isEmpty()) {
 			return getUserAddressVO(userAddressEntityList);
 		}
-		return null;
+		return new ArrayList<UserAddressRespVO>();
 	}
 	
 	/**

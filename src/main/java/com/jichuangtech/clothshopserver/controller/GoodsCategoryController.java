@@ -3,6 +3,7 @@ package com.jichuangtech.clothshopserver.controller;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.model.Response;
@@ -37,18 +38,35 @@ public class GoodsCategoryController {
     private GoodsCategoryService mGoodsCategoryService;
 
     @RequestMapping()
-    public List<GoodsCategoryEntity> list() {
-        return mGoodsCategoryRepository.findAll();
+    public Response<List<GoodsCategoryEntity>> list() {
+        Response<List<GoodsCategoryEntity>> response = new Response<>();
+        response.data = mGoodsCategoryRepository.findAll();
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_CATEGORY_GET_ERROR);
+        }
+        return response;
     }
 
     @RequestMapping(value = "/{goodsCategoryId}", method = RequestMethod.GET)
-    public GoodsCategoryEntity listById(@PathVariable int goodsCategoryId) {
-        return mGoodsCategoryService.getCategory(goodsCategoryId);
+    public Response<GoodsCategoryEntity> listById(@PathVariable int goodsCategoryId) {
+        Response<GoodsCategoryEntity> response = new Response<>();
+        response.data = mGoodsCategoryService.getCategory(goodsCategoryId);
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_CATEGORY_GET_ERROR);
+        }
+        return response;
     }
 
     @RequestMapping(value = "/{goodsCategoryId}" + GoodsConstant.GOODS, method = RequestMethod.GET)
-    public List<GoodsEntity> listGoodsById(@PathVariable int goodsCategoryId) {
-        return mGoodsCategoryService.listGoods(goodsCategoryId);
+    public Response<List<GoodsEntity>> listGoodsById(@PathVariable int goodsCategoryId) {
+        Response<List<GoodsEntity>> response = new Response<>();
+        response.data = mGoodsCategoryService.listGoods(goodsCategoryId);
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_CATEGORY_GET_GOODS_ERROR);
+        }
+        return response;
     }
 
     @RequestMapping(value = GoodsCategoryConstant.PICTURE + "/{picName:.+}", method = RequestMethod.GET)

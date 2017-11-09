@@ -4,7 +4,6 @@ import com.jichuangtech.clothshopserver.constant.Constant;
 import com.jichuangtech.clothshopserver.constant.OrderConstant;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
-import com.jichuangtech.clothshopserver.model.UsersEntity;
 import com.jichuangtech.clothshopserver.model.vo.OrderReqVO;
 import com.jichuangtech.clothshopserver.model.vo.OrderRespVO;
 import com.jichuangtech.clothshopserver.service.OrderService;
@@ -32,9 +31,6 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
-    private SessionService sessionService;
-
-    @Autowired
     private UsersService usersService;
     /**
      * 查找用户所有订单
@@ -46,7 +42,7 @@ public class OrderController {
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId,
                                             @RequestHeader("access_token") String accessToken) {
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
         response.data = orderService.getList(userId);
         return response;
@@ -59,8 +55,7 @@ public class OrderController {
         response.data = orderService.getOrderDetail(orderId);
 
         if(response.data == null) {
-            response.statusCode = ResponseCode.COODE_ORDER_NOT_FOUND;
-            response.setMsg("order id: '" + orderId + "' not found ..");
+            response.setStatusCode(ResponseCode.CODE_ORDER_DETAIL_GET_ERROR);
         }
         LOGGER.info(" getOrderDetail response: " + response);
         return response;
@@ -84,8 +79,11 @@ public class OrderController {
                 + ", orderStatus: " + orderStatus
                 + ", accessToken: " + accessToken);
         Response<List<OrderRespVO>> response = new Response<>();
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
         response.data = orderService.getByOrderStatus(orderStatus, userId);
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ORDER_GET_ERROR);
+        }
         return response;
     }
 
@@ -101,7 +99,7 @@ public class OrderController {
                                            @RequestBody OrderReqVO orderReqVO,
                                            @RequestHeader("access_token") String accessToken) {
         Response<OrderRespVO> response = new Response<>();
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
         response.data = orderService.saveOrder(userId, orderReqVO);
         return response;
     }
@@ -116,13 +114,10 @@ public class OrderController {
                                               @PathVariable("orderId") int orderId,
                                               @PathVariable("orderStatus") byte orderStatus,
                                               @RequestHeader("access_token") String accessToken){
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
     	orderService.updateOrderStatusByOrderId(userId,orderId,orderStatus);
     	Response<String> response = new Response<String>();
     	return response;
     }
 
-    private int getUserId(String token) {
-        return usersService.getUserIdByOpenId(sessionService.get(token));
-    }
 }

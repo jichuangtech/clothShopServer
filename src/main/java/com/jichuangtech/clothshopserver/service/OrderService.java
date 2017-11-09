@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mysql.jdbc.log.LogFactory;
 import com.sun.org.apache.xml.internal.resolver.readers.OASISXMLCatalogReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ import com.jichuangtech.clothshopserver.utils.ListUtils;
 @Service
 @Transactional
 public class OrderService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class.getSimpleName());
 	@Autowired
 	private OrderRepository orderRepository;
 	@Autowired
@@ -67,11 +71,10 @@ public class OrderService {
 		}else{
 			orderEntityList = orderRepository.findByUserId(userId);
 		}
-
-        if(orderEntityList != null && orderEntityList.size() > 0 ) {
+        if(orderEntityList != null && !orderEntityList.isEmpty()) {
             return getGoodsDetailInfo(orderEntityList);
         }
-        return null;
+        return new ArrayList<OrderRespVO>();
 	}
 	
 	/**
@@ -213,7 +216,12 @@ public class OrderService {
 			return getList(userId);
 		}
 		List<OrderEntity> orderEntityList = orderRepository.findByOrderStatusAndUserId(orderStatus, userId);
-		return getGoodsDetailInfo(orderEntityList);
+		if(orderEntityList != null && !orderEntityList.isEmpty()) {
+			return getGoodsDetailInfo(orderEntityList);
+		} else {
+			return new ArrayList<OrderRespVO>();
+		}
+
 	}
 	
 	/**
@@ -289,7 +297,7 @@ public class OrderService {
 
 	/**
 	 * 生成订单
-	 * @param orderDetailVO
+	 * @param
 	 */
 	private OrderEntity createOrder(int userId,OrderReqVO orderReqVO) {
 		Date date = new Date();

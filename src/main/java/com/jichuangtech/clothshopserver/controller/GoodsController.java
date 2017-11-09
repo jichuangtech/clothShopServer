@@ -1,6 +1,7 @@
 package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.GoodsEntity;
 import com.jichuangtech.clothshopserver.model.Page;
 import com.jichuangtech.clothshopserver.model.Response;
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.IMAGE_SUFFIX;
 import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SERVER_IMAGE_PATH;
 
 /**
@@ -47,25 +47,49 @@ public class GoodsController {
     }
 
     @RequestMapping(value = GoodsConstant.HOT, method = RequestMethod.GET)
-    public List<GoodsEntity> listHot() {
-        return mGoodsRepository.findAllByIsHot(new Byte("1"));
+    public Response<List<GoodsEntity>> listHot() {
+        Response<List<GoodsEntity>> response = new Response<>();
+        response.data = mGoodsRepository.findAllByIsHot(new Byte("1"));
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_HOT_ERROR);
+        }
+        return response;
     }
 
     @RequestMapping(value = GoodsConstant.RECOMMEND, method = RequestMethod.GET)
     @ResponseBody
-    public List<GoodsEntity> listRecommend() {
-        return mGoodsRepository.findAllByIsRecommend(new Byte("1"));
+    public Response<List<GoodsEntity>> listRecommend() {
+        Response<List<GoodsEntity>> response = new Response<>();
+        response.data = mGoodsRepository.findAllByIsRecommend(new Byte("1"));
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_RECOMMEND_ERROR);
+        }
+        return response;
     }
 
     @RequestMapping(value = GoodsConstant.HOT + "/{goodsId}", method = RequestMethod.GET)
-    public GoodsEntity listHotById(@PathVariable int goodsId) {
-        return mGoodsRepository.findByIsHotAndGoodsId(new Byte("1"), goodsId);
+    public Response<GoodsEntity> listHotById(@PathVariable int goodsId) {
+        Response<GoodsEntity> response = new Response<>();
+        response.data = mGoodsRepository.findByIsHotAndGoodsId(new Byte("1"), goodsId);
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_NOT_FOUND);
+        }
+        return response;
     }
 
     @RequestMapping(value = "/{goodsId}", method = RequestMethod.GET)
-    public GoodsEntity listById(@PathVariable int goodsId) {
-        System.out.print("listOne goodsId: " + goodsId + " \n");
-        return mGoodsRepository.findByGoodsId(goodsId);
+    public Response<GoodsEntity> listById(@PathVariable int goodsId) {
+        LOGGER.info("listOne goodsId: " + goodsId + " \n");
+        Response<GoodsEntity> response = new Response<>();
+        response.data = mGoodsRepository.findByGoodsId(goodsId);
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_NOT_FOUND);
+        }
+        return response;
     }
 
     @RequestMapping(value = GoodsConstant.PAGINATION, method = RequestMethod.GET)

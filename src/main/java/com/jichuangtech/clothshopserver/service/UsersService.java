@@ -23,6 +23,8 @@ public class UsersService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TAG);
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private SessionService sessionService;
 
     public List<UsersVO> list() {
         List<UsersEntity> all = usersRepository.findAll();
@@ -53,13 +55,14 @@ public class UsersService {
         return entity;
     }
 
-    public int getUserIdByOpenId(String openId) {
+    public int getUserIdByToken(String token) {
+        String openId  = sessionService.get(token);
         int userId = -1;
         UsersEntity entity = getUserByOpenId(openId);
         if(entity != null) {
             userId  = Math.toIntExact(entity.getUserId());
         }
-        LOGGER.info(" getUserIdByOpenId entity: " + entity + ", openId: " + openId);
+        LOGGER.info(" getUserIdByToken entity: " + entity + ", openId: " + openId);
         return userId;
     }
 }

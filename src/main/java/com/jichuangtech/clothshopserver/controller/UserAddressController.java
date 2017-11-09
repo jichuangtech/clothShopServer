@@ -1,5 +1,6 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.service.UsersService;
 import io.swagger.annotations.Api;
@@ -26,9 +27,6 @@ public class UserAddressController {
     @Autowired
     private UsersService usersService;
 
-    @Autowired
-    private SessionService sessionService;
-
     /**
      * 查找该用户的所有收货地址
      *
@@ -39,9 +37,12 @@ public class UserAddressController {
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public Response<List<UserAddressRespVO>> listAddress(@PathVariable("userId") int userId,
                                                          @RequestHeader("access_token") String accessToken) {
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
         Response<List<UserAddressRespVO>> response = new Response<>();
         response.data = userAddressService.listAddress(userId);
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ADDRESS_ALL_GET_ERROR);
+        }
         return response;
     }
 
@@ -57,6 +58,9 @@ public class UserAddressController {
     public Response<List<RegionEntity>> listRegion(@PathVariable("parentId") long parentId) {
         Response<List<RegionEntity>> response = new Response<>();
         response.data = userAddressService.listRegion(parentId);
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ADDRESS_REGION_GET_ERROR);
+        }
         return response;
     }
 
@@ -72,7 +76,7 @@ public class UserAddressController {
     public Response<String> updateDefaultAddress(@PathVariable("userId") int userId,
                                                  @PathVariable("defaultAddressId") int defaultAddressId,
                                                  @RequestHeader("access_token") String accessToken) {
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
         userAddressService.updateDefaultAddress(userId, defaultAddressId);
         return new Response<>();
     }
@@ -87,15 +91,15 @@ public class UserAddressController {
     @RequestMapping(value = "{userId}/defaultaddress", method = RequestMethod.GET)
     public Response<UserAddressRespVO> getDefaultAddress(@PathVariable("userId")int userId,
                                                          @RequestHeader("access_token") String accessToken){
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
     	UserAddressRespVO  userAddressRespVO = userAddressService.getDefaultAddress(userId);
     	Response<UserAddressRespVO> response = new Response<>();
     	response.data = userAddressRespVO;
-    	return response;
-    }
 
-    private int getUserId(String token) {
-        return usersService.getUserIdByOpenId(sessionService.get(token));
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ADDRESS_DEFAULT_GET_ERROR);
+        }
+    	return response;
     }
 
     /**
@@ -109,8 +113,11 @@ public class UserAddressController {
     public Response<UserAddressRespVO> saveUserAddress(@RequestBody UserAddressReqVO userAddressReqVO,
                                                        @RequestHeader("access_token") String accessToken) {
         Response<UserAddressRespVO> response = new Response<>();
-        userAddressReqVO.setUserId(getUserId(accessToken));
+        userAddressReqVO.setUserId(usersService.getUserIdByToken(accessToken));
         response.data = userAddressService.saveUserAddress(userAddressReqVO);
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ADDRESS_ADD_ERROR);
+        }
         return response;
     }
     
@@ -125,7 +132,7 @@ public class UserAddressController {
     public Response<String> deleteAddress(@PathVariable("userId")int userId,
                                           @PathVariable("addressId")int addressId,
                                           @RequestHeader("access_token") String accessToken){
-        userId = getUserId(accessToken);
+        userId = usersService.getUserIdByToken(accessToken);
     	userAddressService.deleteAddressByAddressId(userId,addressId);
     	return new Response<>();
     }
@@ -141,6 +148,10 @@ public class UserAddressController {
     	UserAddressRespDetailVO  userAddressRespDetailVO = userAddressService.getDetailAddress(addressId);
     	Response<UserAddressRespDetailVO> response = new Response<>();
     	response.data = userAddressRespDetailVO;
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ADDRESS_DETAIL_GET_ERROR);
+        }
     	return response;
     }
 }
