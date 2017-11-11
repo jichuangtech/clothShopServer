@@ -20,6 +20,7 @@ public class ResponseCode {
     public static final int CODE_GOODS_NOT_FOUND = 102;
     public static final int CODE_GOODS_HOT_ERROR = 103;
     public static final int CODE_GOODS_RECOMMEND_ERROR = 104;
+    public static final int CODE_GOODS_GET_ALL_ERROR = 105;
 
     //商品分类系列返回码
     public static final int CODE_GOODS_CATEGORY_D = 300;
@@ -53,6 +54,7 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_GOODS_NOT_FOUND, "goods not found");
         sCodeMsgMap.put(CODE_GOODS_HOT_ERROR, "get hot goods error");
         sCodeMsgMap.put(CODE_GOODS_RECOMMEND_ERROR, "get recommended goods error");
+        sCodeMsgMap.put(CODE_GOODS_GET_ALL_ERROR, "get all goods error");
         sCodeMsgMap.put(CODE_GOODS_CATEGORY_GET_ERROR, "get categories error");
         sCodeMsgMap.put(CODE_GOODS_CATEGORY_GET_GOODS_ERROR, "get categories'goods error");
         sCodeMsgMap.put(CODE_GOODS_CART_GET_ERROR, "get goods cart error");

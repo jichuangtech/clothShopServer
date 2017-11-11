@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -31,7 +33,7 @@ public class UsersService {
         return DomainCopyUtil.mapList(all, UsersVO.class);
     }
 
-    public void validateUser(String openId) {
+    public UsersEntity validateUser(String openId) {
         UsersEntity entity = getUserByOpenId(openId);
         LOGGER.info(" validateUser entity1: " + entity);
         if(entity == null) {
@@ -40,7 +42,20 @@ public class UsersService {
             LOGGER.info(" validateUser entity2: " + entity);
         }
 
+        return entity;
     }
+
+    public void refreshLoginInfo(UsersEntity entity, HttpServletRequest httpServletRequest) {
+        String ip = httpServletRequest.getRemoteAddr();
+        String host = httpServletRequest.getRemoteHost();
+
+        entity.setLastIp(ip);
+        entity.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+        usersRepository.save(entity);
+
+        LOGGER.info(" refreshLoginInfo ip: " + ip + ", host: " + host);
+    }
+
     public UsersEntity getUserByOpenId(String openId) {
         UsersEntity entity = usersRepository.findByOpenid(openId);
         LOGGER.info(" getUserByOpenId entity: " + entity + ", openId: " + openId);
@@ -50,6 +65,7 @@ public class UsersService {
     public UsersEntity saveUserByOpenId(String openId) {
         UsersEntity entity = new UsersEntity();
         entity.setOpenid(openId);
+        entity.setCraetedAt(new Timestamp(System.currentTimeMillis()));
         entity = usersRepository.save(entity);
         LOGGER.info(" saveUserByOpenId entity: " + entity + ", openId: " + openId);
         return entity;

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -30,6 +31,9 @@ import java.util.Random;
 @RestController
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
     @Autowired
     private SessionService sessionService;
     @Autowired
@@ -66,7 +70,7 @@ public class UserController {
         } else {
             String openid = (String) map.get("openid");
             // 进行判断是否有用户存在，不存在则进行创建
-            usersService.validateUser(openid);
+            usersService.refreshLoginInfo(usersService.validateUser(openid), httpServletRequest);
             int randomValue = new Random(10).nextInt();
             //随机去一个数当sessionId
             String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;

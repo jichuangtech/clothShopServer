@@ -16,9 +16,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SessionService {
 
+    public static final int TOKEN_EXPIRE_DURATION = 1;
     private LoadingCache<String, String> session = CacheBuilder.newBuilder()
             .maximumSize(10000)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterWrite(TOKEN_EXPIRE_DURATION, TimeUnit.MINUTES)
             .build(new CacheLoader<String, String>() {
                 public String load(String key) {
                     return "";

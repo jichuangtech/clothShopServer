@@ -42,8 +42,15 @@ public class GoodsController {
     private GoodsService mGoodsService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<GoodsEntity> list() {
-        return mGoodsRepository.findAll();
+    public Response<List<GoodsEntity>> list() {
+        Response<List<GoodsEntity>> response = new Response<>();
+        response.data = mGoodsRepository.findAll();
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_GET_ALL_ERROR);
+        }
+
+        return response;
     }
 
     @RequestMapping(value = GoodsConstant.HOT, method = RequestMethod.GET)

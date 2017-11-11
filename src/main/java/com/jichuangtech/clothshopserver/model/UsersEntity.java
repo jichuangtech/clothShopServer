@@ -47,6 +47,7 @@ public class UsersEntity {
     private String token;
     private Timestamp craetedAt;
     private Timestamp updatedAt;
+    private Timestamp lastLoginTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -395,8 +396,8 @@ public class UsersEntity {
         return craetedAt;
     }
 
-    public void setCraetedAt(Timestamp craetedAt) {
-        this.craetedAt = craetedAt;
+    public void setCraetedAt(Timestamp createdAt) {
+        this.craetedAt = createdAt;
     }
 
     @Basic
@@ -407,6 +408,16 @@ public class UsersEntity {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Basic
+    @Column(name = "last_login_time", nullable = true)
+    public Timestamp getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Timestamp lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     @Override
