@@ -1,6 +1,8 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.Token;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.utils.JsonMapper;
 import org.apache.commons.lang.StringUtils;
@@ -30,19 +32,16 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String getByOrderStatus(String username, String password) {
-        Response resp = new Response();
+    public Response<Token> login(String username, String password) {
+        Response<Token> resp = new Response();
 
         if (StringUtils.equalsIgnoreCase("admin", username) && StringUtils.equalsIgnoreCase("admin", password)) {
             String id = httpServletRequest.getSession().getId();
             sessionService.put(id, id);
-            resp.msg = "ok";
-            resp.statusCode = 200;
-            resp.data = id;
-            return JsonMapper.nonDefaultMapper().toJson(resp);
+            resp.data = new Token(id);
+        } else {
+            resp.setStatusCode(ResponseCode.CODE_LOGIN_CMS_ERROR);
         }
-        resp.msg = "no";
-        resp.statusCode = 403;
-        return JsonMapper.nonDefaultMapper().toJson(resp);
+        return resp;
     }
 }

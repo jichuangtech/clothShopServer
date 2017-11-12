@@ -7,6 +7,7 @@ package com.jichuangtech.clothshopserver.model.vo;
 public class UsersVO {
     private Long userId;
     private String nickname;
+    private String headPic;
 
     public Long getUserId() {
         return userId;
@@ -22,5 +23,13 @@ public class UsersVO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
     }
 }

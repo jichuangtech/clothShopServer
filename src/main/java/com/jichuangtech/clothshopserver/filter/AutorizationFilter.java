@@ -57,7 +57,7 @@ public class AutorizationFilter implements Filter {
         httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access-token,Content-Type");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization,access_token,Content-Type");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
 
         //不是生产环境不开启session验证
@@ -86,11 +86,12 @@ public class AutorizationFilter implements Filter {
             return;
         }
         Response resp = new Response();
-        String sessionId = req.getHeader("access_token") == null ? req.getHeader("access-token") : req.getHeader("access_token");
-        if (sessionId == null) {
-            HttpSession session = req.getSession(false);
-            sessionId = session == null ? null : session.getId();
-        }
+        String sessionId = req.getHeader("access_token");
+//        String sessionId = req.getHeader("access_token") == null ? req.getHeader("access-token") : req.getHeader("access_token");
+//        if (sessionId == null) {
+//            HttpSession session = req.getSession(false);
+//            sessionId = session == null ? null : session.getId();
+//        }
         if (sessionId == null) {
             LOGGER.info("sessionId param lost");
             resp.msg = "not found access_token in your headers";

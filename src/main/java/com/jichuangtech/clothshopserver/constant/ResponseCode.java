@@ -46,6 +46,12 @@ public class ResponseCode {
     public static final int CODE_ADDRESS_REGION_GET_ERROR = 604;
     public static final int CODE_ADDRESS_ALL_GET_ERROR = 605;
 
+    //用户系列返回码
+    public static final int CODE_USER_LIST_ERROR = 700;
+
+    //登录系列返回码
+    public static final int CODE_LOGIN_CMS_ERROR = 800;
+
     public static final Map<Integer, String> sCodeMsgMap = new HashMap();
 
     static {
@@ -66,6 +72,8 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_ADDRESS_DEFAULT_GET_ERROR, "get default address error");
         sCodeMsgMap.put(CODE_ADDRESS_REGION_GET_ERROR, "get address region error");
         sCodeMsgMap.put(CODE_ADDRESS_ALL_GET_ERROR, "get user all address error");
+        sCodeMsgMap.put(CODE_USER_LIST_ERROR, "get all user error");
+        sCodeMsgMap.put(CODE_LOGIN_CMS_ERROR, "cms login error");
     }
 
     public static String getMsg(int code) {

@@ -1,5 +1,6 @@
 package com.jichuangtech.clothshopserver.service;
 
+import com.jichuangtech.clothshopserver.model.UserInfo;
 import com.jichuangtech.clothshopserver.model.UsersEntity;
 import com.jichuangtech.clothshopserver.model.vo.UsersVO;
 import com.jichuangtech.clothshopserver.repository.UsersRepository;
@@ -45,12 +46,16 @@ public class UsersService {
         return entity;
     }
 
-    public void refreshLoginInfo(UsersEntity entity, HttpServletRequest httpServletRequest) {
+    public void refreshLoginInfo(UsersEntity entity,
+                                 HttpServletRequest httpServletRequest,
+                                 UserInfo userInfo) {
         String ip = httpServletRequest.getRemoteAddr();
         String host = httpServletRequest.getRemoteHost();
 
         entity.setLastIp(ip);
         entity.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+        entity.setNickname(userInfo.nickName);
+        entity.setHeadPic(userInfo.avatarUrl);
         usersRepository.save(entity);
 
         LOGGER.info(" refreshLoginInfo ip: " + ip + ", host: " + host);

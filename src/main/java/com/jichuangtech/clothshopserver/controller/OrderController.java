@@ -41,8 +41,12 @@ public class OrderController {
     @ApiOperation(value = "获取用户所有订单信息")
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public Response<List<OrderRespVO>> list(@PathVariable("userId") int userId,
-                                            @RequestHeader("access_token") String accessToken) {
-        userId = usersService.getUserIdByToken(accessToken);
+                                            @RequestHeader(value = "access_token") String accessToken,
+                                            @RequestHeader(value = "is_from_cms", defaultValue = "false", required = false)
+                                            boolean isFromCMS) {
+        if(!isFromCMS) {
+            userId = usersService.getUserIdByToken(accessToken);
+        }
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
         response.data = orderService.getList(userId);
         return response;

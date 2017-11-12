@@ -1,7 +1,9 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.model.Token;
+import com.jichuangtech.clothshopserver.model.UserInfo;
 import com.jichuangtech.clothshopserver.model.vo.UsersVO;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.service.UsersService;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,9 +53,11 @@ public class UserController {
      * @return
      */
     @ApiOperation(value = "小程序登录", notes = "必须要传code过来,根据这个code,服务器这边会生成一个session_key返回。当做身份验证。<br/>调用正确返回 sessionId。调用失败返回错误信息")
-    @RequestMapping(value = "/onlogin", method = RequestMethod.GET)
-    public Response<Token> onlogin(@ApiParam(name = "验证码", required = true) String code) {
+    @RequestMapping(value = "/onlogin", method = RequestMethod.POST)
+    public Response<Token> onlogin(@ApiParam(name = "验证码", required = true) String code,
+                                   @RequestBody UserInfo userInfo) {
         LOGGER.info("user.code is {}", code);
+        LOGGER.info("userInfo {}", userInfo);
         Response<Token> response = new Response<>();
         String requestUrl = wxSessionApi + "?" +
                 "appid=" + appId + "&" +
@@ -70,7 +75,7 @@ public class UserController {
         } else {
             String openid = (String) map.get("openid");
             // 进行判断是否有用户存在，不存在则进行创建
-            usersService.refreshLoginInfo(usersService.validateUser(openid), httpServletRequest);
+            usersService.refreshLoginInfo(usersService.validateUser(openid), httpServletRequest, userInfo);
             int randomValue = new Random(10).nextInt();
             //随机去一个数当sessionId
             String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
@@ -87,7 +92,12 @@ public class UserController {
 
     @ApiOperation(value = "列出所有用户", notes = "返回所有用户信息")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<UsersVO> listAll() {
-        return usersService.list();
+    public Response<List<UsersVO>> listAll() {
+        Response<List<UsersVO>> response = new Response<>();
+        response.data = usersService.list();
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_USER_LIST_ERROR);
+        }
+        return response;
     }
 }

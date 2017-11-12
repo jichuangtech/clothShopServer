@@ -219,7 +219,7 @@ public class OrderService {
 		if(orderEntityList != null && !orderEntityList.isEmpty()) {
 			return getGoodsDetailInfo(orderEntityList);
 		} else {
-			return new ArrayList<OrderRespVO>();
+			return new ArrayList<>();
 		}
 
 	}
