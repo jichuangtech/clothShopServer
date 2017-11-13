@@ -104,7 +104,12 @@ public class OrderController {
                                            @RequestHeader("access_token") String accessToken) {
         Response<OrderRespVO> response = new Response<>();
         userId = usersService.getUserIdByToken(accessToken);
+        orderReqVO.setUserId(userId);
         response.data = orderService.saveOrder(userId, orderReqVO);
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ORDER_CREATE_ERROR);
+        }
         return response;
     }
     

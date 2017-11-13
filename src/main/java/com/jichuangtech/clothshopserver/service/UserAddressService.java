@@ -232,7 +232,7 @@ public class UserAddressService {
 	 */
 	public UserAddressRespDetailVO getDetailAddress(int addressId){
 		UserAddressEntity userAddressEntity = userAddressRepository.findOne(addressId);
-		return createUserAddressRespDetailVO(userAddressEntity);
+		return userAddressEntity == null ? null : createUserAddressRespDetailVO(userAddressEntity);
 	}
 
 	

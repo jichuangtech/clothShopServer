@@ -41,6 +41,7 @@ public class AutorizationFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         //不用进行身份验证的URI
         filterUri.add("/");
+        filterUri.add("/api/pay/wxNotify"); //微信支付的后，微信服务器的回调信息
         filterUri.add("/login");
         filterUri.add("/onlogin");
         filterUri.add("/configuration/ui");

@@ -238,7 +238,10 @@ public class OrderService {
 		//写入订单商品表
 		createOrderGoods(orderId,goodsReqVOList);
 		orderRespVO.setOrderId(orderId);
+		orderRespVO.setUserId(userId);
+		orderRespVO.setOrderStatus(orderEntity.getOrderStatus());
 		orderRespVO.setTotalAmount(orderEntity.getTotalAmount());
+		orderRespVO.setOrderSn(orderEntity.getOrderSn());
 		return orderRespVO;
 	}
 

@@ -37,6 +37,7 @@ public class ResponseCode {
     public static final int CODE_ORDER_NOT_FOUND = 501;
     public static final int CODE_ORDER_GET_ERROR = 502;
     public static final int CODE_ORDER_DETAIL_GET_ERROR = 503;
+    public static final int CODE_ORDER_CREATE_ERROR = 504;
 
     //收货地址系列返回码
     public static final int CODE_ADDRESS_x = 600;
@@ -51,6 +52,9 @@ public class ResponseCode {
 
     //登录系列返回码
     public static final int CODE_LOGIN_CMS_ERROR = 800;
+
+    //支付系列返回码
+    public static final int CODE_PREF_PAY_ERROR = 900;
 
     public static final Map<Integer, String> sCodeMsgMap = new HashMap();
 
@@ -74,6 +78,8 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_ADDRESS_ALL_GET_ERROR, "get user all address error");
         sCodeMsgMap.put(CODE_USER_LIST_ERROR, "get all user error");
         sCodeMsgMap.put(CODE_LOGIN_CMS_ERROR, "cms login error");
+        sCodeMsgMap.put(CODE_PREF_PAY_ERROR, "pref pay error");
+        sCodeMsgMap.put(CODE_ORDER_CREATE_ERROR, "create order error");
     }
 
     public static String getMsg(int code) {
