@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.Collections;
 import java.util.List;
 
 @Api(description = "订单模块接口")
@@ -49,6 +50,12 @@ public class OrderController {
         }
         Response<List<OrderRespVO>> response = new Response<List<OrderRespVO>>();
         response.data = orderService.getList(userId);
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_ORDER_GET_ERROR);
+        } else {
+            Collections.reverse(response.data);
+        }
         return response;
     }
 
@@ -85,8 +92,11 @@ public class OrderController {
         Response<List<OrderRespVO>> response = new Response<>();
         userId = usersService.getUserIdByToken(accessToken);
         response.data = orderService.getByOrderStatus(orderStatus, userId);
+
         if(response.data == null) {
             response.setStatusCode(ResponseCode.CODE_ORDER_GET_ERROR);
+        } else {
+            Collections.reverse(response.data);
         }
         return response;
     }
@@ -123,6 +133,7 @@ public class OrderController {
                                               @PathVariable("orderId") int orderId,
                                               @PathVariable("orderStatus") byte orderStatus,
                                               @RequestHeader("access_token") String accessToken){
+        LOGGER.info("updateOrderStatus orderId: " + orderId + ", orderStatus: " + orderStatus);
         userId = usersService.getUserIdByToken(accessToken);
     	orderService.updateOrderStatusByOrderId(userId,orderId,orderStatus);
     	Response<String> response = new Response<String>();
