@@ -512,6 +512,7 @@ public class UsersEntity {
         return "UsersEntity{" +
                 "userId=" + userId +
                 ", openid='" + openid + '\'' +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 }

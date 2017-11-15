@@ -152,13 +152,13 @@ public class GoodsCartService {
         if(entity != null) {
             mGoodsCartRepository.delete(mGoodsCartRepository.findById(cartId));
         } else {
-            response.statusCode = -1;
-            response.msg = "要删除购物车不存在, id: " + cartId;
+            response.setStatusCode(ResponseCode.CODE_GOODS_CART_DELETE_NOT_FOUND_ERROR);
         }
         return response;
     }
 
     public Response deleteCart(int[] cartIds) {
+
         Response response = new Response();
         for(int cartId : cartIds) {
             response = deleteCart(cartId);

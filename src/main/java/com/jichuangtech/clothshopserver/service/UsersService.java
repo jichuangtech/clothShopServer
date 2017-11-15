@@ -58,7 +58,7 @@ public class UsersService {
         entity.setHeadPic(userInfo.avatarUrl);
         usersRepository.save(entity);
 
-        LOGGER.info(" refreshLoginInfo ip: " + ip + ", host: " + host);
+        LOGGER.info(" refreshLoginInfo ip: " + ip + ", host: " + host + ", nickname: "  + userInfo.nickName);
     }
 
     public UsersEntity getUserByOpenId(String openId) {

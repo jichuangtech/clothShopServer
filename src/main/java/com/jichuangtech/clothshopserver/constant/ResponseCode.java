@@ -31,6 +31,7 @@ public class ResponseCode {
     public static final int CODE_GOODS_CART_x = 400;
     public static final int CODE_GOODS_CART_GET_ERROR = 401;
     public static final int CODE_GOODS_CART_ADD_ERROR = 402;
+    public static final int CODE_GOODS_CART_DELETE_NOT_FOUND_ERROR = 403;
 
     //订单系列返回码
     public static final int CODE_ORDER_x = 500;
@@ -80,6 +81,7 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_LOGIN_CMS_ERROR, "cms login error");
         sCodeMsgMap.put(CODE_PREF_PAY_ERROR, "pref pay error");
         sCodeMsgMap.put(CODE_ORDER_CREATE_ERROR, "create order error");
+        sCodeMsgMap.put(CODE_GOODS_CART_DELETE_NOT_FOUND_ERROR, "delete goodsCart error : cart not found..");
     }
 
     public static String getMsg(int code) {

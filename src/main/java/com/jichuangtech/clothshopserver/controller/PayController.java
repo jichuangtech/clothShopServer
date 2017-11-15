@@ -4,6 +4,7 @@ import com.jichuangtech.clothshopserver.constant.Constant;
 import com.jichuangtech.clothshopserver.constant.PayConstant;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.PayInfo;
+import com.jichuangtech.clothshopserver.model.PayRequest;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.utils.IpUtils;
@@ -40,8 +41,9 @@ public class PayController {
      * @Description: 发起微信支付
      * @param request
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public Response<PayInfo> wxPay(@RequestHeader("access_token") String accessToken, HttpServletRequest request){
+    @RequestMapping(method = RequestMethod.POST)
+    public Response<PayInfo> wxPay(@RequestHeader("access_token") String accessToken,
+                                   HttpServletRequest request, @RequestBody PayRequest payRequest){
         String openid = sessionService.get(accessToken);
         Response<PayInfo> response = new Response<>();
         try{
@@ -51,18 +53,17 @@ public class PayController {
             String body = "金凤针织商品购买测试";
             //获取客户端的ip地址
             String spbill_create_ip = IpUtils.getIpAddr(request);
-            String orderSn = "123456";
             //人民币 分为单位
-            int totalFee = 1;
-
+//            int totalAmount = 1;
+            int totalAmount = payRequest.getTotalAmount();
             //组装参数，用户生成统一下单接口的签名
             Map<String, String> packageParams = new HashMap<>();
             packageParams.put("appid", WxPayConfig.appid);
             packageParams.put("mch_id", WxPayConfig.mch_id);
             packageParams.put("nonce_str", nonce_str);
             packageParams.put("body", body);
-            packageParams.put("out_trade_no", orderSn);//商户订单号
-            packageParams.put("total_fee", String.valueOf(totalFee));//支付金额，这边需要转成字符串类型，否则后面的签名会失败
+            packageParams.put("out_trade_no", payRequest.getOrderSn());//商户订单号
+            packageParams.put("total_fee", String.valueOf(totalAmount));//支付金额，这边需要转成字符串类型，否则后面的签名会失败
             packageParams.put("spbill_create_ip", spbill_create_ip);
             packageParams.put("notify_url", WxPayConfig.NOTIFY_URL);//支付成功后的回调地址
             packageParams.put("trade_type", WxPayConfig.TRADE_TYPE);//支付方式
@@ -80,9 +81,10 @@ public class PayController {
                     + "<nonce_str>" + nonce_str + "</nonce_str>"
                     + "<notify_url>" + WxPayConfig.NOTIFY_URL + "</notify_url>"
                     + "<openid>" + openid + "</openid>"
-                    + "<out_trade_no>" + orderSn + "</out_trade_no>"
+                    + "<out_trade_no>" + payRequest.getOrderSn() + "</out_trade_no>"
                     + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
-                    + "<total_fee>" + totalFee + "</total_fee>"
+                    + "<total_fee>" + totalAmount + "</total_fee>"
+//                    + "<total_fee>" + payRequest.getTotalAmount() + "</total_fee>"
                     + "<trade_type>" + WxPayConfig.TRADE_TYPE + "</trade_type>"
                     + "<sign>" + mysign + "</sign>"
                     + "</xml>";
@@ -157,7 +159,7 @@ public class PayController {
             //验证签名是否正确
             if(PayUtil.verify(PayUtil.createLinkString(map), (String)map.get("sign"), WxPayConfig.key, "utf-8")){
                 /**此处添加自己的业务逻辑代码start**/
-                // TODO: 2017/11/12
+                // TODO: 2017/11/12 比如进行订单的修改
 
                 /**此处添加自己的业务逻辑代码end**/
                 //通知微信服务器已经支付成功
