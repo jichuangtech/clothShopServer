@@ -8,6 +8,7 @@ public class UsersVO {
     private Long userId;
     private String nickname;
     private String headPic;
+    private Integer loginCount;
 
     public Long getUserId() {
         return userId;
@@ -31,5 +32,13 @@ public class UsersVO {
 
     public void setHeadPic(String headPic) {
         this.headPic = headPic;
+    }
+
+    public Integer getLoginCount() {
+        return loginCount;
+    }
+
+    public void setLoginCount(Integer loginCount) {
+        this.loginCount = loginCount;
     }
 }

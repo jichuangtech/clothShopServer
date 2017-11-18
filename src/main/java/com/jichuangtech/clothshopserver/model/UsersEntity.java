@@ -44,6 +44,7 @@ public class UsersEntity {
     private Integer firstLeader;
     private Integer secondLeader;
     private Integer thirdLeader;
+    private Integer loginCount;
     private String token;
     private Timestamp craetedAt;
     private Timestamp updatedAt;
@@ -378,6 +379,16 @@ public class UsersEntity {
 
     public void setThirdLeader(Integer thirdLeader) {
         this.thirdLeader = thirdLeader;
+    }
+
+    @Basic
+    @Column(name = "login_count", nullable = true)
+    public Integer getloginCount() {
+        return loginCount;
+    }
+
+    public void setloginCount(Integer loginCount) {
+        this.loginCount = loginCount;
     }
 
     @Basic
