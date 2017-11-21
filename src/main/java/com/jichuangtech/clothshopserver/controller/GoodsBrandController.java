@@ -37,6 +37,15 @@ public class GoodsBrandController {
         return mGoodsBrandRepository.findById(goodsBrandId);
     }
 
+    /**
+     * 使用InfoController中获取图片的方法
+     * @param request
+     * @param response
+     * @param model
+     * @param picName
+     * @return
+     */
+    @Deprecated
     @RequestMapping(value = GoodsConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
     public String getGoodsPicture(HttpServletRequest request,
                                   HttpServletResponse response, Model model, @PathVariable String picName) {

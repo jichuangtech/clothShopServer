@@ -67,6 +67,15 @@ public class GoodsCategoryController {
         return response;
     }
 
+    /**
+     * * 使用InfoController中获取图片的方法
+     * @param request
+     * @param response
+     * @param model
+     * @param picName
+     * @return
+     */
+    @Deprecated
     @RequestMapping(value = GoodsCategoryConstant.PICTURE + "/{picName:.+}", method = RequestMethod.GET)
     public String getGoodsCategoryPicture(HttpServletRequest request,
                                           HttpServletResponse response, Model model, @PathVariable String picName) {

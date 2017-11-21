@@ -127,7 +127,7 @@ public class GoodsService {
         GoodsEntity entity = new GoodsEntity();
         if (vo.getImage() != null) {
             try {
-                File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, FilenameUtils.getBaseName(vo.getImage().getOriginalFilename()));
+                File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, vo.getImage().getOriginalFilename());
                 if (!file.exists()) {
                     file.createNewFile();
                 }
