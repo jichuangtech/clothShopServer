@@ -15,11 +15,8 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ScheduledFuture;
 
 /**
  * Created by yangjb on 2017/8/18.
@@ -28,7 +25,7 @@ import java.util.concurrent.ScheduledFuture;
 @Component("autorizationFilter")
 public class AutorizationFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(AutorizationFilter.class);
-    public static final String CLOTHSHOPSERVER = "/clothshopserver";
+    public static final String CLOTH_SHOP_SERVER = "/clothshopserver";
     private final Set<String> filterUri = Sets.newHashSet();
     private static final String PRODUCT_REQUESTURI_PRREF = "/clothshopserver";
 
@@ -72,7 +69,7 @@ public class AutorizationFilter implements Filter {
         String requestURI = req.getRequestURI();
         String remoteHost = req.getRemoteHost();
         LOGGER.info("requestURI : " + requestURI + ", remoteHost: " + remoteHost);
-        if (StringUtils.startsWithIgnoreCase(requestURI, CLOTHSHOPSERVER)) {
+        if (StringUtils.startsWithIgnoreCase(requestURI, CLOTH_SHOP_SERVER)) {
             requestURI = requestURI.substring(16);
         }
         if (filterUri.contains(requestURI)) {
@@ -82,6 +79,7 @@ public class AutorizationFilter implements Filter {
         //过滤一些静态资源,如果不用swagger可以考虑注释掉
         if (StringUtils.endsWith(requestURI, "js") || StringUtils.endsWith(requestURI, "css")
                 || StringUtils.endsWith(requestURI, "html") || StringUtils.endsWith(requestURI, "png")
+                || StringUtils.startsWith(requestURI, "/api/info")
                 || StringUtils.endsWith(requestURI, "jpg") || StringUtils.endsWith(requestURI, "ttf")) {
             chain.doFilter(request, response);
             return;
