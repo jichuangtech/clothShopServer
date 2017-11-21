@@ -1,20 +1,25 @@
 package com.jichuangtech.clothshopserver.utils;
 
+import com.jichuangtech.clothshopserver.constant.Constant;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.IMAGE_SUFFIX;
-import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SERVER_IMAGE_PATH;
 
 /**
  * Created by Bingo on 2017/8/3.
  */
 public class PictureUtils {
-
-    public static void writePic(HttpServletResponse response, String serverPath, String picName) {
-        System.out.println("getPicture :" + picName);
+    private static final String TAG = PictureUtils.class.getSimpleName();
+    private static Logger LOGGER = LoggerFactory.getLogger(Constant.MODULE_NAME);
+    public static int getPicture(HttpServletResponse response, String serverPath, String picName) {
+        LOGGER.info("getPicture :" + picName);
+        int resultCode = 200;
         FileInputStream fis = null;
         OutputStream os = null;
         try {
@@ -27,7 +32,8 @@ public class PictureUtils {
                 os.flush();
             }
         } catch (Exception e) {
-            System.out.println(" getPicture e: " + e.getMessage());
+            resultCode = ResponseCode.CODE_PIC_SAVE_ERROR;
+            LOGGER.info("getPicture e: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
@@ -44,5 +50,22 @@ public class PictureUtils {
             }
         }
 
+        return resultCode;
+    }
+
+
+    public static int deletePicture(String serverPath, String picName) {
+        int resultCode = ResponseCode.CODE_PIC_DELETE_ERROR;
+        LOGGER.info(" deletePicture path: " + serverPath + picName);
+        try {
+            File file = new File(serverPath, picName);
+            if (file.exists() && file.delete()) {
+                resultCode = ResponseCode.CODE_SUCCESS;
+            }
+        } catch (Exception e) {
+            LOGGER.info(" deletePicture error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultCode;
     }
 }

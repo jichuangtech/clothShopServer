@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SessionService {
 
-    public static final int TOKEN_EXPIRE_DURATION = 1;
+    public static final int TOKEN_EXPIRE_DURATION = 5;
     private LoadingCache<String, String> session = CacheBuilder.newBuilder()
             .maximumSize(10000)
             .expireAfterWrite(TOKEN_EXPIRE_DURATION, TimeUnit.MINUTES)

@@ -26,6 +26,7 @@ public class ResponseCode {
     public static final int CODE_GOODS_CATEGORY_D = 300;
     public static final int CODE_GOODS_CATEGORY_GET_ERROR = 301;
     public static final int CODE_GOODS_CATEGORY_GET_GOODS_ERROR = 302;
+    public static final int CODE_GOODS_CATEGORY_SAVE_PIC_ERROR = 303;
 
     //购物车分类系列返回码
     public static final int CODE_GOODS_CART_x = 400;
@@ -57,10 +58,14 @@ public class ResponseCode {
     //支付系列返回码
     public static final int CODE_PREF_PAY_ERROR = 900;
 
+    //图片
+    public static final int CODE_PIC_SAVE_ERROR = 1000;
+    public static final int CODE_PIC_DELETE_ERROR = 1001;
+
     public static final Map<Integer, String> sCodeMsgMap = new HashMap();
 
     static {
-        sCodeMsgMap.put(CODE_SUCCESS, " success ");
+        sCodeMsgMap.put(CODE_SUCCESS, " success... ");
         sCodeMsgMap.put(CODE_DELETE_NOT_FOUND, "goods cart not found ");
         sCodeMsgMap.put(CODE_GOODS_NOT_FOUND, "goods not found");
         sCodeMsgMap.put(CODE_GOODS_HOT_ERROR, "get hot goods error");
@@ -82,6 +87,9 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_PREF_PAY_ERROR, "pref pay error");
         sCodeMsgMap.put(CODE_ORDER_CREATE_ERROR, "create order error");
         sCodeMsgMap.put(CODE_GOODS_CART_DELETE_NOT_FOUND_ERROR, "delete goodsCart error : cart not found..");
+        sCodeMsgMap.put(CODE_GOODS_CATEGORY_SAVE_PIC_ERROR, "save category pic error... ");
+        sCodeMsgMap.put(CODE_PIC_SAVE_ERROR, " save picture error...");
+        sCodeMsgMap.put(CODE_PIC_DELETE_ERROR, " delete picture error...");
     }
 
     public static String getMsg(int code) {

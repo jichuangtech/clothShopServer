@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.IMAGE_SUFFIX;
 import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SERVER_IMAGE_PATH;
 
 /**
@@ -41,7 +40,7 @@ public class GoodsBrandController {
     @RequestMapping(value = GoodsConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
     public String getGoodsPicture(HttpServletRequest request,
                                   HttpServletResponse response, Model model, @PathVariable String picName) {
-        PictureUtils.writePic(response, SERVER_IMAGE_PATH, picName);
+        PictureUtils.getPicture(response, SERVER_IMAGE_PATH, picName);
         return "getGoodsPicture success ...";
     }
 }

@@ -9,7 +9,5 @@ public class GoodsCategoryConstant extends Constant{
 
     public static final String LIST_GOODS  = "/listGoods";
 
-    public static final String SERVER_IMAGE_PATH = "//home/image/clothshop/";
-
     public static final String IMAGE_SUFFIX = ".jpg";
 }

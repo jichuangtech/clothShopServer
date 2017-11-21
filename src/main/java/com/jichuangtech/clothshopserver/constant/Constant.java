@@ -9,4 +9,5 @@ public class Constant {
     public static final String PICTURE = "/picture";
     public static final String LIST = "/list";
     public static final String LIST_BY_ID = "/listById";
+    public static final String SERVER_IMAGE_PATH = "//home/image/clothshop/";
 }
