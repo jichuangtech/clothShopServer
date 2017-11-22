@@ -12,6 +12,7 @@ import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
 import com.jichuangtech.clothshopserver.service.GoodsService;
 import com.jichuangtech.clothshopserver.utils.PaginationUtils;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,6 +133,14 @@ public class GoodsController {
         }
         int code = mGoodsService.saveGoods(goodsAddVO);
         LOGGER.info(" saveGoods goodsVo: " + goodsAddVO);
+        response.setStatusCode(code);
+        return response;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public Response deleteGoods(@ApiParam(name = "要被删除的商品的ID", required = true) @RequestParam int goodsIds) {
+        Response response = new Response();
+        int code = mGoodsService.deleteGoods(goodsIds);
         response.setStatusCode(code);
         return response;
     }

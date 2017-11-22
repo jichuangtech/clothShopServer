@@ -1,11 +1,13 @@
 package com.jichuangtech.clothshopserver.service;
 
+import com.jichuangtech.clothshopserver.constant.Constant;
 import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.GoodsAddVO;
 import com.jichuangtech.clothshopserver.repository.*;
+import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Bingo on 2017/9/9.
@@ -154,5 +157,32 @@ public class GoodsService {
         return newGoods != null ? newGoods.getGoodsId() : -1;
     }
 
+    public int deleteGoods(int goodsIs) {
+        int code = ResponseCode.CODE_SUCCESS;
+        GoodsEntity entity = mGoodsRepository.findByGoodsId(goodsIs);
+        LOGGER.info(" deleteGoods id: " + goodsIs + ", entity: " + entity);
 
+        if (entity != null) {
+            mGoodsRepository.delete(entity);
+            PictureUtils.deletePicture(Constant.SERVER_IMAGE_PATH, entity.getOriginalImg());
+            deleteGoodsColors(entity.getGoodsColors());
+            deleteGoodsDetailImgs(entity.getGoodsDetailImages());
+            deleteGoodsSpecs(entity.getGoodsSpecs());
+        } else {
+            code = ResponseCode.CODE_GOODS_DELETE_NOT_FOUND;
+        }
+        return code;
+    }
+
+    private void deleteGoodsDetailImgs(List<GoodsImagesEntity> images) {
+        mGoodsImageRepository.deleteInBatch(images);
+    }
+
+    private void deleteGoodsColors(List<GoodsColorEntity> colors) {
+        mGoodsColorRepository.deleteInBatch(colors);
+    }
+
+    private void deleteGoodsSpecs(List<GoodsSpecificationEntity> specs) {
+        mGoodsSpecificationRepository.deleteInBatch(specs);
+    }
 }

@@ -12,8 +12,6 @@ public class ResponseCode {
     public static final int TOKEN_INVALID = 102;
     public static final int CODE_SUCCESS = 200;
 
-    public static final int CODE_DELETE_NOT_FOUND = 201;
-
     //商品系列返回码
     public static final int CODE_GOODS_x = 100;
     public static final int CODE_GOODS_ADD_ERROR = 101;
@@ -21,12 +19,14 @@ public class ResponseCode {
     public static final int CODE_GOODS_HOT_ERROR = 103;
     public static final int CODE_GOODS_RECOMMEND_ERROR = 104;
     public static final int CODE_GOODS_GET_ALL_ERROR = 105;
+    public static final int CODE_GOODS_DELETE_NOT_FOUND = 106;
 
     //商品分类系列返回码
     public static final int CODE_GOODS_CATEGORY_D = 300;
     public static final int CODE_GOODS_CATEGORY_GET_ERROR = 301;
     public static final int CODE_GOODS_CATEGORY_GET_GOODS_ERROR = 302;
     public static final int CODE_GOODS_CATEGORY_SAVE_PIC_ERROR = 303;
+    public static final int CODE_CATEGORY_DELETE_NOT_FOUND = 304;
 
     //购物车分类系列返回码
     public static final int CODE_GOODS_CART_x = 400;
@@ -66,7 +66,7 @@ public class ResponseCode {
 
     static {
         sCodeMsgMap.put(CODE_SUCCESS, " success... ");
-        sCodeMsgMap.put(CODE_DELETE_NOT_FOUND, "goods cart not found ");
+        sCodeMsgMap.put(CODE_CATEGORY_DELETE_NOT_FOUND, "goods cart not found ");
         sCodeMsgMap.put(CODE_GOODS_NOT_FOUND, "goods not found");
         sCodeMsgMap.put(CODE_GOODS_HOT_ERROR, "get hot goods error");
         sCodeMsgMap.put(CODE_GOODS_RECOMMEND_ERROR, "get recommended goods error");
@@ -90,6 +90,7 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_GOODS_CATEGORY_SAVE_PIC_ERROR, "save category pic error... ");
         sCodeMsgMap.put(CODE_PIC_SAVE_ERROR, " save picture error...");
         sCodeMsgMap.put(CODE_PIC_DELETE_ERROR, " delete picture error...");
+        sCodeMsgMap.put(CODE_GOODS_DELETE_NOT_FOUND, " delete goods error : goods not found..");
     }
 
     public static String getMsg(int code) {
