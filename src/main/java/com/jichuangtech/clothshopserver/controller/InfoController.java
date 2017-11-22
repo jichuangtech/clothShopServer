@@ -55,7 +55,7 @@ public class InfoController {
         return mColorRepository.findAll();
     }
 
-    @RequestMapping(value = InfoConstant.PICTURE + "/{picName}", method = RequestMethod.GET)
+    @RequestMapping(value = InfoConstant.PICTURE + "/{picName:.+}", method = RequestMethod.GET)
     public Response getPicture(HttpServletResponse response, @PathVariable String picName) {
         Response res = new Response();
         res.setStatusCode(PictureUtils.getPicture(response, SERVER_IMAGE_PATH, picName));
