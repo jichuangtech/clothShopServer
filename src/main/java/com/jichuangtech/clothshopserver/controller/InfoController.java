@@ -40,15 +40,24 @@ public class InfoController {
     private GoodsRepository mGoodsRepository;
 
     @Autowired
-    private GoodsService mGoodsService;
-
-    @Autowired
     private ColorRepository mColorRepository;
     @Autowired
     private GoodsCategoryRepository mGoodsCategoryRepository;
 
     @Autowired
     private GoodsCategoryService mGoodsCategoryService;
+
+    @ApiOperation(value = "根据商品Id来获取商品信息", notes = "不需要经过token")
+    @RequestMapping(value = InfoConstant.GOODS + "/{goodsId}", method = RequestMethod.GET)
+    public Response<GoodsEntity> listById(@PathVariable int goodsId) {
+        Response<GoodsEntity> response = new Response<>();
+        response.data = mGoodsRepository.findByGoodsId(goodsId);
+
+        if(response.data == null) {
+            response.setStatusCode(ResponseCode.CODE_GOODS_NOT_FOUND);
+        }
+        return response;
+    }
 
     @RequestMapping(InfoConstant.COLOR)
     public List<ColorEntity> getColors () {
