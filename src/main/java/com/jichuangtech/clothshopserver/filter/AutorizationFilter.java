@@ -86,11 +86,6 @@ public class AutorizationFilter implements Filter {
         }
         Response resp = new Response();
         String sessionId = req.getHeader("access_token");
-//        String sessionId = req.getHeader("access_token") == null ? req.getHeader("access-token") : req.getHeader("access_token");
-//        if (sessionId == null) {
-//            HttpSession session = req.getSession(false);
-//            sessionId = session == null ? null : session.getId();
-//        }
         if (sessionId == null) {
             LOGGER.info("sessionId param lost");
             resp.msg = "not found access_token in your headers";

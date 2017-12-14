@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Bingo on 2017/9/9.
  */
 public class GoodsAddVO {
+    private int goodsId = -1;
     private String goodsName;
 
     private int categoryId;
@@ -25,7 +26,7 @@ public class GoodsAddVO {
     //    private List<Spec> specs;
     private List<Integer> colorIds;
     private MultipartFile image; //商品显示图片
-    private List<String> detailInfoImages;  //详细信息的图片列表
+    private List<MultipartFile> detailInfoImages;  //详细信息的图片列表
     private String kgPrice;
     private String codePrice;
 
@@ -160,17 +161,27 @@ public class GoodsAddVO {
 //        this.image = image;
 //    }
 
-    public List<String> getDetailInfoImages() {
+    public List<MultipartFile> getDetailInfoImages() {
         return detailInfoImages;
     }
 
-    public void setDetailInfoImages(List<String> detailInfoImages) {
+    public void setDetailInfoImages(List<MultipartFile> detailInfoImages) {
         this.detailInfoImages = detailInfoImages;
+    }
+
+
+    public int getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
     }
 
     @Override
     public String toString() {
         return "GoodsAddVO{" +
+                "goodsId='" + goodsId + '\'' +
                 "goodsName='" + goodsName + '\'' +
                 ", categoryId=" + categoryId +
                 ", goodsSn='" + goodsSn + '\'' +

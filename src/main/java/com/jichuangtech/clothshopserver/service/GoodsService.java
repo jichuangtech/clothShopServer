@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class GoodsService {
     private GoodsImageRepository mGoodsImageRepository;
 
     public int saveGoods(GoodsAddVO goodsAddVO) {
-        int code = 200;
+        int code = ResponseCode.CODE_SUCCESS;
         //（1）保存到商品
         int goodsId = saveGoodsEntity(goodsAddVO);
         LOGGER.info(" saveGoods goodsId: " + goodsId);
@@ -52,26 +53,41 @@ public class GoodsService {
         //（2）颜色的保存
         code = saveGoodsColors(goodsId, goodsAddVO);
         LOGGER.info("saveGoodsColors code: " + code);
-        if (code == 200) {
+        if (code == ResponseCode.CODE_SUCCESS) {
             //（3）规格的保存
             code = saveGoodsSpec(goodsId, goodsAddVO);
             LOGGER.info(" saveGoodsSpec code: " + code);
         }
 
         //（4）参数图片介绍
-        // TODO: 2017/9/9
         code = saveGoodsDetailInfoImages(goodsId, goodsAddVO);
         return code;
     }
 
     private int saveGoodsDetailInfoImages(int goodsId, GoodsAddVO vo) {
-        int code = 200;
-//        for (String image : vo.getDetailInfoImages()) {
-//            GoodsImagesEntity entity = new GoodsImagesEntity();
-//            entity.setImageUrl(image);
-//            entity.setGoodsId(goodsId);
-//            mGoodsImageRepository.save(entity);
-//        }
+        int code = ResponseCode.CODE_SUCCESS;
+        if (vo.getDetailInfoImages() == null) {
+            code = -1;
+        } else {
+            for (MultipartFile image : vo.getDetailInfoImages()) {
+                GoodsImagesEntity entity = new GoodsImagesEntity();
+                entity.setImageUrl(image.getOriginalFilename());
+                entity.setGoodsId(goodsId);
+                mGoodsImageRepository.save(entity);
+
+                try {
+                    File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, image.getOriginalFilename());
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+
+                    FileUtils.writeByteArrayToFile(file, image.getBytes());
+                } catch (IOException e) {
+                    LOGGER.error(" saveGoodsDetailInfoImages error image.name: " + image.getOriginalFilename());
+                    e.printStackTrace();
+                }
+            }
+        }
         return code;
     }
 
@@ -138,10 +154,11 @@ public class GoodsService {
                 FileUtils.writeByteArrayToFile(file, vo.getImage().getBytes());
                 entity.setOriginalImg(vo.getImage().getOriginalFilename());
             } catch (IOException e) {
+                LOGGER.error("saveGoodsEntity error pic name: " + vo.getImage().getOriginalFilename());
                 e.printStackTrace();
             }
         }
-        // TODO: 2017/11/2 保存商品显示图片
+        entity.setGoodsId(vo.getGoodsId());
         entity.setGoodsName(vo.getGoodsName());
         entity.setCatId(vo.getCategoryId());
         entity.setGoodsSn(vo.getGoodsSn());

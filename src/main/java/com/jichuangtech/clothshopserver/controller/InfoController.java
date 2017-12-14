@@ -74,7 +74,7 @@ public class InfoController {
         return response;
     }
 
-    @ApiOperation(value = "获取全部商品分类", notes = "不需要经过token")
+    @ApiOperation(value = "获取某个商品分类下面的商品", notes = "不需要经过token")
     @RequestMapping(value = InfoConstant.GOODS_CATEGORIES + "/{goodsCategoryId}" + InfoConstant.GOODS,
             method = RequestMethod.GET)
     public Response<List<GoodsEntity>> listGoodsFromCateById(@PathVariable int goodsCategoryId) {
