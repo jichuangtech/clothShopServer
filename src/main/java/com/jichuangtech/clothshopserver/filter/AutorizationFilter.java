@@ -48,7 +48,7 @@ public class AutorizationFilter implements Filter {
         filterUri.add("/swagger-ui.html");
         filterUri.add("/v2/api-docs");
         filterUri.add(UserConstant.API_USER + UserConstant.LOGIN);
-        filterUri.add(UserConstant.API_USER + UserConstant.LOGIN);
+        filterUri.add(UserConstant.API_USER + UserConstant.REGISTER);
         filterUri.add(UserConstant.API_USER + UserConstant.LOGOUT);
     }
 
