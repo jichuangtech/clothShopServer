@@ -66,6 +66,7 @@ public class ResponseCode {
     public static final int CODE_USER_NOT_FOUND = 1100;
     public static final int CODE_PASSWORD_WRONG = 1101;
     public static final int CODE_USER_ALREADY_EXIST = 1102;
+    public static final int CODE_LOGOUT_ERROR_HAS_NOT_LOGIN = 1103;
 
     public static final Map<Integer, String> sCodeMsgMap = new HashMap();
 
@@ -99,6 +100,7 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_USER_NOT_FOUND, " user not found...");
         sCodeMsgMap.put(CODE_PASSWORD_WRONG, " password wrong...");
         sCodeMsgMap.put(CODE_USER_ALREADY_EXIST, " user already exist...");
+        sCodeMsgMap.put(CODE_LOGOUT_ERROR_HAS_NOT_LOGIN, " logout error has not login...");
     }
 
     public static String getMsg(int code) {

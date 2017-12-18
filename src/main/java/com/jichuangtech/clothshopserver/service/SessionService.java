@@ -49,6 +49,10 @@ public class SessionService {
         mWxSession.put(key, value);
     }
 
+    public void removeAppItem(String key) {
+        mAppSession.invalidate(key);
+    }
+
     public void putApp(String key, String value) {
         mAppSession.put(key, value);
     }

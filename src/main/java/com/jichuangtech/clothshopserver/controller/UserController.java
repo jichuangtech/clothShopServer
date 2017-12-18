@@ -115,6 +115,20 @@ public class UserController {
         return response;
     }
 
+    @RequestMapping(value = UserConstant.API_USER + UserConstant.LOGOUT, method = RequestMethod.POST)
+    public Response logoutFromApp(@RequestBody LogoutInfo info) {
+        Response response = new Response();
+        if(info.token == null || sessionService.get(info.token) == null) {
+            response.setStatusCode(ResponseCode.CODE_LOGOUT_ERROR_HAS_NOT_LOGIN);
+        } else {
+            sessionService.removeAppItem(info.token);
+        }
+        LOGGER.info(" logoutFromApp token: " + info + ", response: " + response);
+        return response;
+    }
+
+
+
     @ApiOperation(value = "列出所有用户", notes = "返回所有用户信息")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Response<List<UsersVO>> listAll() {
