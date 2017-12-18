@@ -54,7 +54,7 @@ public class UserController {
      */
     @ApiOperation(value = "小程序登录", notes = "必须要传code过来,根据这个code,服务器这边会生成一个session_key返回。当做身份验证。<br/>调用正确返回 sessionId。调用失败返回错误信息")
     @RequestMapping(value = "/onlogin", method = RequestMethod.POST)
-    public Response<Token> onlogin(@ApiParam(name = "验证码", required = true) String code,
+    public Response<Token> loginFromWxApp(@ApiParam(name = "验证码", required = true) String code,
                                    @RequestBody UserInfo userInfo) {
         LOGGER.info("user.code is {}", code);
         LOGGER.info("userInfo {}", userInfo);
@@ -83,11 +83,20 @@ public class UserController {
             LOGGER.info("onlogin sessionKey: " + sessionKey
                     + ", openid: " + openid
                     + ", sessionThirdId: " + sessionThirdId);
-            Token token = new Token(sessionThirdId);
-            response.data = token;
+            response.data = new Token(sessionThirdId);
         }
 
         return response;
+    }
+
+    public Response<Token> loginFromApp() {
+        // TODO: 2017/12/18
+        return null;
+    }
+
+    public Response registerFromApp() {
+        // TODO: 2017/12/18
+        return null;
     }
 
     @ApiOperation(value = "列出所有用户", notes = "返回所有用户信息")

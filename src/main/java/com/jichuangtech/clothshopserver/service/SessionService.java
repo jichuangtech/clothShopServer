@@ -16,10 +16,14 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SessionService {
 
-    public static final int TOKEN_EXPIRE_DURATION = 5;
+    //微信小程序
+    private static final int WX_TOKEN_EXPIRE_DURATION_MINUTES = 5;
+    //移动端 android ios
+    private static final int APP_TOKEN_EXPIRE_DURATION_DAYS = 7;
+
     private LoadingCache<String, String> session = CacheBuilder.newBuilder()
             .maximumSize(10000)
-            .expireAfterWrite(TOKEN_EXPIRE_DURATION, TimeUnit.MINUTES)
+            .expireAfterWrite(WX_TOKEN_EXPIRE_DURATION_MINUTES, TimeUnit.MINUTES)
             .build(new CacheLoader<String, String>() {
                 public String load(String key) {
                     return "";

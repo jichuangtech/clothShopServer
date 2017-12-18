@@ -87,4 +87,5 @@ public class UsersService {
         LOGGER.info(" getUserIdByToken entity: " + entity + ", openId: " + openId);
         return userId;
     }
+
 }
