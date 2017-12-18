@@ -2,6 +2,7 @@ package com.jichuangtech.clothshopserver.service;
 
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
 import com.jichuangtech.clothshopserver.model.LoginInfo;
+import com.jichuangtech.clothshopserver.model.RegisterInfo;
 import com.jichuangtech.clothshopserver.model.UserInfo;
 import com.jichuangtech.clothshopserver.model.UsersEntity;
 import com.jichuangtech.clothshopserver.model.vo.UsersVO;
@@ -27,6 +28,7 @@ import java.util.List;
 public class UsersService {
     private static final String TAG = UsersService.class.getSimpleName();
     private static final Logger LOGGER = LoggerFactory.getLogger(TAG);
+
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
@@ -65,13 +67,13 @@ public class UsersService {
         LOGGER.info(" refreshLoginInfo ip: " + ip + ", host: " + host + ", nickname: "  + userInfo.nickName);
     }
 
-    public UsersEntity getUserByOpenId(String openId) {
+    private UsersEntity getUserByOpenId(String openId) {
         UsersEntity entity = usersRepository.findByOpenid(openId);
         LOGGER.info(" getUserByOpenId entity: " + entity + ", openId: " + openId);
         return entity;
     }
 
-    public UsersEntity saveUserByOpenId(String openId) {
+    private UsersEntity saveUserByOpenId(String openId) {
         UsersEntity entity = new UsersEntity();
         entity.setOpenid(openId);
         entity.setCraetedAt(new Timestamp(System.currentTimeMillis()));
@@ -104,7 +106,31 @@ public class UsersService {
         return code;
     }
 
+    public int register(RegisterInfo info) {
+        String mobile = info.getMobile();
+        String password = info.getPassword();
+
+        int code = ResponseCode.CODE_SUCCESS;
+        if(usersRepository.findByMobile(mobile) != null) {
+            code = ResponseCode.CODE_USER_ALREADY_EXIST;
+        } else {
+            UsersEntity user = saveUserByOpenId("");
+            user.setMobile(mobile);
+            user.setOpenid(getAppUserOpenId(user));
+            user.setPassword(password);
+            LOGGER.info(" register user: " + user);
+        }
+        LOGGER.info(" register code: " + code);
+        return code;
+    }
+
     public UsersEntity getUserByMobile(String mobile) {
         return usersRepository.findByMobile(mobile);
     }
+
+    private String getAppUserOpenId(UsersEntity entity) {
+        return String.valueOf(entity.getUserId());
+    }
+
+
 }

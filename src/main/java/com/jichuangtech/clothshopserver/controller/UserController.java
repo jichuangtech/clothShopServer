@@ -108,9 +108,11 @@ public class UserController {
         return response;
     }
 
-    public Response registerFromApp() {
-        // TODO: 2017/12/18
-        return null;
+    @RequestMapping(value = UserConstant.API_USER + UserConstant.REGISTER, method = RequestMethod.POST)
+    public Response registerFromApp(@RequestBody RegisterInfo info) {
+        Response response = new Response();
+        response.setStatusCode(usersService.register(info));
+        return response;
     }
 
     @ApiOperation(value = "列出所有用户", notes = "返回所有用户信息")

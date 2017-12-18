@@ -524,6 +524,8 @@ public class UsersEntity {
                 "userId=" + userId +
                 ", openid='" + openid + '\'' +
                 ", nickname='" + nickname + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
