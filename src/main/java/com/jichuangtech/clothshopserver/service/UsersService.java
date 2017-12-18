@@ -1,5 +1,7 @@
 package com.jichuangtech.clothshopserver.service;
 
+import com.jichuangtech.clothshopserver.constant.ResponseCode;
+import com.jichuangtech.clothshopserver.model.LoginInfo;
 import com.jichuangtech.clothshopserver.model.UserInfo;
 import com.jichuangtech.clothshopserver.model.UsersEntity;
 import com.jichuangtech.clothshopserver.model.vo.UsersVO;
@@ -7,6 +9,7 @@ import com.jichuangtech.clothshopserver.repository.UsersRepository;
 import com.jichuangtech.clothshopserver.utils.DomainCopyUtil;
 import com.sun.org.apache.regexp.internal.RE;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,4 +91,20 @@ public class UsersService {
         return userId;
     }
 
+    public int login(LoginInfo info) {
+        String mobile = info.getMobile();
+        String password = info.getPassword();
+
+        int code = ResponseCode.CODE_SUCCESS;
+        if(usersRepository.findByMobile(mobile) == null) {
+            code = ResponseCode.CODE_USER_NOT_FOUND;
+        } else if(usersRepository.findByMobileAndPassword(mobile, password) == null) {
+            code = ResponseCode.CODE_PASSWORD_WRONG;
+        }
+        return code;
+    }
+
+    public UsersEntity getUserByMobile(String mobile) {
+        return usersRepository.findByMobile(mobile);
+    }
 }

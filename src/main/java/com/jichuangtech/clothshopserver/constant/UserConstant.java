@@ -6,7 +6,9 @@ package com.jichuangtech.clothshopserver.constant;
 public class UserConstant extends Constant{
 
     public static final String API_USER = API + "/user";
-    
+    public static final String LOGIN = "/login";
+    public static final String REGISTER = "/register";
+
     /** 全部用户*/
 	public static final int USER_ALL = -1;
 }

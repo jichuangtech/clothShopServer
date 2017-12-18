@@ -62,6 +62,11 @@ public class ResponseCode {
     public static final int CODE_PIC_SAVE_ERROR = 1000;
     public static final int CODE_PIC_DELETE_ERROR = 1001;
 
+    //用户管理返回码
+    public static final int CODE_USER_NOT_FOUND = 1100;
+    public static final int CODE_PASSWORD_WRONG = 1101;
+    public static final int CODE_USER_ALREADY_EXIST = 1102;
+
     public static final Map<Integer, String> sCodeMsgMap = new HashMap();
 
     static {
@@ -91,6 +96,9 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_PIC_SAVE_ERROR, " save picture error...");
         sCodeMsgMap.put(CODE_PIC_DELETE_ERROR, " delete picture error...");
         sCodeMsgMap.put(CODE_GOODS_DELETE_NOT_FOUND, " delete goods error : goods not found..");
+        sCodeMsgMap.put(CODE_USER_NOT_FOUND, " user not found...");
+        sCodeMsgMap.put(CODE_PASSWORD_WRONG, " password wrong...");
+        sCodeMsgMap.put(CODE_USER_ALREADY_EXIST, " user already exist...");
     }
 
     public static String getMsg(int code) {

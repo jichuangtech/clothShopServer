@@ -1,9 +1,8 @@
 package com.jichuangtech.clothshopserver.controller;
 
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
-import com.jichuangtech.clothshopserver.model.Response;
-import com.jichuangtech.clothshopserver.model.Token;
-import com.jichuangtech.clothshopserver.model.UserInfo;
+import com.jichuangtech.clothshopserver.constant.UserConstant;
+import com.jichuangtech.clothshopserver.model.*;
 import com.jichuangtech.clothshopserver.model.vo.UsersVO;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.service.UsersService;
@@ -89,9 +88,24 @@ public class UserController {
         return response;
     }
 
-    public Response<Token> loginFromApp() {
-        // TODO: 2017/12/18
-        return null;
+    @RequestMapping(value = UserConstant.API_USER + UserConstant.LOGIN, method = RequestMethod.POST)
+    public Response<Token> loginFromApp(@RequestBody LoginInfo loginInfo) {
+        Response<Token> response = new Response<>();
+        int code = usersService.login(loginInfo);
+
+        if(code == ResponseCode.CODE_SUCCESS) {
+            UsersEntity usersEntity = usersService.getUserByMobile(loginInfo.getMobile());
+            //随机去一个数当sessionId
+            String openid = usersEntity.getOpenid();
+            int randomValue = new Random(10).nextInt();
+            String sessionThirdId = randomValue + "&" + System.currentTimeMillis() + openid;
+            sessionService.putApp(sessionThirdId, openid);
+            response.data = new Token(sessionThirdId);
+        } else {
+            response.setStatusCode(code);
+        }
+
+        return response;
     }
 
     public Response registerFromApp() {
