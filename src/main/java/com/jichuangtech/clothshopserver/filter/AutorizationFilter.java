@@ -2,6 +2,7 @@ package com.jichuangtech.clothshopserver.filter;
 
 import com.google.common.collect.Sets;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
+import com.jichuangtech.clothshopserver.constant.UserConstant;
 import com.jichuangtech.clothshopserver.model.Response;
 import com.jichuangtech.clothshopserver.service.SessionService;
 import com.jichuangtech.clothshopserver.utils.JsonMapper;
@@ -46,6 +47,8 @@ public class AutorizationFilter implements Filter {
         filterUri.add("/webjars/springfox-swagger-ui/lib/underscore-min.map");
         filterUri.add("/swagger-ui.html");
         filterUri.add("/v2/api-docs");
+        filterUri.add(UserConstant.API_USER + UserConstant.LOGIN);
+        filterUri.add(UserConstant.API_USER + UserConstant.REGISTER);
     }
 
     @Override

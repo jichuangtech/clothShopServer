@@ -118,6 +118,7 @@ public class UsersService {
             user.setMobile(mobile);
             user.setOpenid(getAppUserOpenId(user));
             user.setPassword(password);
+            usersRepository.save(user);
             LOGGER.info(" register user: " + user);
         }
         LOGGER.info(" register code: " + code);
