@@ -59,9 +59,10 @@ public class UsersService {
 
         entity.setLastIp(ip);
         entity.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
+        entity.setloginCount(entity.getloginCount() + 1);
+
         entity.setNickname(userInfo.nickName);
         entity.setHeadPic(userInfo.avatarUrl);
-        entity.setloginCount(entity.getloginCount() + 1);
         usersRepository.save(entity);
 
         LOGGER.info(" refreshLoginInfo ip: " + ip + ", host: " + host + ", nickname: "  + userInfo.nickName);

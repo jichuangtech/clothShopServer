@@ -44,7 +44,7 @@ public class UsersEntity {
     private Integer firstLeader;
     private Integer secondLeader;
     private Integer thirdLeader;
-    private Integer loginCount;
+    private Integer loginCount = 0;
     private String token;
     private Timestamp craetedAt;
     private Timestamp updatedAt;

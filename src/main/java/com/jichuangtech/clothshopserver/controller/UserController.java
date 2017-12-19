@@ -95,6 +95,7 @@ public class UserController {
 
         if(code == ResponseCode.CODE_SUCCESS) {
             UsersEntity usersEntity = usersService.getUserByMobile(loginInfo.getMobile());
+            usersService.refreshLoginInfo(usersEntity, httpServletRequest, new UserInfo());
             //随机去一个数当sessionId
             String openid = usersEntity.getOpenid();
             int randomValue = new Random(10).nextInt();
