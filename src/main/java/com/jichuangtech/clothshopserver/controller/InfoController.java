@@ -3,16 +3,15 @@ package com.jichuangtech.clothshopserver.controller;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.constant.InfoConstant;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
-import com.jichuangtech.clothshopserver.model.ColorEntity;
-import com.jichuangtech.clothshopserver.model.GoodsCategoryEntity;
-import com.jichuangtech.clothshopserver.model.GoodsEntity;
-import com.jichuangtech.clothshopserver.model.Response;
+import com.jichuangtech.clothshopserver.model.*;
+import com.jichuangtech.clothshopserver.model.vo.GoodsPaginationVO;
 import com.jichuangtech.clothshopserver.repository.ColorRepository;
 import com.jichuangtech.clothshopserver.repository.GoodsCategoryRepository;
 import com.jichuangtech.clothshopserver.repository.GoodsRepository;
 import com.jichuangtech.clothshopserver.service.GoodsCategoryService;
 import com.jichuangtech.clothshopserver.service.GoodsInfoService;
 import com.jichuangtech.clothshopserver.service.GoodsService;
+import com.jichuangtech.clothshopserver.utils.PaginationUtils;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.ApiOperation;
@@ -129,6 +128,14 @@ public class InfoController {
             response.setStatusCode(ResponseCode.CODE_GOODS_RECOMMEND_ERROR);
         }
         return response;
+    }
+
+    @RequestMapping(value = InfoConstant.PAGINATION, method = RequestMethod.GET)
+    public Page paginate(@RequestParam int catId, @RequestParam int pageSize, @RequestParam int pageIndex) {
+        List<GoodsEntity> srcData = mGoodsCategoryService.listGoods(catId);
+        Page page = new GoodsPaginationVO();
+        PaginationUtils.paginate(page, srcData, pageSize, pageIndex);
+        return page;
     }
 
 }

@@ -12,4 +12,5 @@ public class Constant {
     public static final String SERVER_IMAGE_PATH = "//home/image/clothshop/";
     public static final String GOODS_CATEGORIES = "/goodsCategories";
     public static final String GOODS = "/goods";
+    public static final String PAGINATION = "/pagination";
 }

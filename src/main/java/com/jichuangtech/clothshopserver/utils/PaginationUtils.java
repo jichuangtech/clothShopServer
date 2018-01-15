@@ -22,7 +22,7 @@ public class PaginationUtils {
      * @return
      */
     public static void paginate(Page page, List< ? extends Object> srcData, int pageSize, int pageIndex) {
-        if(pageIndex < 1 || pageSize < 1) {
+        if(pageIndex < 1 || pageSize < 21) {
             LOGGER.error("paginate error, pageIndex: " + pageIndex + ", pageSize: " + pageSize);
             return;
         }
