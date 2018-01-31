@@ -24,6 +24,10 @@ public class SessionService {
     private Logger mLogger = LoggerFactory.getLogger(Constant.MODULE_NAME);
     //微信小程序
     private static final int WX_TOKEN_EXPIRE_DURATION_MINUTES = 5;
+
+    //CMS后台管理系统
+    private static final int CMS_TOKEN_EXPIRE_DURATION_HOURS = 1;
+
     //移动端 android ios
     private static final int APP_TOKEN_EXPIRE_DURATION_DAYS = 7;
 

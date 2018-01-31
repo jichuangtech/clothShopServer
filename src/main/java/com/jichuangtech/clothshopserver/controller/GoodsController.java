@@ -127,12 +127,14 @@ public class GoodsController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Response saveGoods(GoodsAddVO goodsAddVO) {
+        LOGGER.info(" saveGoods goodsAddVO： " + goodsAddVO);
         Response response = new Response();
         if (goodsAddVO.getImage() == null) {
+            LOGGER.error(" saveGoods  image is null");
             return response;
         }
         int code = mGoodsService.saveGoods(goodsAddVO);
-        LOGGER.info(" saveGoods goodsVo: " + goodsAddVO);
+        LOGGER.info(" saveGoods code ：" + code + "， goodsVo: " + goodsAddVO);
         response.setStatusCode(code);
         return response;
     }

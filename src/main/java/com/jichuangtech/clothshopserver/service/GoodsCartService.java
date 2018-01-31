@@ -131,6 +131,11 @@ public class GoodsCartService {
     private GoodsCartRespVO createGoodsCartVO(GoodsCartEntity goodsCartEntity) {
         GoodsCartRespVO goodsCartVO = new GoodsCartRespVO();
         GoodsEntity goodsEntity = mGoodsRepository.findByGoodsId(goodsCartEntity.getGoodsId());
+        if(goodsEntity != null) {
+            //有可能用户在添加到购物车后，商品被删除了
+            goodsCartVO.setOriginalImg(goodsEntity.getOriginalImg());
+            goodsCartVO.setStoreCount(goodsEntity.getStoreCount());
+        }
         goodsCartVO.setGoodsId(goodsCartEntity.getGoodsId());
         goodsCartVO.setGoodsSn(goodsCartEntity.getGoodsSn());
         goodsCartVO.setSpecName(goodsCartEntity.getSpecName());
@@ -138,9 +143,7 @@ public class GoodsCartService {
         goodsCartVO.setShopPrice(new BigDecimal(goodsCartEntity.getGoodsPrice()));
         goodsCartVO.setGoodsName(goodsCartEntity.getGoodsName());
         goodsCartVO.setColor(goodsCartEntity.getColorName());
-        goodsCartVO.setOriginalImg(goodsEntity.getOriginalImg());
         goodsCartVO.setGoodsCartId(goodsCartEntity.getId());
-        goodsCartVO.setStoreCount(goodsEntity.getStoreCount());
         goodsCartVO.setColorId(goodsCartEntity.getColorId());
         goodsCartVO.setSpecId(goodsCartEntity.getSpecId());
         return goodsCartVO;
