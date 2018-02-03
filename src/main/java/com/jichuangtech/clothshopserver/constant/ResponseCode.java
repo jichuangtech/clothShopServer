@@ -1,5 +1,7 @@
 package com.jichuangtech.clothshopserver.constant;
 
+import com.sun.xml.internal.bind.v2.TODO;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ public class ResponseCode {
     public static final int TOKEN_INVALID = 102;
     public static final int CODE_SUCCESS = 200;
 
+    // TODO: 2018/2/2 要修改下状态吗
     //商品系列返回码
     public static final int CODE_GOODS_x = 100;
     public static final int CODE_GOODS_ADD_ERROR = 101;

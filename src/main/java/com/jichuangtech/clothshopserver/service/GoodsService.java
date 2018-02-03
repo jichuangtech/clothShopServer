@@ -60,7 +60,7 @@ public class GoodsService {
         }
 
         //（4）参数图片介绍
-        code = saveGoodsDetailInfoImages(goodsId, goodsAddVO);
+//        code = saveGoodsDetailInfoImages(goodsId, goodsAddVO);
         return code;
     }
 
