@@ -32,6 +32,7 @@ import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SE
 @RestController
 @RequestMapping(GoodsConstant.API_GOODS)
 public class GoodsController {
+    private static final String TAG = GoodsController.class.getSimpleName();
     private static final Logger LOGGER = LoggerFactory.getLogger(GoodsController.class);
     @Autowired
     private GoodsRepository mGoodsRepository;
@@ -140,9 +141,10 @@ public class GoodsController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public Response deleteGoods(@ApiParam(name = "要被删除的商品的ID", required = true) @RequestParam int goodsIds) {
+    public Response deleteGoods(@ApiParam(name = "要被删除的商品的ID", required = true) @RequestParam int goodsId) {
+        LOGGER.info(TAG, " deleteGoods goodsId: " + goodsId);
         Response response = new Response();
-        int code = mGoodsService.deleteGoods(goodsIds);
+        int code = mGoodsService.deleteGoods(goodsId);
         response.setStatusCode(code);
         return response;
     }
