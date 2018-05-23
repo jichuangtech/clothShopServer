@@ -142,9 +142,9 @@ public class GoodsController {
 
     @RequestMapping(method = RequestMethod.DELETE)
     public Response deleteGoods(@ApiParam(name = "要被删除的商品的ID", required = true) @RequestParam int goodsId) {
-        LOGGER.info(TAG, " deleteGoods goodsId: " + goodsId);
         Response response = new Response();
         int code = mGoodsService.deleteGoods(goodsId);
+        LOGGER.info(" deleteGoods goodsId: " + goodsId + "，code：" + code);
         response.setStatusCode(code);
         return response;
     }
