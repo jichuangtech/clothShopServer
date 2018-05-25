@@ -1,5 +1,6 @@
 package com.jichuangtech.clothshopserver.controller;
 
+import com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant;
 import com.jichuangtech.clothshopserver.constant.GoodsConstant;
 import com.jichuangtech.clothshopserver.constant.InfoConstant;
 import com.jichuangtech.clothshopserver.constant.ResponseCode;
@@ -15,10 +16,16 @@ import com.jichuangtech.clothshopserver.utils.PaginationUtils;
 import com.jichuangtech.clothshopserver.utils.PictureUtils;
 import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SERVER_IMAGE_PATH;
@@ -34,7 +41,7 @@ import static com.jichuangtech.clothshopserver.constant.GoodsCategoryConstant.SE
 @RestController
 @RequestMapping(InfoConstant.API_INFO)
 public class InfoController {
-
+    private static Logger LOGGER = LoggerFactory.getLogger(InfoController.class.getSimpleName());
     @Autowired
     private GoodsRepository mGoodsRepository;
 
@@ -52,14 +59,14 @@ public class InfoController {
         Response<GoodsEntity> response = new Response<>();
         response.data = mGoodsRepository.findByGoodsId(goodsId);
 
-        if(response.data == null) {
+        if (response.data == null) {
             response.setStatusCode(ResponseCode.CODE_GOODS_NOT_FOUND);
         }
         return response;
     }
 
     @RequestMapping(InfoConstant.COLOR)
-    public List<ColorEntity> getColors () {
+    public List<ColorEntity> getColors() {
         return mColorRepository.findAll();
     }
 
@@ -76,7 +83,7 @@ public class InfoController {
         Response<List<GoodsCategoryEntity>> response = new Response<>();
         response.data = mGoodsCategoryRepository.findAll();
 
-        if(response.data == null) {
+        if (response.data == null) {
             response.setStatusCode(ResponseCode.CODE_GOODS_CATEGORY_GET_ERROR);
         }
         return response;
@@ -88,7 +95,7 @@ public class InfoController {
     public Response<List<GoodsEntity>> listGoodsFromCateById(@PathVariable int goodsCategoryId) {
         Response<List<GoodsEntity>> response = new Response<>();
         response.data = mGoodsCategoryService.listGoods(goodsCategoryId);
-        if(response.data == null) {
+        if (response.data == null) {
             response.setStatusCode(ResponseCode.CODE_GOODS_CATEGORY_GET_GOODS_ERROR);
         }
         return response;
@@ -100,7 +107,7 @@ public class InfoController {
         Response<List<GoodsEntity>> response = new Response<>();
         response.data = mGoodsRepository.findAll();
 
-        if(response.data == null) {
+        if (response.data == null) {
             response.setStatusCode(ResponseCode.CODE_GOODS_GET_ALL_ERROR);
         }
 
@@ -112,7 +119,7 @@ public class InfoController {
         Response<List<GoodsEntity>> response = new Response<>();
         response.data = mGoodsRepository.findAllByIsHot(new Byte("1"));
 
-        if(response.data == null) {
+        if (response.data == null) {
             response.setStatusCode(ResponseCode.CODE_GOODS_HOT_ERROR);
         }
         return response;
@@ -124,7 +131,7 @@ public class InfoController {
         Response<List<GoodsEntity>> response = new Response<>();
         response.data = mGoodsRepository.findAllByIsRecommend(new Byte("1"));
 
-        if(response.data == null) {
+        if (response.data == null) {
             response.setStatusCode(ResponseCode.CODE_GOODS_RECOMMEND_ERROR);
         }
         return response;
@@ -136,6 +143,23 @@ public class InfoController {
         Page page = new GoodsPaginationVO();
         PaginationUtils.paginate(page, srcData, pageSize, pageIndex);
         return page;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/uploadFile")
+    public Response uploadFile(@RequestParam("file") MultipartFile[] partFiles) {
+        LOGGER.error(" uploadFile size: " + (partFiles != null ? partFiles.length : "null"));
+        File file = new File(GoodsCategoryConstant.SERVER_IMAGE_PATH, "test_net_speed_file");
+        MultipartFile image = partFiles[0];
+        try {
+            if (!file.exists()) {
+                boolean success = file.createNewFile();
+                LOGGER.error(" uploadFile: " + success);
+            }
+            FileUtils.writeByteArrayToFile(file, image.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new Response();
     }
 
 }
