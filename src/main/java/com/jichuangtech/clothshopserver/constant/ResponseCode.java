@@ -64,6 +64,7 @@ public class ResponseCode {
     //图片
     public static final int CODE_PIC_SAVE_ERROR = 1000;
     public static final int CODE_PIC_DELETE_ERROR = 1001;
+    public static final int CODE_PIC_GET_ERROR = 1002;
 
     //用户管理返回码
     public static final int CODE_USER_NOT_FOUND = 1100;
@@ -99,6 +100,7 @@ public class ResponseCode {
         sCodeMsgMap.put(CODE_GOODS_CATEGORY_SAVE_PIC_ERROR, "save category pic error... ");
         sCodeMsgMap.put(CODE_PIC_SAVE_ERROR, " save picture error...");
         sCodeMsgMap.put(CODE_PIC_DELETE_ERROR, " delete picture error...");
+        sCodeMsgMap.put(CODE_PIC_GET_ERROR, " geta picture error...");
         sCodeMsgMap.put(CODE_GOODS_DELETE_NOT_FOUND, " delete goods error : goods not found..");
         sCodeMsgMap.put(CODE_USER_NOT_FOUND, " user not found...");
         sCodeMsgMap.put(CODE_PASSWORD_WRONG, " password wrong...");

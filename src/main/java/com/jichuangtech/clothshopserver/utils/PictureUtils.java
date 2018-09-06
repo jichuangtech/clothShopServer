@@ -32,7 +32,7 @@ public class PictureUtils {
                 os.flush();
             }
         } catch (Exception e) {
-            resultCode = ResponseCode.CODE_PIC_SAVE_ERROR;
+            resultCode = ResponseCode.CODE_PIC_GET_ERROR;
             LOGGER.info("getPicture e: " + e.getMessage());
             e.printStackTrace();
         } finally {
